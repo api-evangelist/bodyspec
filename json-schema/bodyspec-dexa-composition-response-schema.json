@@ -1,0 +1,101 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/bodyspec/main/json-schema/bodyspec-dexa-composition-response-schema.json",
+  "title": "DexaComposition",
+  "description": "DEXA body composition results by region.",
+  "x-generated": "2026-10-02",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/bodyspec-openapi.json#/components/schemas/DexaCompositionResponse",
+  "properties": {
+    "result_id": {
+      "type": "string",
+      "title": "Result Id",
+      "description": "Unique identifier for the result"
+    },
+    "section_name": {
+      "type": "string",
+      "title": "Section Name",
+      "description": "Name of this section",
+      "default": "composition"
+    },
+    "total": {
+      "$ref": "#/$defs/BodyRegion",
+      "description": "Total body composition"
+    },
+    "regions": {
+      "additionalProperties": {
+        "$ref": "#/$defs/BodyRegion"
+      },
+      "type": "object",
+      "title": "Regions",
+      "description": "Regional composition data including standard regions and special regions"
+    },
+    "android_gynoid_ratio": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Android Gynoid Ratio",
+      "description": "Android/Gynoid fat ratio"
+    }
+  },
+  "type": "object",
+  "required": [
+    "result_id",
+    "total",
+    "regions"
+  ],
+  "$defs": {
+    "BodyRegion": {
+      "properties": {
+        "fat_mass_kg": {
+          "type": "number",
+          "title": "Fat Mass Kg",
+          "description": "Fat mass in kilograms"
+        },
+        "lean_mass_kg": {
+          "type": "number",
+          "title": "Lean Mass Kg",
+          "description": "Lean mass in kilograms"
+        },
+        "bone_mass_kg": {
+          "type": "number",
+          "title": "Bone Mass Kg",
+          "description": "Bone mass in kilograms"
+        },
+        "total_mass_kg": {
+          "type": "number",
+          "title": "Total Mass Kg",
+          "description": "Total mass in kilograms"
+        },
+        "tissue_fat_pct": {
+          "type": "number",
+          "title": "Tissue Fat Pct",
+          "description": "Fat percentage of soft tissue (excludes bone)"
+        },
+        "region_fat_pct": {
+          "type": "number",
+          "title": "Region Fat Pct",
+          "description": "Fat percentage of total region (includes bone)"
+        }
+      },
+      "type": "object",
+      "required": [
+        "fat_mass_kg",
+        "lean_mass_kg",
+        "bone_mass_kg",
+        "total_mass_kg",
+        "tissue_fat_pct",
+        "region_fat_pct"
+      ],
+      "title": "BodyRegion",
+      "description": "Body composition data for a specific region.",
+      "x-internal": true
+    }
+  }
+}

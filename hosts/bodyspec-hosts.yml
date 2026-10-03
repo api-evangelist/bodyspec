@@ -1,0 +1,206 @@
+generated: '2026-10-02'
+method: derived
+source: the pre-flight dossier, apis.yml pointers, spec servers, well-known, vendors -- nothing fetched here
+generator: derive-hosts.py
+summary:
+  hosts: 15
+  own: 15
+  other_domain: 0
+  platform: 0
+  roles:
+  - api
+  - data
+  - docs
+  - identity
+  - other
+  - partner
+  - portal
+  - website
+hosts:
+- host: api.bodyspec.com
+  found_by:
+  - contract-discovery
+  types: []
+  serves: []
+  registrable_domain: bodyspec.com
+  role: api
+  relation: own
+- host: apis.bodyspec.com
+  found_by:
+  - probed
+  - site-links
+  - namespace-probe
+  - contract-discovery
+  - well-known
+  types: []
+  serves: []
+  status: 200
+  registrable_domain: bodyspec.com
+  role: api
+  relation: own
+- host: app.bodyspec.com
+  found_by:
+  - pointer
+  - apis[]
+  - probed
+  - site-links
+  - docs-index
+  - spec-found
+  - contract-discovery
+  - well-known
+  types:
+  - Documentation
+  - APIReference
+  serves:
+  - api
+  - docs
+  - spec
+  registrable_domain: bodyspec.com
+  role: docs
+  relation: own
+- host: auth.bodyspec.com
+  found_by:
+  - vendor-detect
+  types: []
+  serves:
+  - identity
+  vendor: keycloak
+  registrable_domain: bodyspec.com
+  role: identity
+  relation: own
+- host: data.bodyspec.com
+  found_by:
+  - probed
+  - site-links
+  - namespace-probe
+  - well-known
+  types: []
+  serves: []
+  status: 200
+  registrable_domain: bodyspec.com
+  role: data
+  relation: own
+- host: datahub.bodyspec.com
+  found_by:
+  - probed
+  - site-links
+  - namespace-probe
+  types: []
+  serves: []
+  status: 200
+  registrable_domain: bodyspec.com
+  role: data
+  relation: own
+- host: dev.bodyspec.com
+  found_by:
+  - probed
+  - site-links
+  - namespace-probe
+  types: []
+  serves: []
+  status: 200
+  registrable_domain: bodyspec.com
+  role: other
+  relation: own
+- host: developer.bodyspec.com
+  found_by:
+  - probed
+  - site-links
+  - namespace-probe
+  - contract-discovery
+  - well-known
+  types: []
+  serves: []
+  status: 200
+  registrable_domain: bodyspec.com
+  role: portal
+  relation: own
+- host: developers.bodyspec.com
+  found_by:
+  - probed
+  - site-links
+  - namespace-probe
+  - well-known
+  types: []
+  serves: []
+  status: 200
+  registrable_domain: bodyspec.com
+  role: portal
+  relation: own
+- host: docs.bodyspec.com
+  found_by:
+  - probed
+  - site-links
+  - namespace-probe
+  - well-known
+  types: []
+  serves: []
+  status: 200
+  registrable_domain: bodyspec.com
+  role: docs
+  relation: own
+- host: open-data.bodyspec.com
+  found_by:
+  - probed
+  - site-links
+  - namespace-probe
+  types: []
+  serves: []
+  status: 200
+  registrable_domain: bodyspec.com
+  role: data
+  relation: own
+- host: opendata.bodyspec.com
+  found_by:
+  - probed
+  - site-links
+  - namespace-probe
+  - well-known
+  types: []
+  serves: []
+  status: 200
+  registrable_domain: bodyspec.com
+  role: data
+  relation: own
+- host: partner.bodyspec.com
+  found_by:
+  - probed
+  - site-links
+  - namespace-probe
+  types: []
+  serves: []
+  status: 200
+  registrable_domain: bodyspec.com
+  role: partner
+  relation: own
+- host: partners.bodyspec.com
+  found_by:
+  - probed
+  - site-links
+  - namespace-probe
+  types: []
+  serves: []
+  status: 200
+  registrable_domain: bodyspec.com
+  role: partner
+  relation: own
+- host: www.bodyspec.com
+  found_by:
+  - pointer
+  - probed
+  - docs-index
+  - contract-discovery
+  - well-known
+  types:
+  - Login
+  - Website
+  - GettingStarted
+  - Blog
+  - Pricing
+  - TermsOfService
+  - PrivacyPolicy
+  serves:
+  - docs
+  registrable_domain: bodyspec.com
+  role: website
+  relation: own

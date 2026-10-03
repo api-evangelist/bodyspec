@@ -1,0 +1,960 @@
+openapi: 3.2.0
+info:
+  title: BodySpec Reservations API
+  description: This API allows BodySpec users to integrate their DEXA scan data with other platforms.
+  license:
+    name: Proprietary
+  version: 0.18.2
+servers:
+- url: https://app.bodyspec.com
+  description: Production server
+security:
+- OAuth2:
+  - openid
+  - profile
+  - email
+- BearerAuth: []
+tags:
+- name: Reservations
+  description: Partner integration endpoints for reservations
+paths:
+  /api/v1/partners/{partner_id}/reservations:
+    get:
+      tags:
+      - Reservations
+      summary: List partner reservations
+      description: Retrieve paginated list of reservations for the authenticated partner.
+      operationId: _list_partner_reservations_api_v1_partners__partner_id__reservations_get
+      security:
+      - HTTPBasic: []
+      - PartnerAuth: []
+      parameters:
+      - name: partner_id
+        in: path
+        required: true
+        schema:
+          type: string
+          description: Partner ID
+          title: Partner Id
+        description: Partner ID
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: Page number (starts at 1)
+          default: 1
+          title: Page
+        description: Page number (starts at 1)
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 100
+          minimum: 1
+          description: Items per page (max 100)
+          default: 20
+          title: Page Size
+        description: Items per page (max 100)
+      - name: status
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - $ref: '#/components/schemas/ApptStatus'
+          - type: 'null'
+          description: 'Filter by appointment outcome: ''scheduled'', ''pending_scan'' (started but results not published yet, or no evidence the location was operating), ''completed'', or ''no_show''. A reservation_no_show webhook is emitted when an appointment becomes ''no_show'''
+          title: Status
+        description: 'Filter by appointment outcome: ''scheduled'', ''pending_scan'' (started but results not published yet, or no evidence the location was operating), ''completed'', or ''no_show''. A reservation_no_show webhook is emitted when an appointment becomes ''no_show'''
+      - name: sort_order
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/SortOrder'
+          description: 'Sort order: ''newest_first'' or ''oldest_first'''
+          default: newest_first
+        description: 'Sort order: ''newest_first'' or ''oldest_first'''
+      - name: start_time[eq]
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          description: 'ISO 8601 datetime: start_time = value'
+          title: Start Time[Eq]
+        description: 'ISO 8601 datetime: start_time = value'
+      - name: start_time[gt]
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          description: 'ISO 8601 datetime: start_time > value'
+          title: Start Time[Gt]
+        description: 'ISO 8601 datetime: start_time > value'
+      - name: start_time[gte]
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          description: 'ISO 8601 datetime: start_time >= value'
+          title: Start Time[Gte]
+        description: 'ISO 8601 datetime: start_time >= value'
+      - name: start_time[lt]
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          description: 'ISO 8601 datetime: start_time < value'
+          title: Start Time[Lt]
+        description: 'ISO 8601 datetime: start_time < value'
+      - name: start_time[lte]
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          description: 'ISO 8601 datetime: start_time <= value'
+          title: Start Time[Lte]
+        description: 'ISO 8601 datetime: start_time <= value'
+      - name: reserve_time[eq]
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          description: 'ISO 8601 datetime: reserve_time = value'
+          title: Reserve Time[Eq]
+        description: 'ISO 8601 datetime: reserve_time = value'
+      - name: reserve_time[gt]
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          description: 'ISO 8601 datetime: reserve_time > value'
+          title: Reserve Time[Gt]
+        description: 'ISO 8601 datetime: reserve_time > value'
+      - name: reserve_time[gte]
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          description: 'ISO 8601 datetime: reserve_time >= value'
+          title: Reserve Time[Gte]
+        description: 'ISO 8601 datetime: reserve_time >= value'
+      - name: reserve_time[lt]
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          description: 'ISO 8601 datetime: reserve_time < value'
+          title: Reserve Time[Lt]
+        description: 'ISO 8601 datetime: reserve_time < value'
+      - name: reserve_time[lte]
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          description: 'ISO 8601 datetime: reserve_time <= value'
+          title: Reserve Time[Lte]
+        description: 'ISO 8601 datetime: reserve_time <= value'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerReservationsListResponse'
+              example:
+                reservations:
+                - user:
+                    user_id: a5950beea2a7487fb79cfdbeb77fa555
+                    email: user@example.com
+                    first_name: Jane
+                    last_name: Smith
+                    phone: '+14155551234'
+                  appt:
+                    appt_id: d7ecde6e9518008607e0e1e3b4b960d9
+                    start_time: '2024-03-15T10:30:00-07:00'
+                    duration_minutes: 12
+                    location:
+                      location_id: loc123
+                      name: BodySpec - Culver City
+                      location_type: storefront
+                    service:
+                      name: DEXA
+                      description: DEXA Scan
+                    status: scheduled
+                    reserve_time: '2024-03-01T15:30:00Z'
+                pagination:
+                  page: 1
+                  page_size: 20
+                  results: 1
+                  has_more: false
+        '401':
+          description: Invalid partner authentication
+        '403':
+          description: Partner ID mismatch
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    post:
+      tags:
+      - Reservations
+      summary: Create reservation
+      description: Create an appointment reservation for a partner integration.
+      operationId: _create_reservation_api_v1_partners__partner_id__reservations_post
+      security:
+      - HTTPBasic: []
+      - PartnerAuth: []
+      parameters:
+      - name: partner_id
+        in: path
+        required: true
+        schema:
+          type: string
+          description: Partner ID
+          title: Partner Id
+        description: Partner ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReservationCreateRequest'
+      responses:
+        '201':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReservationResponse'
+              example:
+                appt_id: '12345'
+                start_time: '2024-03-15T10:30:00-07:00'
+                location:
+                  location_id: a5950beea2a7487fb79cfdbeb77fa555
+                  name: BodySpec - Culver City
+                  location_type: storefront
+                  address:
+                    address_line1: 5847 Uplander Way
+                    city: Culver City
+                    state: CA
+                    postal_code: '90230'
+                    country: US
+                  coordinates:
+                    latitude: 33.9874
+                    longitude: -118.3878
+                  timezone: US/Pacific
+                  description: Free parking available in the lot behind the building
+                  last_updated: '2024-02-01T18:00:00Z'
+                user_id: a5950beea2a7487fb79cfdbeb77fa555
+                reserve_time: '2024-03-15T10:30:00Z'
+                external:
+                  user_id: partner_user_456
+                  appt_id: partner_booking_123
+        '400':
+          description: Invalid request or reservation failed
+        '401':
+          description: Invalid partner authentication
+        '403':
+          description: Partner ID mismatch
+        '404':
+          description: Appointment not found
+        '409':
+          description: Appointment already reserved
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/partners/{partner_id}/reservations/{appt_id}:
+    get:
+      tags:
+      - Reservations
+      summary: Get reservation
+      description: Retrieve a single reservation and its current outcome. Use this to check what happened at one appointment without paging the reservation list.
+      operationId: _get_partner_reservation_api_v1_partners__partner_id__reservations__appt_id__get
+      security:
+      - HTTPBasic: []
+      - PartnerAuth: []
+      parameters:
+      - name: partner_id
+        in: path
+        required: true
+        schema:
+          type: string
+          description: Partner ID
+          title: Partner Id
+        description: Partner ID
+      - name: appt_id
+        in: path
+        required: true
+        schema:
+          type: string
+          description: BodySpec appointment ID
+          title: Appt Id
+        description: BodySpec appointment ID
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerReservation'
+              example:
+                user:
+                  user_id: a5950beea2a7487fb79cfdbeb77fa555
+                  email: jane@example.com
+                  first_name: Jane
+                  last_name: Doe
+                  phone: '+15551234567'
+                appt:
+                  appt_id: d7ecde6e9518008607e0e1e3b4b960d9
+                  start_time: '2024-03-15T10:30:00-07:00'
+                  duration_minutes: 12
+                  location:
+                    location_id: a5950beea2a7487fb79cfdbeb77fa555
+                    name: BodySpec - Culver City
+                    address: 5847 Uplander Way
+                    city_state: Culver City, CA
+                    timezone: US/Pacific
+                  service:
+                    name: DEXA
+                    description: Dual-energy X-ray Absorptiometry scan for body composition
+                  status: completed
+                  reserve_time: '2024-03-01T15:00:00Z'
+        '401':
+          description: Invalid partner authentication
+        '403':
+          description: Partner ID mismatch
+        '404':
+          description: Reservation not found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - Reservations
+      summary: Cancel reservation
+      description: Cancel an existing reservation.
+      operationId: _cancel_reservation_api_v1_partners__partner_id__reservations__appt_id__delete
+      security:
+      - HTTPBasic: []
+      - PartnerAuth: []
+      parameters:
+      - name: partner_id
+        in: path
+        required: true
+        schema:
+          type: string
+          description: Partner ID
+          title: Partner Id
+        description: Partner ID
+      - name: appt_id
+        in: path
+        required: true
+        schema:
+          type: string
+          description: BodySpec appointment ID
+          title: Appt Id
+        description: BodySpec appointment ID
+      requestBody:
+        content:
+          application/json:
+            schema:
+              anyOf:
+              - $ref: '#/components/schemas/ReservationCancelRequest'
+              - type: 'null'
+              title: Body
+      responses:
+        '204':
+          description: Reservation cancelled successfully
+        '400':
+          description: Cannot cancel reservation
+        '401':
+          description: Invalid partner authentication
+        '403':
+          description: Partner ID mismatch
+        '404':
+          description: Appointment not found
+        '405':
+          description: Appointment cannot be cancelled
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+      x-internal: true
+    ReservationCreateRequest:
+      properties:
+        appt_id:
+          type: string
+          title: Appt Id
+          description: BodySpec appointment ID
+        user:
+          $ref: '#/components/schemas/PartnerUser'
+          description: User information
+        external:
+          anyOf:
+          - $ref: '#/components/schemas/ExternalIds'
+          - type: 'null'
+          description: Optional external IDs for partner tracking
+      type: object
+      required:
+      - appt_id
+      - user
+      title: ReservationCreateRequest
+      description: Request to create an appointment reservation.
+      examples:
+      - appt_id: '12345'
+        external:
+          appt_id: partner_booking_123
+          user_id: partner_user_456
+        user:
+          email: user@example.com
+          first_name: Jane
+          last_name: Smith
+      x-internal: true
+    UserResponse:
+      properties:
+        user_id:
+          type: string
+          title: User Id
+          description: Unique identifier for the user
+        email:
+          type: string
+          format: email
+          title: Email
+          description: User's email address
+        first_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: First Name
+          description: User's first name
+        last_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Name
+          description: User's last name
+        phone:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Phone
+          description: Phone number in E.164 format
+          examples:
+          - '+14155551234'
+      type: object
+      required:
+      - user_id
+      - email
+      title: User
+      description: 'User model for API responses.
+
+
+        Note: This model intentionally excludes sensitive or internal fields like:
+
+        - is_admin: Admin status is determined from token claims, not exposed in responses
+
+        - created_at/updated_at: Internal timestamps not needed in public API'
+    ReservationResponse:
+      properties:
+        appt_id:
+          type: string
+          title: Appt Id
+          description: BodySpec appointment ID
+        start_time:
+          type: string
+          format: date-time
+          title: Start Time
+          description: Appointment start time in location timezone
+        location:
+          $ref: '#/components/schemas/Location'
+          description: Location details for the appointment
+        user_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Id
+          description: BodySpec user ID
+        external:
+          anyOf:
+          - $ref: '#/components/schemas/ExternalIds'
+          - type: 'null'
+          description: External IDs (echoed back if provided)
+        reserve_time:
+          type: string
+          format: date-time
+          title: Reserve Time
+          description: UTC timestamp when reservation was created
+      type: object
+      required:
+      - appt_id
+      - start_time
+      - location
+      - reserve_time
+      title: Reservation
+      description: Response for reservation creation.
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+      x-internal: true
+    SortOrder:
+      type: string
+      enum:
+      - newest_first
+      - oldest_first
+      title: SortOrder
+      description: Sort order options for appointment lists.
+      x-internal: true
+    Address:
+      properties:
+        address_line1:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Address Line1
+          description: Primary address line
+        address_line2:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Address Line2
+          description: Secondary address line (e.g., suite number)
+        city:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: City
+          description: City name
+        state:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: State
+          description: State or province
+        postal_code:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Postal Code
+          description: Postal/ZIP code
+        country:
+          type: string
+          title: Country
+          description: Two-letter ISO country code
+          default: US
+      type: object
+      title: Address
+      description: Address information for a location.
+      x-internal: true
+    PartnerUser:
+      properties:
+        email:
+          type: string
+          format: email
+          title: Email
+          description: User email address
+        first_name:
+          type: string
+          title: First Name
+          description: User first name
+        last_name:
+          type: string
+          title: Last Name
+          description: User last name
+        phone:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Phone
+          description: Phone number in E.164 format
+      type: object
+      required:
+      - email
+      - first_name
+      - last_name
+      title: PartnerUser
+      description: User information provided by integration partner.
+      examples:
+      - email: user@example.com
+        first_name: Jane
+        last_name: Smith
+        phone: '+14155551234'
+      x-internal: true
+    ReservationCancelRequest:
+      properties:
+        reason:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Reason
+          description: Cancellation reason
+      type: object
+      title: ReservationCancelRequest
+      description: Request to cancel a reservation (optional body).
+      examples:
+      - reason: User requested cancellation
+      x-internal: true
+    PartnerReservationsListResponse:
+      properties:
+        reservations:
+          items:
+            $ref: '#/components/schemas/PartnerReservation'
+          type: array
+          title: Reservations
+          description: List of reservations with user and appointment data
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+          description: Pagination information
+      type: object
+      required:
+      - reservations
+      - pagination
+      title: PartnerReservationsListResponse
+      description: Paginated partner reservations list response.
+      x-internal: true
+    Coordinates:
+      properties:
+        latitude:
+          type: number
+          title: Latitude
+          description: Latitude in decimal degrees
+        longitude:
+          type: number
+          title: Longitude
+          description: Longitude in decimal degrees
+      type: object
+      required:
+      - latitude
+      - longitude
+      title: Coordinates
+      description: Geographic coordinates for a location.
+      x-internal: true
+    Pagination:
+      properties:
+        page:
+          type: integer
+          title: Page
+          description: Current page number
+        page_size:
+          type: integer
+          title: Page Size
+          description: Number of items per page
+        results:
+          type: integer
+          title: Results
+          description: Number of results in this page
+        has_more:
+          type: boolean
+          title: Has More
+          description: Whether more results exist after this page
+      type: object
+      required:
+      - page
+      - page_size
+      - results
+      - has_more
+      title: Pagination
+      description: Pagination information for list responses.
+      x-internal: true
+    PartnerReservation:
+      properties:
+        user:
+          $ref: '#/components/schemas/UserResponse'
+          description: User information
+        appt:
+          $ref: '#/components/schemas/Appointment'
+          description: Appointment details
+      type: object
+      required:
+      - user
+      - appt
+      title: PartnerReservation
+      description: Combined user and appointment for a partner reservation.
+    Service:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Short name of the service (e.g., 'DEXA')
+        description:
+          type: string
+          title: Description
+          description: Full descriptive name of the service
+        service_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Service Id
+          description: Unique identifier for the service
+        service_code:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Service Code
+          description: Service code (e.g., 'DXA', 'RMR', 'VO2')
+        duration_minutes:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Duration Minutes
+          description: Typical duration in minutes
+        last_updated:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Last Updated
+          description: Last update timestamp in ISO 8601 UTC format
+      type: object
+      required:
+      - name
+      - description
+      title: Service
+      description: Service model representing a bookable scan or test type.
+    Location:
+      properties:
+        location_id:
+          type: string
+          title: Location Id
+          description: Unique identifier for the location
+        name:
+          type: string
+          title: Name
+          description: Location name
+        location_type:
+          type: string
+          title: Location Type
+          description: 'Type of location: ''mobile'' or ''storefront'''
+        address:
+          $ref: '#/components/schemas/Address'
+          description: Address information
+        coordinates:
+          anyOf:
+          - $ref: '#/components/schemas/Coordinates'
+          - type: 'null'
+          description: Geographic coordinates
+        timezone:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Timezone
+          description: IANA timezone identifier (e.g., 'America/Los_Angeles')
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: Public notes or description
+        last_updated:
+          type: string
+          format: date-time
+          title: Last Updated
+          description: Last update timestamp in ISO 8601 UTC format
+        distance_miles:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Distance Miles
+          description: Distance from search coordinates in miles. Only present when lat/lng search parameters are provided.
+      type: object
+      required:
+      - location_id
+      - name
+      - location_type
+      - address
+      - last_updated
+      title: Location
+      description: Location model representing a scan location with full details.
+    ExternalIds:
+      properties:
+        user_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Id
+          description: Partner's external user ID
+        appt_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Appt Id
+          description: Partner's external appointment/reservation ID
+      type: object
+      title: ExternalIds
+      description: Optional external IDs for partner tracking.
+      examples:
+      - appt_id: partner_booking_123
+        user_id: partner_user_456
+      x-internal: true
+    ApptStatus:
+      type: string
+      enum:
+      - scheduled
+      - pending_scan
+      - completed
+      - no_show
+      title: ApptStatus
+      description: 'Derived appointment outcome.
+
+
+        BodySpec does not record attendance, so the outcome is inferred from whether
+
+        published results exist and from what happened at the same location that day.'
+      x-internal: true
+    Appointment:
+      properties:
+        appt_id:
+          type: string
+          title: Appt Id
+          description: Unique identifier for the appointment
+        start_time:
+          type: string
+          format: date-time
+          title: Start Time
+          description: Appointment start time in location timezone
+        duration_minutes:
+          type: integer
+          title: Duration Minutes
+          description: Duration of the appointment in minutes
+        location:
+          $ref: '#/components/schemas/Location'
+          description: Location details
+        service:
+          $ref: '#/components/schemas/Service'
+          description: Service information
+        status:
+          $ref: '#/components/schemas/ApptStatus'
+          description: 'Appointment outcome. `scheduled` — upcoming, results not expected yet. `pending_scan` — the appointment time has passed but results are not published yet, or no other scan at that location later that day produced results either (which reads as a site problem rather than a missed appointment). `completed` — results are published and retrievable. `no_show` — the appointment time has passed with no results, and a later scan at the same location that day did produce results, so the location was operating normally. Note that `pending_scan` can be a lasting state: BodySpec does not record attendance, so an appointment is only reported as `no_show` when there is positive evidence the location was operating. When BodySpec makes the `no_show` determination for a partner appointment, a `reservation_no_show` webhook is emitted.'
+        reserve_time:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Reserve Time
+          description: UTC timestamp when the appointment was reserved, if applicable
+      type: object
+      required:
+      - appt_id
+      - start_time
+      - duration_minutes
+      - location
+      - service
+      - status
+      title: Appointment
+      description: Appointment information.
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      description: OAuth2 authentication via Keycloak with PKCE
+      flows:
+        authorizationCode:
+          authorizationUrl: https://auth.bodyspec.com/realms/bodyspec/protocol/openid-connect/auth
+          tokenUrl: https://auth.bodyspec.com/realms/bodyspec/protocol/openid-connect/token
+          scopes:
+            openid: OpenID Connect scope
+            profile: Access to user profile
+            email: Access to user email
+          x-usePkce: SHA-256
+          x-scalar-client-id: bodyspec-api-ext-v1
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT Bearer token for authentication
+    PartnerAuth:
+      type: http
+      scheme: basic
+      description: For partner integrations only. Contact BodySpec to obtain credentials.
+x-tagGroups:
+- name: 👤 User Data
+  tags:
+  - Users
+  - Appointments
+  - Results
+- name: 📅 Availability
+  tags:
+  - Locations
+  - Services
+  - Availability
+- name: 🤝 Partners
+  tags:
+  - Reservations
+  - Partner Users
+  - Partner Appointments
+  - Partner Results
+  - Partner Intake
+  - Partner Orders
+  - Partner Webhooks
+- name: 🏥 API Status
+  tags:
+  - API Status

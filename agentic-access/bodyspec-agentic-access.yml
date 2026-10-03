@@ -1,0 +1,563 @@
+generated: '2026-10-02'
+method: generated
+source: openapi/bodyspec-openapi.json
+description: Recommended x-agentic-access execution contracts, classified heuristically from
+  the OpenAPI. A governance starting point for exposing this API to AI agents — review and bind
+  audience per deployment. See research/curity/agentic-governance/.
+summary:
+  operations: 45
+  by_action_class:
+    connected: 35
+    acting: 10
+  by_consequence:
+    read: 35
+    write: 8
+    physical: 2
+  human_in_the_loop_required: 0
+operations:
+- path: /api/info
+  method: get
+  operationId: api_info_api_info_get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+    scope:
+    - email
+    - openid
+    - profile
+- path: /health
+  method: get
+  operationId: health_check_health_get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+    scope:
+    - email
+    - openid
+    - profile
+- path: /api/v1/users/me
+  method: get
+  operationId: _get_user_api_v1_users_me_get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/users/me
+  method: patch
+  operationId: _update_user_api_v1_users_me_patch
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/v1/users/me/appts
+  method: get
+  operationId: _list_appts_api_v1_users_me_appts_get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/users/me/appts/{appt_id}
+  method: get
+  operationId: _get_appt_api_v1_users_me_appts__appt_id__get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/users/me/results/
+  method: get
+  operationId: _get_results_api_v1_users_me_results__get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/users/me/results/{result_id}
+  method: get
+  operationId: _get_result_detail_api_v1_users_me_results__result_id__get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/users/me/results/{result_id}/dexa/scan-info
+  method: get
+  operationId: _get_dexa_scan_info_api_v1_users_me_results__result_id__dexa_scan_info_get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/users/me/results/{result_id}/dexa/composition
+  method: get
+  operationId: _get_dexa_composition_api_v1_users_me_results__result_id__dexa_composition_get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/users/me/results/{result_id}/dexa/bone-density
+  method: get
+  operationId: _get_dexa_bone_density_api_v1_users_me_results__result_id__dexa_bone_density_get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/users/me/results/{result_id}/dexa/percentiles
+  method: get
+  operationId: _get_dexa_percentiles_api_v1_users_me_results__result_id__dexa_percentiles_get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/users/me/results/{result_id}/dexa/visceral-fat
+  method: get
+  operationId: _get_dexa_visceral_fat_api_v1_users_me_results__result_id__dexa_visceral_fat_get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/users/me/results/{result_id}/dexa/rmr
+  method: get
+  operationId: _get_dexa_rmr_api_v1_users_me_results__result_id__dexa_rmr_get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/locations/{location_id}/availability
+  method: get
+  operationId: _get_availability_api_v1_locations__location_id__availability_get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+    scope:
+    - email
+    - openid
+    - profile
+- path: /api/v1/locations/availability
+  method: get
+  operationId: _get_multi_availability_api_v1_locations_availability_get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+    scope:
+    - email
+    - openid
+    - profile
+- path: /api/v1/locations
+  method: get
+  operationId: _list_locations_api_v1_locations_get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+    scope:
+    - email
+    - openid
+    - profile
+- path: /api/v1/locations/{location_id}
+  method: get
+  operationId: _get_location_api_v1_locations__location_id__get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+    scope:
+    - email
+    - openid
+    - profile
+- path: /api/v1/services
+  method: get
+  operationId: _list_services_api_v1_services_get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+    scope:
+    - email
+    - openid
+    - profile
+- path: /api/v1/services/{service_id}
+  method: get
+  operationId: _get_service_api_v1_services__service_id__get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+    scope:
+    - email
+    - openid
+    - profile
+- path: /api/v1/partners/{partner_id}/reservations
+  method: get
+  operationId: _list_partner_reservations_api_v1_partners__partner_id__reservations_get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/partners/{partner_id}/reservations
+  method: post
+  operationId: _create_reservation_api_v1_partners__partner_id__reservations_post
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/v1/partners/{partner_id}/reservations/{appt_id}
+  method: get
+  operationId: _get_partner_reservation_api_v1_partners__partner_id__reservations__appt_id__get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/partners/{partner_id}/reservations/{appt_id}
+  method: delete
+  operationId: _cancel_reservation_api_v1_partners__partner_id__reservations__appt_id__delete
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/v1/partners/{partner_id}/users
+  method: get
+  operationId: _list_partner_users_api_v1_partners__partner_id__users_get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/partners/{partner_id}/users/{user_id}/appts
+  method: get
+  operationId: _list_partner_user_appointments_api_v1_partners__partner_id__users__user_id__appts_get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/partners/{partner_id}/users/{user_id}/results
+  method: get
+  operationId: _list_partner_user_results_api_v1_partners__partner_id__users__user_id__results_get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/partners/{partner_id}/users/{user_id}/results/{result_id}
+  method: get
+  operationId: _get_partner_user_result_detail_api_v1_partners__partner_id__users__user_id__results__result_id__get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/partners/{partner_id}/users/{user_id}/results/{result_id}/export
+  method: post
+  operationId: _create_partner_user_result_export_api_v1_partners__partner_id__users__user_id__results__result_id__export_post
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/v1/partners/{partner_id}/users/{user_id}/results/{result_id}/dexa/composition
+  method: get
+  operationId: _get_partner_dexa_composition_api_v1_partners__partner_id__users__user_id__results__result_id__dexa_composition_get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/partners/{partner_id}/users/{user_id}/results/{result_id}/dexa/bone-density
+  method: get
+  operationId: _get_partner_dexa_bone_density_api_v1_partners__partner_id__users__user_id__results__result_id__dexa_bone_density_get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/partners/{partner_id}/users/{user_id}/results/{result_id}/dexa/percentiles
+  method: get
+  operationId: _get_partner_dexa_percentiles_api_v1_partners__partner_id__users__user_id__results__result_id__dexa_percentiles_get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/partners/{partner_id}/users/{user_id}/results/{result_id}/dexa/visceral-fat
+  method: get
+  operationId: _get_partner_dexa_visceral_fat_api_v1_partners__partner_id__users__user_id__results__result_id__dexa_visceral_fat_get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/partners/{partner_id}/users/{user_id}/results/{result_id}/dexa/rmr
+  method: get
+  operationId: _get_partner_dexa_rmr_api_v1_partners__partner_id__users__user_id__results__result_id__dexa_rmr_get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/partners/{partner_id}/users/{user_id}/results/{result_id}/dexa/scan-info
+  method: get
+  operationId: _get_partner_dexa_scan_info_api_v1_partners__partner_id__users__user_id__results__result_id__dexa_scan_info_get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/partners/{partner_id}/users/{user_id}/intake
+  method: post
+  operationId: _create_intake_api_v1_partners__partner_id__users__user_id__intake_post
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/v1/partners/{partner_id}/orders
+  method: post
+  operationId: _create_order_api_v1_partners__partner_id__orders_post
+  x-agentic-access:
+    action-class: acting
+    consequence: physical
+    subject: required
+    audience: null
+    token:
+      max-ttl: 300
+      exchange: true
+      purpose-required: true
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/v1/partners/{partner_id}/orders
+  method: get
+  operationId: _list_orders_api_v1_partners__partner_id__orders_get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/partners/{partner_id}/orders/{order_id}
+  method: get
+  operationId: _get_order_api_v1_partners__partner_id__orders__order_id__get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/partners/{partner_id}/orders/{order_id}
+  method: patch
+  operationId: _update_order_api_v1_partners__partner_id__orders__order_id__patch
+  x-agentic-access:
+    action-class: acting
+    consequence: physical
+    subject: required
+    audience: null
+    token:
+      max-ttl: 300
+      exchange: true
+      purpose-required: true
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/v1/partners/{partner_id}/webhooks
+  method: get
+  operationId: list_webhooks_api_v1_partners__partner_id__webhooks_get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/partners/{partner_id}/webhooks
+  method: post
+  operationId: create_webhook_api_v1_partners__partner_id__webhooks_post
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/v1/partners/{partner_id}/webhooks/{webhook_id}
+  method: get
+  operationId: get_webhook_api_v1_partners__partner_id__webhooks__webhook_id__get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/partners/{partner_id}/webhooks/{webhook_id}
+  method: patch
+  operationId: update_webhook_api_v1_partners__partner_id__webhooks__webhook_id__patch
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/v1/partners/{partner_id}/webhooks/{webhook_id}
+  method: delete
+  operationId: delete_webhook_api_v1_partners__partner_id__webhooks__webhook_id__delete
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required

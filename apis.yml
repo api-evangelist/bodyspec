@@ -1,23 +1,443 @@
 aid: bodyspec
+
 name: BodySpec
-description: 'BodySpec is a company surfaced via the API Evangelist harvest backlog (source: secondary-market)
-  and added to the network as a stub for full-pipeline profiling.'
+
+image: https://static.bodyspec.com/at/55/6b/556bb64891d971a6
+
+description: BodySpec provides full-body DEXA scanning services that deliver precise body composition data, including fat, muscle, and bone density.
+  Their platform offers an API and MCP access for integrating scan results into health, fitness, and AI applications, supporting bookings, pricing,
+  and data retrieval for individuals and enterprises.
+
 url: https://raw.githubusercontent.com/api-evangelist/bodyspec/refs/heads/main/apis.yml
+
 x-type: company
+
 x-source: harvest:secondary-market
-x-tier: stub
-x-tier-reason: harvest
+
+x-tier: profiled
+x-tier-reason: enrichment pass 2026-10-02 (modular-v1; was harvest)
+
 specificationVersion: '0.20'
+
 created: '2026-10-02'
+
 modified: '2026-10-02'
+
 tags:
 - Company
-apis: []
+- Health
+- Fitness
+- API
+- Data
+
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
+
 common:
+- type: Vendors
+  url: vendors/bodyspec-vendors.yml
+- type: AgenticAccess
+  url: agentic-access/bodyspec-agentic-access.yml
+- type: Spectral
+  url: rules/bodyspec-rules.yml
+- type: JSONLD
+  url: json-ld/bodyspec-context.jsonld
+- type: Vocabulary
+  url: vocabulary/bodyspec-vocabulary.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: Webhooks
+  url: asyncapi/bodyspec-webhooks.yml
+- type: DataModel
+  url: data-model/bodyspec-data-model.yml
+- type: ErrorCatalog
+  url: errors/bodyspec-problem-types.yml
+- type: Conformance
+  url: conformance/bodyspec-conformance.yml
+- type: WellKnown
+  url: well-known/bodyspec-well-known.yml
+- type: Hosts
+  url: hosts/bodyspec-hosts.yml
+- type: Login
+  url: https://www.bodyspec.com/sign-in
+- type: OAuthScopes
+  url: scopes/bodyspec-scopes.yml
+- type: Authentication
+  url: authentication/bodyspec-authentication.yml
+- type: DomainSecurity
+  url: security/bodyspec-domain-security.yml
 - type: Website
-  url: https://www.nasdaqprivatemarket.com/
+  url: https://www.bodyspec.com/
+- type: Documentation
+  url: https://app.bodyspec.com/docs
+- type: APIReference
+  url: https://app.bodyspec.com/docs
+- type: GettingStarted
+  url: https://www.bodyspec.com/pricing-packages
+- type: Blog
+  url: https://www.bodyspec.com/blog
+- type: Pricing
+  url: https://www.bodyspec.com/pricing-packages
+- type: TermsOfService
+  url: https://www.bodyspec.com/terms-of-service
+- type: PrivacyPolicy
+  url: https://www.bodyspec.com/privacy-policy
+
+apis:
+- aid: bodyspec:bodyspec-api-status-api
+  name: BodySpec API Status API
+  description: Health check and monitoring endpoints
+  humanURL: https://app.bodyspec.com/docs
+  baseURL: https://app.bodyspec.com
+  tags:
+  - API Status
+  properties:
+  - type: OpenAPI
+    url: openapi/bodyspec-api-status-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/bodyspec-dexa-composition-response-schema.json
+  - type: JSONSchema
+    url: json-schema/bodyspec-appointment-schema.json
+  - type: JSONSchema
+    url: json-schema/bodyspec-interactive-format-request-schema.json
+  - type: JSONSchema
+    url: json-schema/bodyspec-pdf-format-request-schema.json
+  - type: JSONSchema
+    url: json-schema/bodyspec-order-response-schema.json
+  - type: JSONSchema
+    url: json-schema/bodyspec-intake-create-request-schema.json
+- aid: bodyspec:bodyspec-appointments-api
+  name: BodySpec Appointments API
+  description: Appointments scheduling and management
+  humanURL: https://app.bodyspec.com/docs
+  baseURL: https://app.bodyspec.com
+  tags:
+  - Appointments
+  properties:
+  - type: OpenAPI
+    url: openapi/bodyspec-appointments-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/bodyspec-dexa-composition-response-schema.json
+  - type: JSONSchema
+    url: json-schema/bodyspec-appointment-schema.json
+  - type: JSONSchema
+    url: json-schema/bodyspec-interactive-format-request-schema.json
+  - type: JSONSchema
+    url: json-schema/bodyspec-pdf-format-request-schema.json
+  - type: JSONSchema
+    url: json-schema/bodyspec-order-response-schema.json
+  - type: JSONSchema
+    url: json-schema/bodyspec-intake-create-request-schema.json
+- aid: bodyspec:bodyspec-availability-api
+  name: BodySpec Availability API
+  description: Check appointment availability at locations
+  humanURL: https://app.bodyspec.com/docs
+  baseURL: https://app.bodyspec.com
+  tags:
+  - Availability
+  properties:
+  - type: OpenAPI
+    url: openapi/bodyspec-availability-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/bodyspec-dexa-composition-response-schema.json
+  - type: JSONSchema
+    url: json-schema/bodyspec-appointment-schema.json
+  - type: JSONSchema
+    url: json-schema/bodyspec-interactive-format-request-schema.json
+  - type: JSONSchema
+    url: json-schema/bodyspec-pdf-format-request-schema.json
+  - type: JSONSchema
+    url: json-schema/bodyspec-order-response-schema.json
+  - type: JSONSchema
+    url: json-schema/bodyspec-intake-create-request-schema.json
+- aid: bodyspec:bodyspec-bodyspec-api-api
+  name: BodySpec BodySpec API
+  description: The BodySpec API API from BodySpec — 0 operation(s) for bodyspec api.
+  humanURL: https://app.bodyspec.com/docs
+  baseURL: https://app.bodyspec.com
+  tags:
+  - BodySpec API
+  properties:
+  - type: OpenAPI
+    url: openapi/bodyspec-bodyspec-api-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/bodyspec-dexa-composition-response-schema.json
+  - type: JSONSchema
+    url: json-schema/bodyspec-appointment-schema.json
+  - type: JSONSchema
+    url: json-schema/bodyspec-interactive-format-request-schema.json
+  - type: JSONSchema
+    url: json-schema/bodyspec-pdf-format-request-schema.json
+  - type: JSONSchema
+    url: json-schema/bodyspec-order-response-schema.json
+  - type: JSONSchema
+    url: json-schema/bodyspec-intake-create-request-schema.json
+- aid: bodyspec:bodyspec-locations-api
+  name: BodySpec Locations API
+  description: Browse and search scan locations
+  humanURL: https://app.bodyspec.com/docs
+  baseURL: https://app.bodyspec.com
+  tags:
+  - Locations
+  properties:
+  - type: OpenAPI
+    url: openapi/bodyspec-locations-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/bodyspec-dexa-composition-response-schema.json
+  - type: JSONSchema
+    url: json-schema/bodyspec-appointment-schema.json
+  - type: JSONSchema
+    url: json-schema/bodyspec-interactive-format-request-schema.json
+  - type: JSONSchema
+    url: json-schema/bodyspec-pdf-format-request-schema.json
+  - type: JSONSchema
+    url: json-schema/bodyspec-order-response-schema.json
+  - type: JSONSchema
+    url: json-schema/bodyspec-intake-create-request-schema.json
+- aid: bodyspec:bodyspec-partner-appointments-api
+  name: BodySpec Partner Appointments API
+  description: Partner integration endpoints for user appointments
+  humanURL: https://app.bodyspec.com/docs
+  baseURL: https://app.bodyspec.com
+  tags:
+  - Partner Appointments
+  properties:
+  - type: OpenAPI
+    url: openapi/bodyspec-partner-appointments-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/bodyspec-dexa-composition-response-schema.json
+  - type: JSONSchema
+    url: json-schema/bodyspec-appointment-schema.json
+  - type: JSONSchema
+    url: json-schema/bodyspec-interactive-format-request-schema.json
+  - type: JSONSchema
+    url: json-schema/bodyspec-pdf-format-request-schema.json
+  - type: JSONSchema
+    url: json-schema/bodyspec-order-response-schema.json
+  - type: JSONSchema
+    url: json-schema/bodyspec-intake-create-request-schema.json
+- aid: bodyspec:bodyspec-partner-intake-api
+  name: BodySpec Partner Intake API
+  description: Partner integration endpoints for intake form submission
+  humanURL: https://app.bodyspec.com/docs
+  baseURL: https://app.bodyspec.com
+  tags:
+  - Partner Intake
+  properties:
+  - type: OpenAPI
+    url: openapi/bodyspec-partner-intake-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/bodyspec-dexa-composition-response-schema.json
+  - type: JSONSchema
+    url: json-schema/bodyspec-appointment-schema.json
+  - type: JSONSchema
+    url: json-schema/bodyspec-interactive-format-request-schema.json
+  - type: JSONSchema
+    url: json-schema/bodyspec-pdf-format-request-schema.json
+  - type: JSONSchema
+    url: json-schema/bodyspec-order-response-schema.json
+  - type: JSONSchema
+    url: json-schema/bodyspec-intake-create-request-schema.json
+- aid: bodyspec:bodyspec-partner-orders-api
+  name: BodySpec Partner Orders API
+  description: Partner integration endpoints for medical order upload and management
+  humanURL: https://app.bodyspec.com/docs
+  baseURL: https://app.bodyspec.com
+  tags:
+  - Partner Orders
+  properties:
+  - type: OpenAPI
+    url: openapi/bodyspec-partner-orders-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/bodyspec-dexa-composition-response-schema.json
+  - type: JSONSchema
+    url: json-schema/bodyspec-appointment-schema.json
+  - type: JSONSchema
+    url: json-schema/bodyspec-interactive-format-request-schema.json
+  - type: JSONSchema
+    url: json-schema/bodyspec-pdf-format-request-schema.json
+  - type: JSONSchema
+    url: json-schema/bodyspec-order-response-schema.json
+  - type: JSONSchema
+    url: json-schema/bodyspec-intake-create-request-schema.json
+- aid: bodyspec:bodyspec-partner-results-api
+  name: BodySpec Partner Results API
+  description: Partner integration endpoints for user results
+  humanURL: https://app.bodyspec.com/docs
+  baseURL: https://app.bodyspec.com
+  tags:
+  - Partner Results
+  properties:
+  - type: OpenAPI
+    url: openapi/bodyspec-partner-results-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/bodyspec-dexa-composition-response-schema.json
+  - type: JSONSchema
+    url: json-schema/bodyspec-appointment-schema.json
+  - type: JSONSchema
+    url: json-schema/bodyspec-interactive-format-request-schema.json
+  - type: JSONSchema
+    url: json-schema/bodyspec-pdf-format-request-schema.json
+  - type: JSONSchema
+    url: json-schema/bodyspec-order-response-schema.json
+  - type: JSONSchema
+    url: json-schema/bodyspec-intake-create-request-schema.json
+- aid: bodyspec:bodyspec-partner-users-api
+  name: BodySpec Partner Users API
+  description: Partner integration endpoints for user management
+  humanURL: https://app.bodyspec.com/docs
+  baseURL: https://app.bodyspec.com
+  tags:
+  - Partner Users
+  properties:
+  - type: OpenAPI
+    url: openapi/bodyspec-partner-users-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/bodyspec-dexa-composition-response-schema.json
+  - type: JSONSchema
+    url: json-schema/bodyspec-appointment-schema.json
+  - type: JSONSchema
+    url: json-schema/bodyspec-interactive-format-request-schema.json
+  - type: JSONSchema
+    url: json-schema/bodyspec-pdf-format-request-schema.json
+  - type: JSONSchema
+    url: json-schema/bodyspec-order-response-schema.json
+  - type: JSONSchema
+    url: json-schema/bodyspec-intake-create-request-schema.json
+- aid: bodyspec:bodyspec-partner-webhooks-api
+  name: BodySpec Partner Webhooks API
+  description: Partner integration endpoints for webhook configuration
+  humanURL: https://app.bodyspec.com/docs
+  baseURL: https://app.bodyspec.com
+  tags:
+  - Partner Webhooks
+  properties:
+  - type: OpenAPI
+    url: openapi/bodyspec-partner-webhooks-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/bodyspec-dexa-composition-response-schema.json
+  - type: JSONSchema
+    url: json-schema/bodyspec-appointment-schema.json
+  - type: JSONSchema
+    url: json-schema/bodyspec-interactive-format-request-schema.json
+  - type: JSONSchema
+    url: json-schema/bodyspec-pdf-format-request-schema.json
+  - type: JSONSchema
+    url: json-schema/bodyspec-order-response-schema.json
+  - type: JSONSchema
+    url: json-schema/bodyspec-intake-create-request-schema.json
+- aid: bodyspec:bodyspec-reservations-api
+  name: BodySpec Reservations API
+  description: Partner integration endpoints for reservations
+  humanURL: https://app.bodyspec.com/docs
+  baseURL: https://app.bodyspec.com
+  tags:
+  - Reservations
+  properties:
+  - type: OpenAPI
+    url: openapi/bodyspec-reservations-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/bodyspec-dexa-composition-response-schema.json
+  - type: JSONSchema
+    url: json-schema/bodyspec-appointment-schema.json
+  - type: JSONSchema
+    url: json-schema/bodyspec-interactive-format-request-schema.json
+  - type: JSONSchema
+    url: json-schema/bodyspec-pdf-format-request-schema.json
+  - type: JSONSchema
+    url: json-schema/bodyspec-order-response-schema.json
+  - type: JSONSchema
+    url: json-schema/bodyspec-intake-create-request-schema.json
+- aid: bodyspec:bodyspec-results-api
+  name: BodySpec Results API
+  description: Test results and analysis data
+  humanURL: https://app.bodyspec.com/docs
+  baseURL: https://app.bodyspec.com
+  tags:
+  - Results
+  properties:
+  - type: OpenAPI
+    url: openapi/bodyspec-results-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/bodyspec-dexa-composition-response-schema.json
+  - type: JSONSchema
+    url: json-schema/bodyspec-appointment-schema.json
+  - type: JSONSchema
+    url: json-schema/bodyspec-interactive-format-request-schema.json
+  - type: JSONSchema
+    url: json-schema/bodyspec-pdf-format-request-schema.json
+  - type: JSONSchema
+    url: json-schema/bodyspec-order-response-schema.json
+  - type: JSONSchema
+    url: json-schema/bodyspec-intake-create-request-schema.json
+- aid: bodyspec:bodyspec-services-api
+  name: BodySpec Services API
+  description: Available scan types and services
+  humanURL: https://app.bodyspec.com/docs
+  baseURL: https://app.bodyspec.com
+  tags:
+  - Services
+  properties:
+  - type: OpenAPI
+    url: openapi/bodyspec-services-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/bodyspec-dexa-composition-response-schema.json
+  - type: JSONSchema
+    url: json-schema/bodyspec-appointment-schema.json
+  - type: JSONSchema
+    url: json-schema/bodyspec-interactive-format-request-schema.json
+  - type: JSONSchema
+    url: json-schema/bodyspec-pdf-format-request-schema.json
+  - type: JSONSchema
+    url: json-schema/bodyspec-order-response-schema.json
+  - type: JSONSchema
+    url: json-schema/bodyspec-intake-create-request-schema.json
+- aid: bodyspec:bodyspec-users-api
+  name: BodySpec Users API
+  description: Operations related to user management and profiles
+  humanURL: https://app.bodyspec.com/docs
+  baseURL: https://app.bodyspec.com
+  tags:
+  - Users
+  properties:
+  - type: OpenAPI
+    url: openapi/bodyspec-users-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/bodyspec-dexa-composition-response-schema.json
+  - type: JSONSchema
+    url: json-schema/bodyspec-appointment-schema.json
+  - type: JSONSchema
+    url: json-schema/bodyspec-interactive-format-request-schema.json
+  - type: JSONSchema
+    url: json-schema/bodyspec-pdf-format-request-schema.json
+  - type: JSONSchema
+    url: json-schema/bodyspec-order-response-schema.json
+  - type: JSONSchema
+    url: json-schema/bodyspec-intake-create-request-schema.json
+x-coverage:
+  state: gated
+  reason: partner-login
+  method: derived
+  generated: '2026-10-02'
+  generator: derive-coverage.py (pre-flight evidence)
+  detail: the company serves an API surface but requires credentials before any description of it can be read
+  evidence:
+  - url: https://app.bodyspec.com/openapi.json
+    status: null
+  - url: https://www.bodyspec.com/graphql
+    status: null
+  - url: https://app.bodyspec.com/mcp
+    status: 401
+  - url: https://api.bodyspec.com/v1/graphql
+    status: 401
+  - url: https://www.nasdaqprivatemarket.com/
+    status: 200
+x-enrichment:
+  date: '2026-10-02'
+  status: enriched
+  artifacts_added: 30
+  pass: modular-v1
+  engine: identity=local,contract=local,surfaces=local,docs=local,regulatory=local

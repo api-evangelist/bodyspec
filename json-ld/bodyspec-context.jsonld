@@ -1,0 +1,620 @@
+{
+  "@context": {
+    "@vocab": "https://bodyspec.com/schema#",
+    "schema": "https://schema.org/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "dcterms": "http://purl.org/dc/terms/",
+    "bodyspec": "https://bodyspec.com/schema#",
+    "Address": "bodyspec:Address",
+    "address_line1": {
+      "@id": "bodyspec:address_line1"
+    },
+    "address_line2": {
+      "@id": "bodyspec:address_line2"
+    },
+    "city": {
+      "@id": "bodyspec:city"
+    },
+    "state": {
+      "@id": "bodyspec:state"
+    },
+    "postal_code": {
+      "@id": "bodyspec:postal_code"
+    },
+    "country": {
+      "@id": "bodyspec:country",
+      "@type": "xsd:string"
+    },
+    "Appointment": "bodyspec:Appointment",
+    "appt_id": {
+      "@id": "bodyspec:appt_id",
+      "@type": "xsd:string"
+    },
+    "start_time": {
+      "@id": "bodyspec:start_time",
+      "@type": "xsd:dateTime"
+    },
+    "duration_minutes": {
+      "@id": "bodyspec:duration_minutes",
+      "@type": "xsd:integer"
+    },
+    "location": {
+      "@id": "bodyspec:location",
+      "@type": "@id"
+    },
+    "service": {
+      "@id": "bodyspec:service",
+      "@type": "@id"
+    },
+    "status": {
+      "@id": "bodyspec:status",
+      "@type": "@id"
+    },
+    "reserve_time": {
+      "@id": "bodyspec:reserve_time"
+    },
+    "ApptListResponse": "bodyspec:ApptListResponse",
+    "appts": {
+      "@id": "bodyspec:appts",
+      "@container": "@list"
+    },
+    "pagination": {
+      "@id": "bodyspec:pagination",
+      "@type": "@id"
+    },
+    "ApptStatus": "bodyspec:ApptStatus",
+    "AvailabilityResponse": "bodyspec:AvailabilityResponse",
+    "slots": {
+      "@id": "bodyspec:slots",
+      "@container": "@list"
+    },
+    "max_availability_days": {
+      "@id": "bodyspec:max_availability_days",
+      "@type": "xsd:integer"
+    },
+    "AvailabilitySlot": "bodyspec:AvailabilitySlot",
+    "location_id": {
+      "@id": "bodyspec:location_id",
+      "@type": "xsd:string"
+    },
+    "service_id": {
+      "@id": "bodyspec:service_id",
+      "@type": "xsd:string"
+    },
+    "timezone": {
+      "@id": "bodyspec:timezone",
+      "@type": "xsd:string"
+    },
+    "is_available": {
+      "@id": "bodyspec:is_available",
+      "@type": "xsd:boolean"
+    },
+    "BodyRegion": "bodyspec:BodyRegion",
+    "fat_mass_kg": {
+      "@id": "bodyspec:fat_mass_kg",
+      "@type": "xsd:decimal"
+    },
+    "lean_mass_kg": {
+      "@id": "bodyspec:lean_mass_kg",
+      "@type": "xsd:decimal"
+    },
+    "bone_mass_kg": {
+      "@id": "bodyspec:bone_mass_kg",
+      "@type": "xsd:decimal"
+    },
+    "total_mass_kg": {
+      "@id": "bodyspec:total_mass_kg",
+      "@type": "xsd:decimal"
+    },
+    "tissue_fat_pct": {
+      "@id": "bodyspec:tissue_fat_pct",
+      "@type": "xsd:decimal"
+    },
+    "region_fat_pct": {
+      "@id": "bodyspec:region_fat_pct",
+      "@type": "xsd:decimal"
+    },
+    "Body__create_order_api_v1_partners__partner_id__orders_post": "bodyspec:Body__create_order_api_v1_partners__partner_id__orders_post",
+    "user_id": {
+      "@id": "bodyspec:user_id",
+      "@type": "xsd:string"
+    },
+    "provider_name": {
+      "@id": "bodyspec:provider_name",
+      "@type": "xsd:string"
+    },
+    "provider_npi": {
+      "@id": "bodyspec:provider_npi"
+    },
+    "order_date": {
+      "@id": "bodyspec:order_date",
+      "@type": "xsd:string"
+    },
+    "expiration_date": {
+      "@id": "bodyspec:expiration_date"
+    },
+    "notes": {
+      "@id": "bodyspec:notes"
+    },
+    "file": {
+      "@id": "bodyspec:file",
+      "@type": "xsd:string"
+    },
+    "Body__update_order_api_v1_partners__partner_id__orders__order_id__patch": "bodyspec:Body__update_order_api_v1_partners__partner_id__orders__order_id__patch",
+    "BoneDensity": "bodyspec:BoneDensity",
+    "bone_mineral_density": {
+      "@id": "bodyspec:bone_mineral_density",
+      "@type": "xsd:decimal"
+    },
+    "bone_area_cm2": {
+      "@id": "bodyspec:bone_area_cm2",
+      "@type": "xsd:decimal"
+    },
+    "bone_mineral_content_g": {
+      "@id": "bodyspec:bone_mineral_content_g",
+      "@type": "xsd:decimal"
+    },
+    "age_sex_z_percentile": {
+      "@id": "bodyspec:age_sex_z_percentile"
+    },
+    "peak_sex_t_percentile": {
+      "@id": "bodyspec:peak_sex_t_percentile"
+    },
+    "ClassicPdfFormatRequest": "bodyspec:ClassicPdfFormatRequest",
+    "format": {
+      "@id": "bodyspec:format",
+      "@type": "xsd:string"
+    },
+    "Coordinates": "bodyspec:Coordinates",
+    "latitude": {
+      "@id": "bodyspec:latitude",
+      "@type": "xsd:decimal"
+    },
+    "longitude": {
+      "@id": "bodyspec:longitude",
+      "@type": "xsd:decimal"
+    },
+    "DexaBoneDensityResponse": "bodyspec:DexaBoneDensityResponse",
+    "result_id": {
+      "@id": "bodyspec:result_id",
+      "@type": "xsd:string"
+    },
+    "section_name": {
+      "@id": "bodyspec:section_name",
+      "@type": "xsd:string"
+    },
+    "total": {
+      "@id": "bodyspec:total",
+      "@type": "@id"
+    },
+    "regions": {
+      "@id": "bodyspec:regions"
+    },
+    "DexaCompositionResponse": "bodyspec:DexaCompositionResponse",
+    "android_gynoid_ratio": {
+      "@id": "bodyspec:android_gynoid_ratio"
+    },
+    "DexaPercentilesResponse": "bodyspec:DexaPercentilesResponse",
+    "params": {
+      "@id": "bodyspec:params",
+      "@type": "@id"
+    },
+    "metrics": {
+      "@id": "bodyspec:metrics"
+    },
+    "DexaRmrResponse": "bodyspec:DexaRmrResponse",
+    "estimates": {
+      "@id": "bodyspec:estimates",
+      "@container": "@list"
+    },
+    "DexaScanInfoResponse": "bodyspec:DexaScanInfoResponse",
+    "scanner_model": {
+      "@id": "bodyspec:scanner_model",
+      "@type": "xsd:string"
+    },
+    "acquire_time": {
+      "@id": "bodyspec:acquire_time",
+      "@type": "xsd:dateTime"
+    },
+    "analyze_time": {
+      "@id": "bodyspec:analyze_time",
+      "@type": "xsd:dateTime"
+    },
+    "patient_intake": {
+      "@id": "bodyspec:patient_intake",
+      "@type": "@id"
+    },
+    "DexaVisceralFatResponse": "bodyspec:DexaVisceralFatResponse",
+    "vat_mass_kg": {
+      "@id": "bodyspec:vat_mass_kg",
+      "@type": "xsd:decimal"
+    },
+    "vat_volume_cm3": {
+      "@id": "bodyspec:vat_volume_cm3",
+      "@type": "xsd:decimal"
+    },
+    "ExternalIds": "bodyspec:ExternalIds",
+    "HTTPValidationError": "bodyspec:HTTPValidationError",
+    "detail": {
+      "@id": "bodyspec:detail",
+      "@container": "@list"
+    },
+    "IntakeAdditionalContact": "bodyspec:IntakeAdditionalContact",
+    "name": {
+      "@id": "bodyspec:name",
+      "@type": "xsd:string"
+    },
+    "relationship": {
+      "@id": "bodyspec:relationship",
+      "@type": "xsd:string"
+    },
+    "email": {
+      "@id": "bodyspec:email",
+      "@type": "xsd:string"
+    },
+    "phone_number": {
+      "@id": "bodyspec:phone_number",
+      "@type": "xsd:string"
+    },
+    "IntakeCreateRequest": "bodyspec:IntakeCreateRequest",
+    "user": {
+      "@id": "bodyspec:user",
+      "@type": "@id"
+    },
+    "qualifiers": {
+      "@id": "bodyspec:qualifiers",
+      "@type": "@id"
+    },
+    "disqualifiers": {
+      "@id": "bodyspec:disqualifiers",
+      "@type": "@id"
+    },
+    "addl_contact": {
+      "@id": "bodyspec:addl_contact"
+    },
+    "IntakeDisqualifiers": "bodyspec:IntakeDisqualifiers",
+    "neg_q1_pregnant": {
+      "@id": "bodyspec:neg_q1_pregnant",
+      "@type": "xsd:boolean"
+    },
+    "neg_q2_barium_xray": {
+      "@id": "bodyspec:neg_q2_barium_xray",
+      "@type": "xsd:boolean"
+    },
+    "neg_q3_nuclear": {
+      "@id": "bodyspec:neg_q3_nuclear",
+      "@type": "xsd:boolean"
+    },
+    "IntakeQualifiers": "bodyspec:IntakeQualifiers",
+    "qual_q1_weight": {
+      "@id": "bodyspec:qual_q1_weight",
+      "@type": "xsd:boolean"
+    },
+    "qual_q2_body_fat": {
+      "@id": "bodyspec:qual_q2_body_fat",
+      "@type": "xsd:boolean"
+    },
+    "qual_q3_athlete": {
+      "@id": "bodyspec:qual_q3_athlete",
+      "@type": "xsd:boolean"
+    },
+    "qual_q4_heart_disease": {
+      "@id": "bodyspec:qual_q4_heart_disease",
+      "@type": "xsd:boolean"
+    },
+    "qual_q5_high_blood_pressure": {
+      "@id": "bodyspec:qual_q5_high_blood_pressure",
+      "@type": "xsd:boolean"
+    },
+    "qual_q6_injuries": {
+      "@id": "bodyspec:qual_q6_injuries",
+      "@type": "xsd:boolean"
+    },
+    "qual_q7_research_study": {
+      "@id": "bodyspec:qual_q7_research_study",
+      "@type": "xsd:boolean"
+    },
+    "IntakeResponse": "bodyspec:IntakeResponse",
+    "intake_id": {
+      "@id": "bodyspec:intake_id",
+      "@type": "xsd:string"
+    },
+    "IntakeUser": "bodyspec:IntakeUser",
+    "first_name": {
+      "@id": "bodyspec:first_name",
+      "@type": "xsd:string"
+    },
+    "last_name": {
+      "@id": "bodyspec:last_name",
+      "@type": "xsd:string"
+    },
+    "birth_date": {
+      "@id": "bodyspec:birth_date",
+      "@type": "xsd:string"
+    },
+    "gender": {
+      "@id": "bodyspec:gender",
+      "@type": "xsd:string"
+    },
+    "height_inches": {
+      "@id": "bodyspec:height_inches",
+      "@type": "xsd:integer"
+    },
+    "weight_pounds": {
+      "@id": "bodyspec:weight_pounds",
+      "@type": "xsd:integer"
+    },
+    "ethnicity": {
+      "@id": "bodyspec:ethnicity",
+      "@type": "xsd:string"
+    },
+    "signature": {
+      "@id": "bodyspec:signature"
+    },
+    "InteractiveFormatRequest": "bodyspec:InteractiveFormatRequest",
+    "min_age": {
+      "@id": "bodyspec:min_age"
+    },
+    "max_age": {
+      "@id": "bodyspec:max_age"
+    },
+    "handle": {
+      "@id": "bodyspec:handle"
+    },
+    "Location": "bodyspec:Location",
+    "location_type": {
+      "@id": "bodyspec:location_type",
+      "@type": "xsd:string"
+    },
+    "address": {
+      "@id": "bodyspec:address",
+      "@type": "@id"
+    },
+    "coordinates": {
+      "@id": "bodyspec:coordinates"
+    },
+    "description": {
+      "@id": "bodyspec:description"
+    },
+    "last_updated": {
+      "@id": "bodyspec:last_updated",
+      "@type": "xsd:dateTime"
+    },
+    "distance_miles": {
+      "@id": "bodyspec:distance_miles"
+    },
+    "LocationResponse": "bodyspec:LocationResponse",
+    "LocationsListResponse": "bodyspec:LocationsListResponse",
+    "locations": {
+      "@id": "bodyspec:locations",
+      "@container": "@list"
+    },
+    "MultiLocationAvailabilityResponse": "bodyspec:MultiLocationAvailabilityResponse",
+    "skipped_location_ids": {
+      "@id": "bodyspec:skipped_location_ids",
+      "@container": "@list"
+    },
+    "OrderCreateResponse": "bodyspec:OrderCreateResponse",
+    "order_id": {
+      "@id": "bodyspec:order_id",
+      "@type": "xsd:string"
+    },
+    "OrderResponse": "bodyspec:OrderResponse",
+    "created_at": {
+      "@id": "bodyspec:created_at",
+      "@type": "xsd:dateTime"
+    },
+    "updated_at": {
+      "@id": "bodyspec:updated_at",
+      "@type": "xsd:dateTime"
+    },
+    "OrdersListResponse": "bodyspec:OrdersListResponse",
+    "orders": {
+      "@id": "bodyspec:orders",
+      "@container": "@list"
+    },
+    "Pagination": "bodyspec:Pagination",
+    "page": {
+      "@id": "bodyspec:page",
+      "@type": "xsd:integer"
+    },
+    "page_size": {
+      "@id": "bodyspec:page_size",
+      "@type": "xsd:integer"
+    },
+    "results": {
+      "@id": "bodyspec:results",
+      "@type": "xsd:integer"
+    },
+    "has_more": {
+      "@id": "bodyspec:has_more",
+      "@type": "xsd:boolean"
+    },
+    "PartnerReservation": "bodyspec:PartnerReservation",
+    "appt": {
+      "@id": "bodyspec:appt",
+      "@type": "@id"
+    },
+    "PartnerReservationsListResponse": "bodyspec:PartnerReservationsListResponse",
+    "reservations": {
+      "@id": "bodyspec:reservations",
+      "@container": "@list"
+    },
+    "PartnerUser": "bodyspec:PartnerUser",
+    "phone": {
+      "@id": "bodyspec:phone"
+    },
+    "PartnerUserResponse": "bodyspec:PartnerUserResponse",
+    "link_time": {
+      "@id": "bodyspec:link_time",
+      "@type": "xsd:dateTime"
+    },
+    "PartnerUsersListResponse": "bodyspec:PartnerUsersListResponse",
+    "users": {
+      "@id": "bodyspec:users",
+      "@container": "@list"
+    },
+    "PatientInfo": "bodyspec:PatientInfo",
+    "age_years": {
+      "@id": "bodyspec:age_years",
+      "@type": "xsd:decimal"
+    },
+    "height_cm": {
+      "@id": "bodyspec:height_cm",
+      "@type": "xsd:decimal"
+    },
+    "weight_kg": {
+      "@id": "bodyspec:weight_kg",
+      "@type": "xsd:decimal"
+    },
+    "PdfFormatRequest": "bodyspec:PdfFormatRequest",
+    "PercentileMetric": "bodyspec:PercentileMetric",
+    "value": {
+      "@id": "bodyspec:value",
+      "@type": "xsd:decimal"
+    },
+    "percentile": {
+      "@id": "bodyspec:percentile",
+      "@type": "xsd:integer"
+    },
+    "PercentileParams": "bodyspec:PercentileParams",
+    "reference_age_range": {
+      "@id": "bodyspec:reference_age_range"
+    },
+    "reference_dataset_size": {
+      "@id": "bodyspec:reference_dataset_size",
+      "@type": "xsd:integer"
+    },
+    "ReservationCancelRequest": "bodyspec:ReservationCancelRequest",
+    "reason": {
+      "@id": "bodyspec:reason"
+    },
+    "ReservationCreateRequest": "bodyspec:ReservationCreateRequest",
+    "external": {
+      "@id": "bodyspec:external"
+    },
+    "ReservationResponse": "bodyspec:ReservationResponse",
+    "ResultDetailResponse": "bodyspec:ResultDetailResponse",
+    "create_time": {
+      "@id": "bodyspec:create_time",
+      "@type": "xsd:dateTime"
+    },
+    "update_time": {
+      "@id": "bodyspec:update_time",
+      "@type": "xsd:dateTime"
+    },
+    "sections": {
+      "@id": "bodyspec:sections",
+      "@container": "@list"
+    },
+    "ResultExportResponse": "bodyspec:ResultExportResponse",
+    "url": {
+      "@id": "bodyspec:url"
+    },
+    "ResultFormatType": "bodyspec:ResultFormatType",
+    "ResultSummary": "bodyspec:ResultSummary",
+    "ResultsListResponse": "bodyspec:ResultsListResponse",
+    "RmrEstimate": "bodyspec:RmrEstimate",
+    "formula": {
+      "@id": "bodyspec:formula",
+      "@type": "xsd:string"
+    },
+    "kcal_per_day": {
+      "@id": "bodyspec:kcal_per_day",
+      "@type": "xsd:integer"
+    },
+    "Service": "bodyspec:Service",
+    "service_code": {
+      "@id": "bodyspec:service_code"
+    },
+    "ServiceResponse": "bodyspec:ServiceResponse",
+    "ServicesListResponse": "bodyspec:ServicesListResponse",
+    "services": {
+      "@id": "bodyspec:services",
+      "@container": "@list"
+    },
+    "SortOrder": "bodyspec:SortOrder",
+    "UserResponse": "bodyspec:UserResponse",
+    "UserUpdateRequest": "bodyspec:UserUpdateRequest",
+    "ValidationError": "bodyspec:ValidationError",
+    "loc": {
+      "@id": "bodyspec:loc",
+      "@container": "@list"
+    },
+    "msg": {
+      "@id": "bodyspec:msg",
+      "@type": "xsd:string"
+    },
+    "type": {
+      "@id": "bodyspec:type",
+      "@type": "xsd:string"
+    },
+    "WebhookCreateRequest": "bodyspec:WebhookCreateRequest",
+    "event_type": {
+      "@id": "bodyspec:event_type",
+      "@type": "@id"
+    },
+    "secret": {
+      "@id": "bodyspec:secret"
+    },
+    "enabled": {
+      "@id": "bodyspec:enabled",
+      "@type": "xsd:boolean"
+    },
+    "WebhookEventType": "bodyspec:WebhookEventType",
+    "WebhookReservationCanceledData": "bodyspec:WebhookReservationCanceledData",
+    "canceled_by": {
+      "@id": "bodyspec:canceled_by",
+      "@type": "xsd:string"
+    },
+    "cancel_time": {
+      "@id": "bodyspec:cancel_time",
+      "@type": "xsd:string"
+    },
+    "WebhookReservationCanceledPayload": "bodyspec:WebhookReservationCanceledPayload",
+    "event_id": {
+      "@id": "bodyspec:event_id",
+      "@type": "xsd:string"
+    },
+    "partner_id": {
+      "@id": "bodyspec:partner_id",
+      "@type": "xsd:string"
+    },
+    "data": {
+      "@id": "bodyspec:data",
+      "@type": "@id"
+    },
+    "WebhookReservationCreatedData": "bodyspec:WebhookReservationCreatedData",
+    "WebhookReservationCreatedPayload": "bodyspec:WebhookReservationCreatedPayload",
+    "WebhookReservationNoShowData": "bodyspec:WebhookReservationNoShowData",
+    "no_show_time": {
+      "@id": "bodyspec:no_show_time",
+      "@type": "xsd:string"
+    },
+    "WebhookReservationNoShowPayload": "bodyspec:WebhookReservationNoShowPayload",
+    "WebhookResponse": "bodyspec:WebhookResponse",
+    "webhook_id": {
+      "@id": "bodyspec:webhook_id",
+      "@type": "xsd:string"
+    },
+    "has_secret": {
+      "@id": "bodyspec:has_secret",
+      "@type": "xsd:boolean"
+    },
+    "WebhookResultsReadyData": "bodyspec:WebhookResultsReadyData",
+    "WebhookResultsReadyPayload": "bodyspec:WebhookResultsReadyPayload",
+    "WebhookUpdateRequest": "bodyspec:WebhookUpdateRequest",
+    "WebhooksListResponse": "bodyspec:WebhooksListResponse",
+    "webhooks": {
+      "@id": "bodyspec:webhooks",
+      "@container": "@list"
+    }
+  },
+  "@type": "schema:Dataset",
+  "schema:name": "BodySpec API JSON-LD context",
+  "schema:description": "A JSON-LD @context for the objects BodySpec's own API contract declares: one class per component schema, one property per declared field, typed from the contract. Derived by script (derive-json-ld.py, 2026-10-02) from openapi/bodyspec-openapi.json.",
+  "dcterms:created": "2026-10-02",
+  "dcterms:source": [
+    "openapi/bodyspec-openapi.json"
+  ]
+}

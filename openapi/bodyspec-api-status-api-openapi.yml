@@ -1,0 +1,111 @@
+openapi: 3.2.0
+info:
+  title: BodySpec API Status API
+  description: This API allows BodySpec users to integrate their DEXA scan data with other platforms.
+  license:
+    name: Proprietary
+  version: 0.18.2
+servers:
+- url: https://app.bodyspec.com
+  description: Production server
+security:
+- OAuth2:
+  - openid
+  - profile
+  - email
+- BearerAuth: []
+tags:
+- name: API Status
+  description: Health check and monitoring endpoints
+paths:
+  /api/info:
+    get:
+      tags:
+      - API Status
+      summary: Get API info
+      description: Get basic information about the API including version and available endpoints.
+      operationId: api_info_api_info_get
+      responses:
+        '200':
+          description: API information
+          content:
+            application/json:
+              schema:
+                additionalProperties: true
+                type: object
+                title: Response Api Info Api Info Get
+              example:
+                name: BodySpec API
+                version: 0.18.2
+                description: API for users to access their BodySpec data
+                documentation: /docs
+                openapi: /openapi.json
+                health: /health
+  /health:
+    get:
+      tags:
+      - API Status
+      summary: Check API health
+      description: Check if the API is healthy and responding to requests.
+      operationId: health_check_health_get
+      responses:
+        '200':
+          description: API is healthy
+          content:
+            application/json:
+              schema:
+                additionalProperties:
+                  type: string
+                type: object
+                title: Response Health Check Health Get
+              example:
+                status: healthy
+                environment: development
+                version: 0.18.2
+components:
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      description: OAuth2 authentication via Keycloak with PKCE
+      flows:
+        authorizationCode:
+          authorizationUrl: https://auth.bodyspec.com/realms/bodyspec/protocol/openid-connect/auth
+          tokenUrl: https://auth.bodyspec.com/realms/bodyspec/protocol/openid-connect/token
+          scopes:
+            openid: OpenID Connect scope
+            profile: Access to user profile
+            email: Access to user email
+          x-usePkce: SHA-256
+          x-scalar-client-id: bodyspec-api-ext-v1
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT Bearer token for authentication
+    PartnerAuth:
+      type: http
+      scheme: basic
+      description: For partner integrations only. Contact BodySpec to obtain credentials.
+x-tagGroups:
+- name: 👤 User Data
+  tags:
+  - Users
+  - Appointments
+  - Results
+- name: 📅 Availability
+  tags:
+  - Locations
+  - Services
+  - Availability
+- name: 🤝 Partners
+  tags:
+  - Reservations
+  - Partner Users
+  - Partner Appointments
+  - Partner Results
+  - Partner Intake
+  - Partner Orders
+  - Partner Webhooks
+- name: 🏥 API Status
+  tags:
+  - API Status

@@ -1,0 +1,518 @@
+openapi: 3.2.0
+info:
+  title: BodySpec Partner Orders API
+  description: This API allows BodySpec users to integrate their DEXA scan data with other platforms.
+  license:
+    name: Proprietary
+  version: 0.18.2
+servers:
+- url: https://app.bodyspec.com
+  description: Production server
+security:
+- OAuth2:
+  - openid
+  - profile
+  - email
+- BearerAuth: []
+tags:
+- name: Partner Orders
+  description: Partner integration endpoints for medical order upload and management
+paths:
+  /api/v1/partners/{partner_id}/orders:
+    post:
+      tags:
+      - Partner Orders
+      summary: Create order
+      description: Upload a partner-generated medical order (metadata + PDF) for a user.
+      operationId: _create_order_api_v1_partners__partner_id__orders_post
+      security:
+      - HTTPBasic: []
+      - PartnerAuth: []
+      parameters:
+      - name: partner_id
+        in: path
+        required: true
+        schema:
+          type: string
+          description: Partner ID
+          title: Partner Id
+        description: Partner ID
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Body__create_order_api_v1_partners__partner_id__orders_post'
+      responses:
+        '201':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderCreateResponse'
+              example:
+                order_id: ord_abc123
+        '400':
+          description: Invalid PDF or request
+        '401':
+          description: Invalid partner authentication
+        '403':
+          description: Partner ID mismatch or user not linked to partner
+        '422':
+          description: Validation error in order metadata
+    get:
+      tags:
+      - Partner Orders
+      summary: List orders
+      description: List partner-generated orders with optional filtering and pagination.
+      operationId: _list_orders_api_v1_partners__partner_id__orders_get
+      security:
+      - HTTPBasic: []
+      - PartnerAuth: []
+      parameters:
+      - name: partner_id
+        in: path
+        required: true
+        schema:
+          type: string
+          description: Partner ID
+          title: Partner Id
+        description: Partner ID
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: Page number
+          default: 1
+          title: Page
+        description: Page number
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 100
+          minimum: 1
+          description: Results per page
+          default: 20
+          title: Page Size
+        description: Results per page
+      - name: user_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter by user ID
+          title: User Id
+        description: Filter by user ID
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrdersListResponse'
+        '401':
+          description: Invalid partner authentication
+        '403':
+          description: Partner ID mismatch
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/partners/{partner_id}/orders/{order_id}:
+    get:
+      tags:
+      - Partner Orders
+      summary: Get order
+      description: Get details of a specific partner order.
+      operationId: _get_order_api_v1_partners__partner_id__orders__order_id__get
+      security:
+      - HTTPBasic: []
+      - PartnerAuth: []
+      parameters:
+      - name: partner_id
+        in: path
+        required: true
+        schema:
+          type: string
+          description: Partner ID
+          title: Partner Id
+        description: Partner ID
+      - name: order_id
+        in: path
+        required: true
+        schema:
+          type: string
+          description: Order ID
+          title: Order Id
+        description: Order ID
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderResponse'
+        '401':
+          description: Invalid partner authentication
+        '403':
+          description: Partner ID mismatch
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              example:
+                detail: Order not found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    patch:
+      tags:
+      - Partner Orders
+      summary: Update order
+      description: Update a partner order's metadata and/or replace the PDF.
+      operationId: _update_order_api_v1_partners__partner_id__orders__order_id__patch
+      security:
+      - HTTPBasic: []
+      - PartnerAuth: []
+      parameters:
+      - name: partner_id
+        in: path
+        required: true
+        schema:
+          type: string
+          description: Partner ID
+          title: Partner Id
+        description: Partner ID
+      - name: order_id
+        in: path
+        required: true
+        schema:
+          type: string
+          description: Order ID
+          title: Order Id
+        description: Order ID
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Body__update_order_api_v1_partners__partner_id__orders__order_id__patch'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderResponse'
+        '400':
+          description: No update data provided or invalid PDF
+        '401':
+          description: Invalid partner authentication
+        '403':
+          description: Partner ID mismatch
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              example:
+                detail: Order not found
+        '422':
+          description: Validation error in order metadata
+components:
+  schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+      x-internal: true
+    OrderCreateResponse:
+      properties:
+        order_id:
+          type: string
+          title: Order Id
+          description: Created order ID
+      type: object
+      required:
+      - order_id
+      title: OrderCreateResponse
+      description: Response from order creation.
+    Body__update_order_api_v1_partners__partner_id__orders__order_id__patch:
+      properties:
+        provider_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Provider Name
+          description: Ordering provider name
+        provider_npi:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Provider Npi
+          description: Provider NPI number (10 digits)
+        order_date:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Order Date
+          description: Date order was written (YYYY-MM-DD)
+        expiration_date:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Expiration Date
+          description: Order expiration date (YYYY-MM-DD)
+        notes:
+          anyOf:
+          - type: string
+            maxLength: 2000
+          - type: 'null'
+          title: Notes
+          description: Additional notes
+        file:
+          anyOf:
+          - type: string
+            format: binary
+          - type: 'null'
+          title: File
+          description: Replacement PDF file
+      type: object
+      title: Body__update_order_api_v1_partners__partner_id__orders__order_id__patch
+      x-internal: true
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+      x-internal: true
+    OrderResponse:
+      properties:
+        order_id:
+          type: string
+          title: Order Id
+          description: Order ID
+        user_id:
+          type: string
+          title: User Id
+          description: User ID
+        provider_name:
+          type: string
+          title: Provider Name
+          description: Ordering provider name
+        provider_npi:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Provider Npi
+          description: Provider NPI number
+        order_date:
+          type: string
+          title: Order Date
+          description: Date order was written (YYYY-MM-DD)
+        expiration_date:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Expiration Date
+          description: Order expiration date (YYYY-MM-DD)
+        notes:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Notes
+          description: Additional notes
+        status:
+          type: string
+          title: Status
+          description: Order status
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: Creation timestamp (ISO 8601 UTC)
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+          description: Last update timestamp (ISO 8601 UTC)
+      type: object
+      required:
+      - order_id
+      - user_id
+      - provider_name
+      - order_date
+      - status
+      - created_at
+      - updated_at
+      title: OrderResponse
+      description: Response for a single order.
+    Body__create_order_api_v1_partners__partner_id__orders_post:
+      properties:
+        user_id:
+          type: string
+          minLength: 1
+          title: User Id
+          description: BodySpec user ID
+        provider_name:
+          type: string
+          minLength: 1
+          title: Provider Name
+          description: Ordering provider name
+        provider_npi:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Provider Npi
+          description: Provider NPI number (10 digits)
+        order_date:
+          type: string
+          title: Order Date
+          description: Date order was written (YYYY-MM-DD)
+        expiration_date:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Expiration Date
+          description: Order expiration date (YYYY-MM-DD)
+        notes:
+          anyOf:
+          - type: string
+            maxLength: 2000
+          - type: 'null'
+          title: Notes
+          description: Additional notes
+        file:
+          type: string
+          format: binary
+          title: File
+          description: PDF file of the medical order
+      type: object
+      required:
+      - user_id
+      - provider_name
+      - order_date
+      - file
+      title: Body__create_order_api_v1_partners__partner_id__orders_post
+      x-internal: true
+    OrdersListResponse:
+      properties:
+        orders:
+          items:
+            $ref: '#/components/schemas/OrderResponse'
+          type: array
+          title: Orders
+          description: List of orders
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+          description: Pagination info
+      type: object
+      required:
+      - orders
+      - pagination
+      title: OrdersListResponse
+      description: Paginated list of orders.
+      x-internal: true
+    Pagination:
+      properties:
+        page:
+          type: integer
+          title: Page
+          description: Current page number
+        page_size:
+          type: integer
+          title: Page Size
+          description: Number of items per page
+        results:
+          type: integer
+          title: Results
+          description: Number of results in this page
+        has_more:
+          type: boolean
+          title: Has More
+          description: Whether more results exist after this page
+      type: object
+      required:
+      - page
+      - page_size
+      - results
+      - has_more
+      title: Pagination
+      description: Pagination information for list responses.
+      x-internal: true
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      description: OAuth2 authentication via Keycloak with PKCE
+      flows:
+        authorizationCode:
+          authorizationUrl: https://auth.bodyspec.com/realms/bodyspec/protocol/openid-connect/auth
+          tokenUrl: https://auth.bodyspec.com/realms/bodyspec/protocol/openid-connect/token
+          scopes:
+            openid: OpenID Connect scope
+            profile: Access to user profile
+            email: Access to user email
+          x-usePkce: SHA-256
+          x-scalar-client-id: bodyspec-api-ext-v1
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT Bearer token for authentication
+    PartnerAuth:
+      type: http
+      scheme: basic
+      description: For partner integrations only. Contact BodySpec to obtain credentials.
+x-tagGroups:
+- name: 👤 User Data
+  tags:
+  - Users
+  - Appointments
+  - Results
+- name: 📅 Availability
+  tags:
+  - Locations
+  - Services
+  - Availability
+- name: 🤝 Partners
+  tags:
+  - Reservations
+  - Partner Users
+  - Partner Appointments
+  - Partner Results
+  - Partner Intake
+  - Partner Orders
+  - Partner Webhooks
+- name: 🏥 API Status
+  tags:
+  - API Status

@@ -1,0 +1,94 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/bodyspec/main/json-schema/bodyspec-interactive-format-request-schema.json",
+  "title": "InteractiveFormatRequest",
+  "description": "Request body for bodyspec_interactive export format.",
+  "x-generated": "2026-10-02",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/bodyspec-openapi.json#/components/schemas/InteractiveFormatRequest",
+  "properties": {
+    "min_age": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "maximum": 75.0,
+          "minimum": 20.0
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Min Age",
+      "description": "Minimum age for percentile comparison range. Defaults to patient age minus 3, clamped to 20."
+    },
+    "max_age": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "maximum": 80.0,
+          "minimum": 20.0
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Max Age",
+      "description": "Maximum age for percentile comparison range. Defaults to patient age plus 3, clamped to 80."
+    },
+    "gender": {
+      "anyOf": [
+        {
+          "type": "string",
+          "enum": [
+            "Male",
+            "Female"
+          ]
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Gender",
+      "description": "Patient gender for percentile comparison. Auto-detected from scan data if omitted."
+    },
+    "handle": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Handle",
+      "description": "Display name on the report. Defaults to the user's first name if omitted."
+    },
+    "appts": {
+      "anyOf": [
+        {
+          "items": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{32}$"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Appts",
+      "description": "Appointment IDs to include as historical comparisons. Each ID must be a 32-character hex string. The current result is always included automatically. Defaults to all of the user's DEXA scans if omitted."
+    },
+    "format": {
+      "type": "string",
+      "const": "bodyspec_interactive",
+      "title": "Format"
+    }
+  },
+  "type": "object",
+  "required": [
+    "format"
+  ],
+  "x-internal": true
+}

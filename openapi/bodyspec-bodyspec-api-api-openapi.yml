@@ -1,0 +1,528 @@
+openapi: 3.2.0
+info:
+  title: BodySpec API
+  description: This API allows BodySpec users to integrate their DEXA scan data with other platforms.
+  license:
+    name: Proprietary
+  version: 0.18.2
+servers:
+- url: https://app.bodyspec.com
+  description: Production server
+security:
+- OAuth2:
+  - openid
+  - profile
+  - email
+- BearerAuth: []
+tags:
+- name: BodySpec API
+paths: {}
+webhooks:
+  results_ready:
+    post:
+      summary: Webhook Results Ready
+      description: 'When a user''s scan results are ready to pull, BodySpec sends a POST request with
+
+        this payload to your registered webhook URL. The event fires once the underlying
+
+        analysis has landed in BodySpec''s database, so the results are queryable by the time
+
+        you receive it.
+
+
+        Delivery is at-least-once: if a scan is re-analyzed, another results_ready is sent
+
+        for the same result. Treat repeats as expected and deduplicate on `data.result_id`.
+
+        `event_id` is unique per delivery and differs across repeats, so do not dedupe on it.'
+      operationId: webhook_results_readyresults_ready_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WebhookResultsReadyPayload'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      tags:
+      - BodySpec API
+  reservation_created:
+    post:
+      summary: Webhook Reservation Created
+      description: 'When a new reservation is created for a user, BodySpec sends a POST request
+
+        with this payload to your registered webhook URL.'
+      operationId: webhook_reservation_createdreservation_created_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WebhookReservationCreatedPayload'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      tags:
+      - BodySpec API
+  reservation_canceled:
+    post:
+      summary: Webhook Reservation Canceled
+      description: 'When a reservation is cancelled, BodySpec sends a POST request with this
+
+        payload to your registered webhook URL. The `canceled_by` field identifies
+
+        who initiated the cancellation.'
+      operationId: webhook_reservation_canceledreservation_canceled_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WebhookReservationCanceledPayload'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      tags:
+      - BodySpec API
+  reservation_no_show:
+    post:
+      summary: Webhook Reservation No Show
+      description: 'When BodySpec determines that a reserved appointment was a no-show, it sends a POST
+
+        request with this payload to your registered webhook URL. BodySpec does not record
+
+        attendance, so this is inferred and deliberately conservative: it fires only once the
+
+        appointment time has passed with no published results, the location has finished its
+
+        day, and a later appointment at the same location that day produced results. An
+
+        appointment that never meets that bar stays `pending_scan` and no event is sent. If
+
+        results are published later, a `results_ready` event follows and supersedes this one.'
+      operationId: webhook_reservation_no_showreservation_no_show_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WebhookReservationNoShowPayload'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      tags:
+      - BodySpec API
+components:
+  schemas:
+    WebhookResultsReadyPayload:
+      properties:
+        event_type:
+          type: string
+          const: results_ready
+          title: Event Type
+          description: Type of event (always 'results_ready' for this payload)
+        event_id:
+          type: string
+          title: Event Id
+          description: Unique identifier for this event
+        partner_id:
+          type: string
+          title: Partner Id
+          description: Partner ID this event is for
+        data:
+          $ref: '#/components/schemas/WebhookResultsReadyData'
+          description: Event data containing user and result information
+      type: object
+      required:
+      - event_type
+      - event_id
+      - partner_id
+      - data
+      title: WebhookResultsReadyPayload
+      description: 'Webhook payload for results_ready events.
+
+
+        Sent when scan results are ready for a user.'
+      examples:
+      - data:
+          appt_id: d7ecde6e9518008607e0e1e3b4b960d9
+          result_id: d7ecde6e9518008607e0e1e3b4b960d9
+          service_id: 8d0e0a1f561f4ec69dbca50ea14336d
+          start_time: '2024-03-15T10:30:00-07:00'
+          user_id: a5950beea2a7487fb79cfdbeb77fa555
+        event_id: 550e8400e29b41d4a716446655440000
+        event_type: results_ready
+        partner_id: pk_acme
+      x-internal: true
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+      x-internal: true
+    WebhookReservationCreatedData:
+      properties:
+        user_id:
+          type: string
+          title: User Id
+          description: BodySpec user ID
+        appt_id:
+          type: string
+          title: Appt Id
+          description: Appointment ID
+        service_id:
+          type: string
+          title: Service Id
+          description: Service identifier
+        start_time:
+          type: string
+          title: Start Time
+          description: Appointment start time in ISO 8601 format with timezone
+      type: object
+      required:
+      - user_id
+      - appt_id
+      - service_id
+      - start_time
+      title: WebhookReservationCreatedData
+      description: Data payload for reservation_created webhook event.
+      x-internal: true
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+      x-internal: true
+    WebhookReservationNoShowData:
+      properties:
+        user_id:
+          type: string
+          title: User Id
+          description: BodySpec user ID
+        appt_id:
+          type: string
+          title: Appt Id
+          description: Appointment ID
+        service_id:
+          type: string
+          title: Service Id
+          description: Service identifier
+        start_time:
+          type: string
+          title: Start Time
+          description: Scheduled start time of the missed appointment, in ISO 8601 format with timezone
+        no_show_time:
+          type: string
+          title: No Show Time
+          description: 'When BodySpec concluded the appointment was a no-show, in ISO 8601 format with timezone. BodySpec does not record attendance, so this is inferred: the appointment time passed with no published results, the location finished its day, and a later appointment at the same location that day did produce results (evidence the location was operating). If results for this appointment are published later, a `results_ready` event follows and supersedes this one.'
+      type: object
+      required:
+      - user_id
+      - appt_id
+      - service_id
+      - start_time
+      - no_show_time
+      title: WebhookReservationNoShowData
+      description: Data payload for reservation_no_show webhook event.
+      x-internal: true
+    WebhookResultsReadyData:
+      properties:
+        user_id:
+          type: string
+          title: User Id
+          description: BodySpec user ID
+        result_id:
+          type: string
+          title: Result Id
+          description: Result/appointment ID
+        appt_id:
+          type: string
+          title: Appt Id
+          description: Appointment ID. For results_ready events this is the same value as result_id; it is echoed under its own key so it can be correlated with the appt_id from the reservation_created event.
+        service_id:
+          type: string
+          title: Service Id
+          description: Service identifier
+        start_time:
+          type: string
+          title: Start Time
+          description: Result time in ISO 8601 format with timezone
+      type: object
+      required:
+      - user_id
+      - result_id
+      - appt_id
+      - service_id
+      - start_time
+      title: WebhookResultsReadyData
+      description: Data payload for results_ready webhook event.
+      x-internal: true
+    WebhookReservationCreatedPayload:
+      properties:
+        event_type:
+          type: string
+          const: reservation_created
+          title: Event Type
+          description: Type of event (always 'reservation_created' for this payload)
+        event_id:
+          type: string
+          title: Event Id
+          description: Unique identifier for this event
+        partner_id:
+          type: string
+          title: Partner Id
+          description: Partner ID this event is for
+        data:
+          $ref: '#/components/schemas/WebhookReservationCreatedData'
+          description: Event data containing user and appointment information
+      type: object
+      required:
+      - event_type
+      - event_id
+      - partner_id
+      - data
+      title: WebhookReservationCreatedPayload
+      description: 'Webhook payload for reservation_created events.
+
+
+        Sent when a new reservation is created for a user.'
+      examples:
+      - data:
+          appt_id: e8c91d4a2b7f3e6c8d0a5b9f1c3e7d2a
+          service_id: 8d0e0a1f561f4ec69dbca50ea14336d
+          start_time: '2024-03-20T14:00:00-07:00'
+          user_id: a5950beea2a7487fb79cfdbeb77fa555
+        event_id: 7f3a9c12b8e64d21f9a8b7c6d5e4f3a2
+        event_type: reservation_created
+        partner_id: pk_acme
+      x-internal: true
+    WebhookReservationCanceledData:
+      properties:
+        user_id:
+          type: string
+          title: User Id
+          description: BodySpec user ID
+        appt_id:
+          type: string
+          title: Appt Id
+          description: Appointment ID
+        service_id:
+          type: string
+          title: Service Id
+          description: Service identifier
+        start_time:
+          type: string
+          title: Start Time
+          description: Start time of the cancelled appointment, in ISO 8601 format with timezone
+        canceled_by:
+          type: string
+          enum:
+          - user
+          - bodyspec
+          - partner
+          - other
+          title: Canceled By
+          description: Who initiated the cancellation. 'user' means the customer cancelled it themselves, 'bodyspec' means BodySpec staff cancelled it, 'partner' means it was cancelled through the partner API, and 'other' covers system or automated cancellations.
+        cancel_time:
+          type: string
+          title: Cancel Time
+          description: When the cancellation occurred, in ISO 8601 format with timezone
+      type: object
+      required:
+      - user_id
+      - appt_id
+      - service_id
+      - start_time
+      - canceled_by
+      - cancel_time
+      title: WebhookReservationCanceledData
+      description: Data payload for reservation_canceled webhook event.
+      x-internal: true
+    WebhookReservationCanceledPayload:
+      properties:
+        event_type:
+          type: string
+          const: reservation_canceled
+          title: Event Type
+          description: Type of event (always 'reservation_canceled' for this payload)
+        event_id:
+          type: string
+          title: Event Id
+          description: Unique identifier for this event
+        partner_id:
+          type: string
+          title: Partner Id
+          description: Partner ID this event is for
+        data:
+          $ref: '#/components/schemas/WebhookReservationCanceledData'
+          description: Event data containing user, appointment, and cancellation information
+      type: object
+      required:
+      - event_type
+      - event_id
+      - partner_id
+      - data
+      title: WebhookReservationCanceledPayload
+      description: 'Webhook payload for reservation_canceled events.
+
+
+        Sent when a reservation is cancelled, regardless of who initiated it.'
+      examples:
+      - data:
+          appt_id: e8c91d4a2b7f3e6c8d0a5b9f1c3e7d2a
+          cancel_time: '2024-03-18T09:12:44-07:00'
+          canceled_by: partner
+          service_id: 8d0e0a1f561f4ec69dbca50ea14336d
+          start_time: '2024-03-20T14:00:00-07:00'
+          user_id: a5950beea2a7487fb79cfdbeb77fa555
+        event_id: 3b7d2e91c4a85f60b2d9e8a1f7c4b3d6
+        event_type: reservation_canceled
+        partner_id: pk_acme
+      x-internal: true
+    WebhookReservationNoShowPayload:
+      properties:
+        event_type:
+          type: string
+          const: reservation_no_show
+          title: Event Type
+          description: Type of event (always 'reservation_no_show' for this payload)
+        event_id:
+          type: string
+          title: Event Id
+          description: Unique identifier for this event
+        partner_id:
+          type: string
+          title: Partner Id
+          description: Partner ID this event is for
+        data:
+          $ref: '#/components/schemas/WebhookReservationNoShowData'
+          description: Event data containing user, appointment, and no-show determination information
+      type: object
+      required:
+      - event_type
+      - event_id
+      - partner_id
+      - data
+      title: WebhookReservationNoShowPayload
+      description: 'Webhook payload for reservation_no_show events.
+
+
+        Sent when BodySpec determines that a reserved appointment was a no-show. BodySpec does not
+
+        record attendance, so the determination is inferred and deliberately conservative; a later
+
+        `results_ready` event for the same appointment supersedes it.'
+      examples:
+      - data:
+          appt_id: e8c91d4a2b7f3e6c8d0a5b9f1c3e7d2a
+          no_show_time: '2024-03-20T19:05:12-07:00'
+          service_id: 8d0e0a1f561f4ec69dbca50ea14336d
+          start_time: '2024-03-20T14:00:00-07:00'
+          user_id: a5950beea2a7487fb79cfdbeb77fa555
+        event_id: 9c1f4e27ab8d43e6b5f2a0c7d8e91b34
+        event_type: reservation_no_show
+        partner_id: pk_acme
+      x-internal: true
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      description: OAuth2 authentication via Keycloak with PKCE
+      flows:
+        authorizationCode:
+          authorizationUrl: https://auth.bodyspec.com/realms/bodyspec/protocol/openid-connect/auth
+          tokenUrl: https://auth.bodyspec.com/realms/bodyspec/protocol/openid-connect/token
+          scopes:
+            openid: OpenID Connect scope
+            profile: Access to user profile
+            email: Access to user email
+          x-usePkce: SHA-256
+          x-scalar-client-id: bodyspec-api-ext-v1
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT Bearer token for authentication
+    PartnerAuth:
+      type: http
+      scheme: basic
+      description: For partner integrations only. Contact BodySpec to obtain credentials.
+x-tagGroups:
+- name: 👤 User Data
+  tags:
+  - Users
+  - Appointments
+  - Results
+- name: 📅 Availability
+  tags:
+  - Locations
+  - Services
+  - Availability
+- name: 🤝 Partners
+  tags:
+  - Reservations
+  - Partner Users
+  - Partner Appointments
+  - Partner Results
+  - Partner Intake
+  - Partner Orders
+  - Partner Webhooks
+- name: 🏥 API Status
+  tags:
+  - API Status

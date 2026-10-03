@@ -1,0 +1,328 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/bodyspec/main/json-schema/bodyspec-appointment-schema.json",
+  "title": "Appointment",
+  "description": "Appointment information.",
+  "x-generated": "2026-10-02",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/bodyspec-openapi.json#/components/schemas/Appointment",
+  "properties": {
+    "appt_id": {
+      "type": "string",
+      "title": "Appt Id",
+      "description": "Unique identifier for the appointment"
+    },
+    "start_time": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Start Time",
+      "description": "Appointment start time in location timezone"
+    },
+    "duration_minutes": {
+      "type": "integer",
+      "title": "Duration Minutes",
+      "description": "Duration of the appointment in minutes"
+    },
+    "location": {
+      "$ref": "#/$defs/Location",
+      "description": "Location details"
+    },
+    "service": {
+      "$ref": "#/$defs/Service",
+      "description": "Service information"
+    },
+    "status": {
+      "$ref": "#/$defs/ApptStatus",
+      "description": "Appointment outcome. `scheduled` — upcoming, results not expected yet. `pending_scan` — the appointment time has passed but results are not published yet, or no other scan at that location later that day produced results either (which reads as a site problem rather than a missed appointment). `completed` — results are published and retrievable. `no_show` — the appointment time has passed with no results, and a later scan at the same location that day did produce results, so the location was operating normally. Note that `pending_scan` can be a lasting state: BodySpec does not record attendance, so an appointment is only reported as `no_show` when there is positive evidence the location was operating. When BodySpec makes the `no_show` determination for a partner appointment, a `reservation_no_show` webhook is emitted."
+    },
+    "reserve_time": {
+      "anyOf": [
+        {
+          "type": "string",
+          "format": "date-time"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Reserve Time",
+      "description": "UTC timestamp when the appointment was reserved, if applicable"
+    }
+  },
+  "type": "object",
+  "required": [
+    "appt_id",
+    "start_time",
+    "duration_minutes",
+    "location",
+    "service",
+    "status"
+  ],
+  "$defs": {
+    "Address": {
+      "properties": {
+        "address_line1": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Address Line1",
+          "description": "Primary address line"
+        },
+        "address_line2": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Address Line2",
+          "description": "Secondary address line (e.g., suite number)"
+        },
+        "city": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "City",
+          "description": "City name"
+        },
+        "state": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "State",
+          "description": "State or province"
+        },
+        "postal_code": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Postal Code",
+          "description": "Postal/ZIP code"
+        },
+        "country": {
+          "type": "string",
+          "title": "Country",
+          "description": "Two-letter ISO country code",
+          "default": "US"
+        }
+      },
+      "type": "object",
+      "title": "Address",
+      "description": "Address information for a location.",
+      "x-internal": true
+    },
+    "ApptStatus": {
+      "type": "string",
+      "enum": [
+        "scheduled",
+        "pending_scan",
+        "completed",
+        "no_show"
+      ],
+      "title": "ApptStatus",
+      "description": "Derived appointment outcome.\n\nBodySpec does not record attendance, so the outcome is inferred from whether\npublished results exist and from what happened at the same location that day.",
+      "x-internal": true
+    },
+    "Coordinates": {
+      "properties": {
+        "latitude": {
+          "type": "number",
+          "title": "Latitude",
+          "description": "Latitude in decimal degrees"
+        },
+        "longitude": {
+          "type": "number",
+          "title": "Longitude",
+          "description": "Longitude in decimal degrees"
+        }
+      },
+      "type": "object",
+      "required": [
+        "latitude",
+        "longitude"
+      ],
+      "title": "Coordinates",
+      "description": "Geographic coordinates for a location.",
+      "x-internal": true
+    },
+    "Location": {
+      "properties": {
+        "location_id": {
+          "type": "string",
+          "title": "Location Id",
+          "description": "Unique identifier for the location"
+        },
+        "name": {
+          "type": "string",
+          "title": "Name",
+          "description": "Location name"
+        },
+        "location_type": {
+          "type": "string",
+          "title": "Location Type",
+          "description": "Type of location: 'mobile' or 'storefront'"
+        },
+        "address": {
+          "$ref": "#/$defs/Address",
+          "description": "Address information"
+        },
+        "coordinates": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Coordinates"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Geographic coordinates"
+        },
+        "timezone": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Timezone",
+          "description": "IANA timezone identifier (e.g., 'America/Los_Angeles')"
+        },
+        "description": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Description",
+          "description": "Public notes or description"
+        },
+        "last_updated": {
+          "type": "string",
+          "format": "date-time",
+          "title": "Last Updated",
+          "description": "Last update timestamp in ISO 8601 UTC format"
+        },
+        "distance_miles": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Distance Miles",
+          "description": "Distance from search coordinates in miles. Only present when lat/lng search parameters are provided."
+        }
+      },
+      "type": "object",
+      "required": [
+        "location_id",
+        "name",
+        "location_type",
+        "address",
+        "last_updated"
+      ],
+      "title": "Location",
+      "description": "Location model representing a scan location with full details."
+    },
+    "Service": {
+      "properties": {
+        "name": {
+          "type": "string",
+          "title": "Name",
+          "description": "Short name of the service (e.g., 'DEXA')"
+        },
+        "description": {
+          "type": "string",
+          "title": "Description",
+          "description": "Full descriptive name of the service"
+        },
+        "service_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Service Id",
+          "description": "Unique identifier for the service"
+        },
+        "service_code": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Service Code",
+          "description": "Service code (e.g., 'DXA', 'RMR', 'VO2')"
+        },
+        "duration_minutes": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Duration Minutes",
+          "description": "Typical duration in minutes"
+        },
+        "last_updated": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date-time"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Last Updated",
+          "description": "Last update timestamp in ISO 8601 UTC format"
+        }
+      },
+      "type": "object",
+      "required": [
+        "name",
+        "description"
+      ],
+      "title": "Service",
+      "description": "Service model representing a bookable scan or test type."
+    }
+  }
+}

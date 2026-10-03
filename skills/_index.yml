@@ -1,0 +1,29 @@
+generated: '2026-10-02'
+method: generated
+generator: extract-docs-artifacts.py skills (local)
+source: openapi/bodyspec-openapi.json
+skills:
+- file: skills/bodyspec-partner-results-export.md
+  name: bodyspec-partner-results-export
+  api: openapi/bodyspec-openapi.json
+  operations:
+  - _list_partner_user_results_api_v1_partners__partner_id__users__user_id__results_get
+  - _get_partner_user_result_detail_api_v1_partners__partner_id__users__user_id__results__result_id__get
+  - _create_partner_user_result_export_api_v1_partners__partner_id__users__user_id__results__result_id__export_post
+- file: skills/bodyspec-manage-partner-webhooks.md
+  name: bodyspec-manage-partner-webhooks
+  api: openapi/bodyspec-openapi.json
+  operations:
+  - list_webhooks_api_v1_partners__partner_id__webhooks_get
+  - create_webhook_api_v1_partners__partner_id__webhooks_post
+  - get_webhook_api_v1_partners__partner_id__webhooks__webhook_id__get
+  - update_webhook_api_v1_partners__partner_id__webhooks__webhook_id__patch
+  - delete_webhook_api_v1_partners__partner_id__webhooks__webhook_id__delete
+- file: skills/bodyspec-partner-orders-create-and-manage.md
+  name: bodyspec-partner-orders-create-and-manage
+  api: openapi/bodyspec-openapi.json
+  operations:
+  - _create_order_api_v1_partners__partner_id__orders_post
+  - _list_orders_api_v1_partners__partner_id__orders_get
+  - _get_order_api_v1_partners__partner_id__orders__order_id__get
+  - _update_order_api_v1_partners__partner_id__orders__order_id__patch

@@ -1,0 +1,1523 @@
+openapi: 3.2.0
+info:
+  title: BodySpec Partner Results API
+  description: This API allows BodySpec users to integrate their DEXA scan data with other platforms.
+  license:
+    name: Proprietary
+  version: 0.18.2
+servers:
+- url: https://app.bodyspec.com
+  description: Production server
+security:
+- OAuth2:
+  - openid
+  - profile
+  - email
+- BearerAuth: []
+tags:
+- name: Partner Results
+  description: Partner integration endpoints for user results
+paths:
+  /api/v1/partners/{partner_id}/users/{user_id}/results:
+    get:
+      tags:
+      - Partner Results
+      summary: List partner user results
+      description: Retrieve paginated list of results for a specific user linked to the partner.
+      operationId: _list_partner_user_results_api_v1_partners__partner_id__users__user_id__results_get
+      security:
+      - HTTPBasic: []
+      - PartnerAuth: []
+      parameters:
+      - name: partner_id
+        in: path
+        required: true
+        schema:
+          type: string
+          description: Partner ID
+          title: Partner Id
+        description: Partner ID
+      - name: user_id
+        in: path
+        required: true
+        schema:
+          type: string
+          description: User ID
+          title: User Id
+        description: User ID
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: Page number (starts at 1)
+          default: 1
+          title: Page
+        description: Page number (starts at 1)
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 100
+          minimum: 1
+          description: Items per page (max 100)
+          default: 20
+          title: Page Size
+        description: Items per page (max 100)
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResultsListResponse'
+              example:
+                results:
+                - result_id: a5950beea2a7487fb79cfdbeb77fa555
+                  start_time: '2024-03-15T10:30:00-07:00'
+                  location:
+                    location_id: loc123
+                    name: BodySpec - Culver City
+                    location_type: storefront
+                  service:
+                    name: DEXA
+                    description: DEXA Scan
+                  create_time: '2024-03-15T10:30:00-07:00'
+                  update_time: '2024-03-15T11:00:00-07:00'
+                pagination:
+                  page: 1
+                  page_size: 20
+                  results: 1
+                  has_more: false
+        '401':
+          description: Invalid partner authentication
+        '403':
+          description: Partner ID mismatch or user not linked to partner
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/partners/{partner_id}/users/{user_id}/results/{result_id}:
+    get:
+      tags:
+      - Partner Results
+      summary: Get partner user result details
+      description: Get detailed information about a specific result including available sections.
+      operationId: _get_partner_user_result_detail_api_v1_partners__partner_id__users__user_id__results__result_id__get
+      security:
+      - HTTPBasic: []
+      - PartnerAuth: []
+      parameters:
+      - name: partner_id
+        in: path
+        required: true
+        schema:
+          type: string
+          description: Partner ID
+          title: Partner Id
+        description: Partner ID
+      - name: user_id
+        in: path
+        required: true
+        schema:
+          type: string
+          description: User ID
+          title: User Id
+        description: User ID
+      - name: result_id
+        in: path
+        required: true
+        schema:
+          type: string
+          description: Result ID
+          title: Result Id
+        description: Result ID
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResultDetailResponse'
+        '401':
+          description: Invalid partner authentication
+        '403':
+          description: Partner ID mismatch or user not linked to partner
+        '404':
+          description: Result not found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/partners/{partner_id}/users/{user_id}/results/{result_id}/export:
+    post:
+      tags:
+      - Partner Results
+      summary: Create result export (Partner)
+      description: Create a downloadable export in the specified format for a partner user's result.
+      operationId: _create_partner_user_result_export_api_v1_partners__partner_id__users__user_id__results__result_id__export_post
+      security:
+      - HTTPBasic: []
+      - PartnerAuth: []
+      parameters:
+      - name: partner_id
+        in: path
+        required: true
+        schema:
+          type: string
+          description: Partner ID
+          title: Partner Id
+        description: Partner ID
+      - name: user_id
+        in: path
+        required: true
+        schema:
+          type: string
+          description: User ID
+          title: User Id
+        description: User ID
+      - name: result_id
+        in: path
+        required: true
+        schema:
+          type: string
+          description: Result ID
+          title: Result Id
+        description: Result ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+              - $ref: '#/components/schemas/InteractiveFormatRequest'
+              - $ref: '#/components/schemas/PdfFormatRequest'
+              - $ref: '#/components/schemas/ClassicPdfFormatRequest'
+              discriminator:
+                propertyName: format
+                mapping:
+                  bodyspec_interactive: '#/components/schemas/InteractiveFormatRequest'
+                  bodyspec_pdf: '#/components/schemas/PdfFormatRequest'
+                  classic_pdf: '#/components/schemas/ClassicPdfFormatRequest'
+              title: Body
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResultExportResponse'
+        '401':
+          description: Invalid partner authentication
+        '403':
+          description: Partner ID mismatch or result not accessible
+        '404':
+          description: Result not found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/partners/{partner_id}/users/{user_id}/results/{result_id}/dexa/composition:
+    get:
+      tags:
+      - Partner Results
+      summary: DEXA - Body comp (Partner)
+      description: Get body composition data by region for a partner user's DEXA result.
+      operationId: _get_partner_dexa_composition_api_v1_partners__partner_id__users__user_id__results__result_id__dexa_composition_get
+      security:
+      - HTTPBasic: []
+      - PartnerAuth: []
+      parameters:
+      - name: partner_id
+        in: path
+        required: true
+        schema:
+          type: string
+          description: Partner ID
+          title: Partner Id
+        description: Partner ID
+      - name: user_id
+        in: path
+        required: true
+        schema:
+          type: string
+          description: User ID
+          title: User Id
+        description: User ID
+      - name: result_id
+        in: path
+        required: true
+        schema:
+          type: string
+          description: Result ID
+          title: Result Id
+        description: Result ID
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DexaCompositionResponse'
+        '401':
+          description: Invalid partner authentication
+        '403':
+          description: Partner ID mismatch or user not linked to partner
+        '404':
+          description: Result not found or section not available
+        '400':
+          description: Result is not a DEXA scan
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/partners/{partner_id}/users/{user_id}/results/{result_id}/dexa/bone-density:
+    get:
+      tags:
+      - Partner Results
+      summary: DEXA - Bone density (Partner)
+      description: Get bone mineral density measurements for a partner user's DEXA result.
+      operationId: _get_partner_dexa_bone_density_api_v1_partners__partner_id__users__user_id__results__result_id__dexa_bone_density_get
+      security:
+      - HTTPBasic: []
+      - PartnerAuth: []
+      parameters:
+      - name: partner_id
+        in: path
+        required: true
+        schema:
+          type: string
+          description: Partner ID
+          title: Partner Id
+        description: Partner ID
+      - name: user_id
+        in: path
+        required: true
+        schema:
+          type: string
+          description: User ID
+          title: User Id
+        description: User ID
+      - name: result_id
+        in: path
+        required: true
+        schema:
+          type: string
+          description: Result ID
+          title: Result Id
+        description: Result ID
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DexaBoneDensityResponse'
+        '401':
+          description: Invalid partner authentication
+        '403':
+          description: Partner ID mismatch or user not linked to partner
+        '404':
+          description: Result not found or section not available
+        '400':
+          description: Result is not a DEXA scan
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/partners/{partner_id}/users/{user_id}/results/{result_id}/dexa/percentiles:
+    get:
+      tags:
+      - Partner Results
+      summary: DEXA - Percentiles (Partner)
+      description: Get age and gender-matched percentile rankings for a partner user's DEXA result.
+      operationId: _get_partner_dexa_percentiles_api_v1_partners__partner_id__users__user_id__results__result_id__dexa_percentiles_get
+      security:
+      - HTTPBasic: []
+      - PartnerAuth: []
+      parameters:
+      - name: partner_id
+        in: path
+        required: true
+        schema:
+          type: string
+          description: Partner ID
+          title: Partner Id
+        description: Partner ID
+      - name: user_id
+        in: path
+        required: true
+        schema:
+          type: string
+          description: User ID
+          title: User Id
+        description: User ID
+      - name: result_id
+        in: path
+        required: true
+        schema:
+          type: string
+          description: Result ID
+          title: Result Id
+        description: Result ID
+      - name: min_age
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          description: Minimum age for reference range (optional)
+          title: Min Age
+        description: Minimum age for reference range (optional)
+      - name: max_age
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          description: Maximum age for reference range (optional)
+          title: Max Age
+        description: Maximum age for reference range (optional)
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DexaPercentilesResponse'
+        '401':
+          description: Invalid partner authentication
+        '403':
+          description: Partner ID mismatch or user not linked to partner
+        '404':
+          description: Result not found or section not available
+        '400':
+          description: Result is not a DEXA scan or invalid age range
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/partners/{partner_id}/users/{user_id}/results/{result_id}/dexa/visceral-fat:
+    get:
+      tags:
+      - Partner Results
+      summary: DEXA - Visceral fat (Partner)
+      description: Get visceral adipose tissue analysis for a partner user's DEXA result.
+      operationId: _get_partner_dexa_visceral_fat_api_v1_partners__partner_id__users__user_id__results__result_id__dexa_visceral_fat_get
+      security:
+      - HTTPBasic: []
+      - PartnerAuth: []
+      parameters:
+      - name: partner_id
+        in: path
+        required: true
+        schema:
+          type: string
+          description: Partner ID
+          title: Partner Id
+        description: Partner ID
+      - name: user_id
+        in: path
+        required: true
+        schema:
+          type: string
+          description: User ID
+          title: User Id
+        description: User ID
+      - name: result_id
+        in: path
+        required: true
+        schema:
+          type: string
+          description: Result ID
+          title: Result Id
+        description: Result ID
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DexaVisceralFatResponse'
+        '401':
+          description: Invalid partner authentication
+        '403':
+          description: Partner ID mismatch or user not linked to partner
+        '404':
+          description: Result not found or section not available
+        '400':
+          description: Result is not a DEXA scan
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/partners/{partner_id}/users/{user_id}/results/{result_id}/dexa/rmr:
+    get:
+      tags:
+      - Partner Results
+      summary: DEXA - RMR (Partner)
+      description: Get resting metabolic rate estimates for a partner user's DEXA result.
+      operationId: _get_partner_dexa_rmr_api_v1_partners__partner_id__users__user_id__results__result_id__dexa_rmr_get
+      security:
+      - HTTPBasic: []
+      - PartnerAuth: []
+      parameters:
+      - name: partner_id
+        in: path
+        required: true
+        schema:
+          type: string
+          description: Partner ID
+          title: Partner Id
+        description: Partner ID
+      - name: user_id
+        in: path
+        required: true
+        schema:
+          type: string
+          description: User ID
+          title: User Id
+        description: User ID
+      - name: result_id
+        in: path
+        required: true
+        schema:
+          type: string
+          description: Result ID
+          title: Result Id
+        description: Result ID
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DexaRmrResponse'
+        '401':
+          description: Invalid partner authentication
+        '403':
+          description: Partner ID mismatch or user not linked to partner
+        '404':
+          description: Result not found or section not available
+        '400':
+          description: Result is not a DEXA scan
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/partners/{partner_id}/users/{user_id}/results/{result_id}/dexa/scan-info:
+    get:
+      tags:
+      - Partner Results
+      summary: DEXA - Scan info (Partner)
+      description: Get basic scan metadata and information for a partner user's DEXA result.
+      operationId: _get_partner_dexa_scan_info_api_v1_partners__partner_id__users__user_id__results__result_id__dexa_scan_info_get
+      security:
+      - HTTPBasic: []
+      - PartnerAuth: []
+      parameters:
+      - name: partner_id
+        in: path
+        required: true
+        schema:
+          type: string
+          description: Partner ID
+          title: Partner Id
+        description: Partner ID
+      - name: user_id
+        in: path
+        required: true
+        schema:
+          type: string
+          description: User ID
+          title: User Id
+        description: User ID
+      - name: result_id
+        in: path
+        required: true
+        schema:
+          type: string
+          description: Result ID
+          title: Result Id
+        description: Result ID
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DexaScanInfoResponse'
+        '401':
+          description: Invalid partner authentication
+        '403':
+          description: Partner ID mismatch or user not linked to partner
+        '404':
+          description: Result not found or section not available
+        '400':
+          description: Result is not a DEXA scan
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+      x-internal: true
+    Address:
+      properties:
+        address_line1:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Address Line1
+          description: Primary address line
+        address_line2:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Address Line2
+          description: Secondary address line (e.g., suite number)
+        city:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: City
+          description: City name
+        state:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: State
+          description: State or province
+        postal_code:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Postal Code
+          description: Postal/ZIP code
+        country:
+          type: string
+          title: Country
+          description: Two-letter ISO country code
+          default: US
+      type: object
+      title: Address
+      description: Address information for a location.
+      x-internal: true
+    BoneDensity:
+      properties:
+        bone_mineral_density:
+          type: number
+          title: Bone Mineral Density
+          description: Bone Mineral Density (g/cm²)
+        bone_area_cm2:
+          type: number
+          title: Bone Area Cm2
+          description: Bone area in cm²
+        bone_mineral_content_g:
+          type: number
+          title: Bone Mineral Content G
+          description: Bone mineral content in grams
+        age_sex_z_percentile:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Age Sex Z Percentile
+          description: Age and sex-matched percentile (1-99)
+        peak_sex_t_percentile:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Peak Sex T Percentile
+          description: Sex-matched percentile compared to 30-year-olds (1-99)
+      type: object
+      required:
+      - bone_mineral_density
+      - bone_area_cm2
+      - bone_mineral_content_g
+      title: BoneDensity
+      description: Bone density measurements for a specific site.
+      x-internal: true
+    ResultDetailResponse:
+      properties:
+        result_id:
+          type: string
+          title: Result Id
+          description: Unique identifier for the result
+        start_time:
+          type: string
+          format: date-time
+          title: Start Time
+          description: Result date/time in location timezone
+        location:
+          $ref: '#/components/schemas/Location'
+          description: Location where the result was obtained
+        service:
+          $ref: '#/components/schemas/Service'
+          description: Service information
+        create_time:
+          type: string
+          format: date-time
+          title: Create Time
+          description: When the result was created in location timezone
+        update_time:
+          type: string
+          format: date-time
+          title: Update Time
+          description: When the result was last updated in location timezone
+        sections:
+          items:
+            type: string
+          type: array
+          title: Sections
+          description: List of available section names (only present in detail response, not in list response)
+      type: object
+      required:
+      - result_id
+      - start_time
+      - location
+      - service
+      - create_time
+      - update_time
+      - sections
+      title: Result
+      description: Response for getting result details.
+    ResultFormatType:
+      type: string
+      enum:
+      - bodyspec_interactive
+      - bodyspec_pdf
+      - classic_pdf
+      title: ResultFormatType
+      description: Available result output format types.
+      x-internal: true
+    ResultsListResponse:
+      properties:
+        results:
+          items:
+            $ref: '#/components/schemas/ResultSummary'
+          type: array
+          title: Results
+          description: List of result summaries
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+          description: Pagination information
+      type: object
+      required:
+      - results
+      - pagination
+      title: ResultsListResponse
+      description: Response for listing user results.
+      x-internal: true
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+      x-internal: true
+    PercentileMetric:
+      properties:
+        value:
+          type: number
+          title: Value
+          description: The measured value
+        percentile:
+          type: integer
+          title: Percentile
+          description: Percentile rank (1-99)
+      type: object
+      required:
+      - value
+      - percentile
+      title: PercentileMetric
+      description: Individual percentile metric data.
+      x-internal: true
+    DexaBoneDensityResponse:
+      properties:
+        result_id:
+          type: string
+          title: Result Id
+          description: Unique identifier for the result
+        section_name:
+          type: string
+          title: Section Name
+          description: Name of this section
+          default: bone-density
+        total:
+          $ref: '#/components/schemas/BoneDensity'
+          description: Total body bone density
+        regions:
+          additionalProperties:
+            $ref: '#/components/schemas/BoneDensity'
+          type: object
+          title: Regions
+          description: Regional bone density data
+          examples:
+          - left_arm:
+              bone_area_cm2: 170.17
+              bone_mineral_content_g: 170.9
+              bone_mineral_density: 1.004
+            left_leg:
+              bone_area_cm2: 376.24
+              bone_mineral_content_g: 542.5
+              bone_mineral_density: 1.442
+            right_arm:
+              bone_area_cm2: 180.66
+              bone_mineral_content_g: 175.5
+              bone_mineral_density: 0.971
+            right_leg:
+              bone_area_cm2: 376.32
+              bone_mineral_content_g: 533.4
+              bone_mineral_density: 1.417
+            trunk:
+              bone_area_cm2: 782.47
+              bone_mineral_content_g: 1005.8
+              bone_mineral_density: 1.285
+      type: object
+      required:
+      - result_id
+      - total
+      - regions
+      title: DexaBoneDensity
+      description: DEXA bone density results by region.
+    DexaCompositionResponse:
+      properties:
+        result_id:
+          type: string
+          title: Result Id
+          description: Unique identifier for the result
+        section_name:
+          type: string
+          title: Section Name
+          description: Name of this section
+          default: composition
+        total:
+          $ref: '#/components/schemas/BodyRegion'
+          description: Total body composition
+        regions:
+          additionalProperties:
+            $ref: '#/components/schemas/BodyRegion'
+          type: object
+          title: Regions
+          description: Regional composition data including standard regions and special regions
+          examples:
+          - android:
+              bone_mass_kg: 0.04
+              fat_mass_kg: 1.07
+              lean_mass_kg: 2.42
+              region_fat_pct: 30.31
+              tissue_fat_pct: 30.67
+              total_mass_kg: 3.53
+            gynoid:
+              bone_mass_kg: 0.2
+              fat_mass_kg: 3.29
+              lean_mass_kg: 6.39
+              region_fat_pct: 33.3
+              tissue_fat_pct: 33.98
+              total_mass_kg: 9.88
+            left_arm:
+              bone_mass_kg: 0.13
+              fat_mass_kg: 1.14
+              lean_mass_kg: 2.04
+              region_fat_pct: 34.5
+              tissue_fat_pct: 35.92
+              total_mass_kg: 3.31
+            left_leg:
+              bone_mass_kg: 0.4
+              fat_mass_kg: 3.27
+              lean_mass_kg: 7.0
+              region_fat_pct: 30.64
+              tissue_fat_pct: 31.83
+              total_mass_kg: 10.67
+            right_arm:
+              bone_mass_kg: 0.13
+              fat_mass_kg: 1.11
+              lean_mass_kg: 2.18
+              region_fat_pct: 32.48
+              tissue_fat_pct: 33.79
+              total_mass_kg: 3.43
+            right_leg:
+              bone_mass_kg: 0.38
+              fat_mass_kg: 3.03
+              lean_mass_kg: 7.11
+              region_fat_pct: 28.81
+              tissue_fat_pct: 29.89
+              total_mass_kg: 10.52
+            trunk:
+              bone_mass_kg: 0.57
+              fat_mass_kg: 7.22
+              lean_mass_kg: 17.32
+              region_fat_pct: 28.75
+              tissue_fat_pct: 29.42
+              total_mass_kg: 25.11
+        android_gynoid_ratio:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Android Gynoid Ratio
+          description: Android/Gynoid fat ratio
+      type: object
+      required:
+      - result_id
+      - total
+      - regions
+      title: DexaComposition
+      description: DEXA body composition results by region.
+    ClassicPdfFormatRequest:
+      properties:
+        format:
+          type: string
+          const: classic_pdf
+          title: Format
+      type: object
+      required:
+      - format
+      title: ClassicPdfFormatRequest
+      description: Request body for classic_pdf export format.
+      examples:
+      - format: classic_pdf
+      x-internal: true
+    PercentileParams:
+      properties:
+        gender:
+          type: string
+          title: Gender
+          description: Gender used for comparison (male/female)
+        reference_age_range:
+          additionalProperties:
+            type: integer
+          type: object
+          title: Reference Age Range
+          description: Age range used for comparison
+          examples:
+          - max_years: 45
+            min_years: 35
+        reference_dataset_size:
+          type: integer
+          title: Reference Dataset Size
+          description: Population size of reference dataset (rounded to nearest thousand)
+      type: object
+      required:
+      - gender
+      - reference_age_range
+      - reference_dataset_size
+      title: PercentileParams
+      description: Parameters used for percentile calculation.
+      x-internal: true
+    PdfFormatRequest:
+      properties:
+        min_age:
+          anyOf:
+          - type: integer
+            maximum: 75.0
+            minimum: 20.0
+          - type: 'null'
+          title: Min Age
+          description: Minimum age for percentile comparison range. Defaults to patient age minus 3, clamped to 20.
+        max_age:
+          anyOf:
+          - type: integer
+            maximum: 80.0
+            minimum: 20.0
+          - type: 'null'
+          title: Max Age
+          description: Maximum age for percentile comparison range. Defaults to patient age plus 3, clamped to 80.
+        gender:
+          anyOf:
+          - type: string
+            enum:
+            - Male
+            - Female
+          - type: 'null'
+          title: Gender
+          description: Patient gender for percentile comparison. Auto-detected from scan data if omitted.
+        handle:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Handle
+          description: Display name on the report. Defaults to the user's first name if omitted.
+        appts:
+          anyOf:
+          - items:
+              type: string
+              pattern: ^[0-9a-f]{32}$
+            type: array
+          - type: 'null'
+          title: Appts
+          description: Appointment IDs to include as historical comparisons. Each ID must be a 32-character hex string. The current result is always included automatically. Defaults to all of the user's DEXA scans if omitted.
+        format:
+          type: string
+          const: bodyspec_pdf
+          title: Format
+      type: object
+      required:
+      - format
+      title: PdfFormatRequest
+      description: Request body for bodyspec_pdf export format.
+      examples:
+      - format: bodyspec_pdf
+      x-internal: true
+    ResultSummary:
+      properties:
+        result_id:
+          type: string
+          title: Result Id
+          description: Unique identifier for the result
+        start_time:
+          type: string
+          format: date-time
+          title: Start Time
+          description: Result date/time in location timezone
+        location:
+          $ref: '#/components/schemas/Location'
+          description: Location where the result was obtained
+        service:
+          $ref: '#/components/schemas/Service'
+          description: Service information
+        create_time:
+          type: string
+          format: date-time
+          title: Create Time
+          description: When the result was created in location timezone
+        update_time:
+          type: string
+          format: date-time
+          title: Update Time
+          description: When the result was last updated in location timezone
+      type: object
+      required:
+      - result_id
+      - start_time
+      - location
+      - service
+      - create_time
+      - update_time
+      title: ResultSummary
+      description: Summary information for a single result.
+      x-internal: true
+    DexaScanInfoResponse:
+      properties:
+        result_id:
+          type: string
+          title: Result Id
+          description: Unique identifier for the result
+        section_name:
+          type: string
+          title: Section Name
+          description: Name of this section
+          default: scan-info
+        scanner_model:
+          type: string
+          title: Scanner Model
+          description: Model of the DEXA scanner (e.g., 'GE Lunar iDXA', 'GE Lunar Prodigy')
+        acquire_time:
+          type: string
+          format: date-time
+          title: Acquire Time
+          description: When the scan was acquired in location timezone
+        analyze_time:
+          type: string
+          format: date-time
+          title: Analyze Time
+          description: When the scan was analyzed in location timezone
+        patient_intake:
+          $ref: '#/components/schemas/PatientInfo'
+          description: Patient information at time of scan (from intake)
+      type: object
+      required:
+      - result_id
+      - scanner_model
+      - acquire_time
+      - analyze_time
+      - patient_intake
+      title: DexaScanInfo
+      description: DEXA scan metadata and information.
+    DexaPercentilesResponse:
+      properties:
+        result_id:
+          type: string
+          title: Result Id
+          description: Unique identifier for the result
+        section_name:
+          type: string
+          title: Section Name
+          description: Name of this section
+          default: percentiles
+        params:
+          $ref: '#/components/schemas/PercentileParams'
+          description: Parameters used for percentile calculations
+        metrics:
+          additionalProperties:
+            $ref: '#/components/schemas/PercentileMetric'
+          type: object
+          title: Metrics
+          description: Percentile data for various metrics
+          examples:
+          - bone_density_g_cm2:
+              percentile: 82
+              value: 1.25
+            limb_lmi_kg_m2:
+              percentile: 85
+              value: 8.5
+            total_body_fat_pct:
+              percentile: 45
+              value: 25.5
+            total_lmi_kg_m2:
+              percentile: 68
+              value: 22.5
+            vat_mass_kg:
+              percentile: 72
+              value: 2.8
+      type: object
+      required:
+      - result_id
+      - params
+      - metrics
+      title: DexaPercentiles
+      description: Age and gender-matched percentile rankings.
+    Coordinates:
+      properties:
+        latitude:
+          type: number
+          title: Latitude
+          description: Latitude in decimal degrees
+        longitude:
+          type: number
+          title: Longitude
+          description: Longitude in decimal degrees
+      type: object
+      required:
+      - latitude
+      - longitude
+      title: Coordinates
+      description: Geographic coordinates for a location.
+      x-internal: true
+    Location:
+      properties:
+        location_id:
+          type: string
+          title: Location Id
+          description: Unique identifier for the location
+        name:
+          type: string
+          title: Name
+          description: Location name
+        location_type:
+          type: string
+          title: Location Type
+          description: 'Type of location: ''mobile'' or ''storefront'''
+        address:
+          $ref: '#/components/schemas/Address'
+          description: Address information
+        coordinates:
+          anyOf:
+          - $ref: '#/components/schemas/Coordinates'
+          - type: 'null'
+          description: Geographic coordinates
+        timezone:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Timezone
+          description: IANA timezone identifier (e.g., 'America/Los_Angeles')
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: Public notes or description
+        last_updated:
+          type: string
+          format: date-time
+          title: Last Updated
+          description: Last update timestamp in ISO 8601 UTC format
+        distance_miles:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Distance Miles
+          description: Distance from search coordinates in miles. Only present when lat/lng search parameters are provided.
+      type: object
+      required:
+      - location_id
+      - name
+      - location_type
+      - address
+      - last_updated
+      title: Location
+      description: Location model representing a scan location with full details.
+    DexaRmrResponse:
+      properties:
+        result_id:
+          type: string
+          title: Result Id
+          description: Unique identifier for the result
+        section_name:
+          type: string
+          title: Section Name
+          description: Name of this section
+          default: rmr
+        estimates:
+          items:
+            $ref: '#/components/schemas/RmrEstimate'
+          type: array
+          title: Estimates
+          description: RMR estimates calculated using different scientific formulas
+          examples:
+          - - formula: ten Haaf (2014)
+              kcal_per_day: 1850
+            - formula: Cunningham (1980)
+              kcal_per_day: 1798
+            - formula: De Lorenzo (1999)
+              kcal_per_day: 1920
+            - formula: Mifflin-St. Jeor (1990)
+              kcal_per_day: 1780
+      type: object
+      required:
+      - result_id
+      - estimates
+      title: DexaRmr
+      description: Resting metabolic rate (RMR) estimates derived from DEXA body composition.
+    Pagination:
+      properties:
+        page:
+          type: integer
+          title: Page
+          description: Current page number
+        page_size:
+          type: integer
+          title: Page Size
+          description: Number of items per page
+        results:
+          type: integer
+          title: Results
+          description: Number of results in this page
+        has_more:
+          type: boolean
+          title: Has More
+          description: Whether more results exist after this page
+      type: object
+      required:
+      - page
+      - page_size
+      - results
+      - has_more
+      title: Pagination
+      description: Pagination information for list responses.
+      x-internal: true
+    InteractiveFormatRequest:
+      properties:
+        min_age:
+          anyOf:
+          - type: integer
+            maximum: 75.0
+            minimum: 20.0
+          - type: 'null'
+          title: Min Age
+          description: Minimum age for percentile comparison range. Defaults to patient age minus 3, clamped to 20.
+        max_age:
+          anyOf:
+          - type: integer
+            maximum: 80.0
+            minimum: 20.0
+          - type: 'null'
+          title: Max Age
+          description: Maximum age for percentile comparison range. Defaults to patient age plus 3, clamped to 80.
+        gender:
+          anyOf:
+          - type: string
+            enum:
+            - Male
+            - Female
+          - type: 'null'
+          title: Gender
+          description: Patient gender for percentile comparison. Auto-detected from scan data if omitted.
+        handle:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Handle
+          description: Display name on the report. Defaults to the user's first name if omitted.
+        appts:
+          anyOf:
+          - items:
+              type: string
+              pattern: ^[0-9a-f]{32}$
+            type: array
+          - type: 'null'
+          title: Appts
+          description: Appointment IDs to include as historical comparisons. Each ID must be a 32-character hex string. The current result is always included automatically. Defaults to all of the user's DEXA scans if omitted.
+        format:
+          type: string
+          const: bodyspec_interactive
+          title: Format
+      type: object
+      required:
+      - format
+      title: InteractiveFormatRequest
+      description: Request body for bodyspec_interactive export format.
+      examples:
+      - format: bodyspec_interactive
+      x-internal: true
+    BodyRegion:
+      properties:
+        fat_mass_kg:
+          type: number
+          title: Fat Mass Kg
+          description: Fat mass in kilograms
+        lean_mass_kg:
+          type: number
+          title: Lean Mass Kg
+          description: Lean mass in kilograms
+        bone_mass_kg:
+          type: number
+          title: Bone Mass Kg
+          description: Bone mass in kilograms
+        total_mass_kg:
+          type: number
+          title: Total Mass Kg
+          description: Total mass in kilograms
+        tissue_fat_pct:
+          type: number
+          title: Tissue Fat Pct
+          description: Fat percentage of soft tissue (excludes bone)
+        region_fat_pct:
+          type: number
+          title: Region Fat Pct
+          description: Fat percentage of total region (includes bone)
+      type: object
+      required:
+      - fat_mass_kg
+      - lean_mass_kg
+      - bone_mass_kg
+      - total_mass_kg
+      - tissue_fat_pct
+      - region_fat_pct
+      title: BodyRegion
+      description: Body composition data for a specific region.
+      x-internal: true
+    PatientInfo:
+      properties:
+        age_years:
+          type: number
+          title: Age Years
+          description: Patient's age at time of scan with one decimal precision
+        height_cm:
+          type: number
+          title: Height Cm
+          description: Patient's height in centimeters
+        weight_kg:
+          type: number
+          title: Weight Kg
+          description: Patient's weight in kilograms
+      type: object
+      required:
+      - age_years
+      - height_cm
+      - weight_kg
+      title: PatientInfo
+      description: Patient information at time of scan.
+      x-internal: true
+    RmrEstimate:
+      properties:
+        formula:
+          type: string
+          title: Formula
+          description: Scientific formula name and publication year
+        kcal_per_day:
+          type: integer
+          title: Kcal Per Day
+          description: Estimated resting metabolic rate in kilocalories per day
+      type: object
+      required:
+      - formula
+      - kcal_per_day
+      title: RmrEstimate
+      description: Individual RMR estimate from a scientific formula.
+      x-internal: true
+    Service:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Short name of the service (e.g., 'DEXA')
+        description:
+          type: string
+          title: Description
+          description: Full descriptive name of the service
+        service_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Service Id
+          description: Unique identifier for the service
+        service_code:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Service Code
+          description: Service code (e.g., 'DXA', 'RMR', 'VO2')
+        duration_minutes:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Duration Minutes
+          description: Typical duration in minutes
+        last_updated:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Last Updated
+          description: Last update timestamp in ISO 8601 UTC format
+      type: object
+      required:
+      - name
+      - description
+      title: Service
+      description: Service model representing a bookable scan or test type.
+    ResultExportResponse:
+      properties:
+        result_id:
+          type: string
+          title: Result Id
+          description: Unique identifier for the result
+        format:
+          $ref: '#/components/schemas/ResultFormatType'
+          description: The export format type
+        url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Url
+          description: URL to access this export (null when unavailable)
+        status:
+          type: string
+          title: Status
+          description: 'Availability status: ''available'', ''unavailable'', or ''pending'''
+      type: object
+      required:
+      - result_id
+      - format
+      - status
+      title: ResultExportResponse
+      description: Response for result export endpoint.
+    DexaVisceralFatResponse:
+      properties:
+        result_id:
+          type: string
+          title: Result Id
+          description: Unique identifier for the result
+        section_name:
+          type: string
+          title: Section Name
+          description: Name of this section
+          default: visceral-fat
+        vat_mass_kg:
+          type: number
+          title: Vat Mass Kg
+          description: Visceral adipose tissue mass in kilograms
+        vat_volume_cm3:
+          type: number
+          title: Vat Volume Cm3
+          description: Visceral adipose tissue volume in cubic centimeters
+      type: object
+      required:
+      - result_id
+      - vat_mass_kg
+      - vat_volume_cm3
+      title: DexaVisceralFat
+      description: Visceral adipose tissue (VAT) analysis results.
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      description: OAuth2 authentication via Keycloak with PKCE
+      flows:
+        authorizationCode:
+          authorizationUrl: https://auth.bodyspec.com/realms/bodyspec/protocol/openid-connect/auth
+          tokenUrl: https://auth.bodyspec.com/realms/bodyspec/protocol/openid-connect/token
+          scopes:
+            openid: OpenID Connect scope
+            profile: Access to user profile
+            email: Access to user email
+          x-usePkce: SHA-256
+          x-scalar-client-id: bodyspec-api-ext-v1
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT Bearer token for authentication
+    PartnerAuth:
+      type: http
+      scheme: basic
+      description: For partner integrations only. Contact BodySpec to obtain credentials.
+x-tagGroups:
+- name: 👤 User Data
+  tags:
+  - Users
+  - Appointments
+  - Results
+- name: 📅 Availability
+  tags:
+  - Locations
+  - Services
+  - Availability
+- name: 🤝 Partners
+  tags:
+  - Reservations
+  - Partner Users
+  - Partner Appointments
+  - Partner Results
+  - Partner Intake
+  - Partner Orders
+  - Partner Webhooks
+- name: 🏥 API Status
+  tags:
+  - API Status

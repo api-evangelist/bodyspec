@@ -1,0 +1,412 @@
+generated: '2026-10-02'
+method: derived
+generator: derive-vocabulary.py
+source: openapi/bodyspec-openapi.json
+vocabulary:
+  name: BodySpec Domain Vocabulary
+  description: 'Terms declared by BodySpec''s own API contract: its resource groups, objects and enumerations, with the contract''s definitions.
+    Derived, not authored.'
+  version: '2026-10-02'
+  terms:
+  - term: API Status
+    definition: Health check and monitoring endpoints
+    tags:
+    - Resource Group
+    source: openapi/bodyspec-openapi.json
+  - term: Users
+    definition: Operations related to user management and profiles
+    tags:
+    - Resource Group
+    source: openapi/bodyspec-openapi.json
+  - term: Appointments
+    definition: Appointments scheduling and management
+    tags:
+    - Resource Group
+    source: openapi/bodyspec-openapi.json
+  - term: Results
+    definition: Test results and analysis data
+    tags:
+    - Resource Group
+    source: openapi/bodyspec-openapi.json
+  - term: Locations
+    definition: Browse and search scan locations
+    tags:
+    - Resource Group
+    source: openapi/bodyspec-openapi.json
+  - term: Services
+    definition: Available scan types and services
+    tags:
+    - Resource Group
+    source: openapi/bodyspec-openapi.json
+  - term: Availability
+    definition: Check appointment availability at locations
+    tags:
+    - Resource Group
+    source: openapi/bodyspec-openapi.json
+  - term: Reservations
+    definition: Partner integration endpoints for reservations
+    tags:
+    - Resource Group
+    source: openapi/bodyspec-openapi.json
+  - term: Partner Users
+    definition: Partner integration endpoints for user management
+    tags:
+    - Resource Group
+    source: openapi/bodyspec-openapi.json
+  - term: Partner Appointments
+    definition: Partner integration endpoints for user appointments
+    tags:
+    - Resource Group
+    source: openapi/bodyspec-openapi.json
+  - term: Partner Results
+    definition: Partner integration endpoints for user results
+    tags:
+    - Resource Group
+    source: openapi/bodyspec-openapi.json
+  - term: Partner Intake
+    definition: Partner integration endpoints for intake form submission
+    tags:
+    - Resource Group
+    source: openapi/bodyspec-openapi.json
+  - term: Partner Orders
+    definition: Partner integration endpoints for medical order upload and management
+    tags:
+    - Resource Group
+    source: openapi/bodyspec-openapi.json
+  - term: Partner Webhooks
+    definition: Partner integration endpoints for webhook configuration
+    tags:
+    - Resource Group
+    source: openapi/bodyspec-openapi.json
+  - term: Address
+    definition: Address information for a location.
+    tags:
+    - Object
+    source: openapi/bodyspec-openapi.json#/components/schemas/Address
+  - term: Appointment
+    definition: Appointment information.
+    tags:
+    - Object
+    source: openapi/bodyspec-openapi.json#/components/schemas/Appointment
+  - term: ApptListResponse
+    definition: Paginated appointment list response.
+    tags:
+    - Object
+    source: openapi/bodyspec-openapi.json#/components/schemas/ApptListResponse
+  - term: ApptStatus
+    definition: Derived appointment outcome. BodySpec does not record attendance, so the outcome is inferred from whether published results exist
+      and from what happened at the same location that day.
+    tags:
+    - Enumeration
+    source: openapi/bodyspec-openapi.json#/components/schemas/ApptStatus
+  - term: AvailabilityResponse
+    definition: Response model for availability endpoint.
+    tags:
+    - Object
+    source: openapi/bodyspec-openapi.json#/components/schemas/AvailabilityResponse
+  - term: AvailabilitySlot
+    definition: Represents an available appointment slot.
+    tags:
+    - Object
+    source: openapi/bodyspec-openapi.json#/components/schemas/AvailabilitySlot
+  - term: BodyRegion
+    definition: Body composition data for a specific region.
+    tags:
+    - Object
+    source: openapi/bodyspec-openapi.json#/components/schemas/BodyRegion
+  - term: Body__create_order_api_v1_partners__partner_id__orders_post
+    definition: 'Object declared by the contract with fields: user_id, provider_name, provider_npi, order_date, expiration_date, notes, file.'
+    tags:
+    - Object
+    source: openapi/bodyspec-openapi.json#/components/schemas/Body__create_order_api_v1_partners__partner_id__orders_post
+  - term: Body__update_order_api_v1_partners__partner_id__orders__order_id__patch
+    definition: 'Object declared by the contract with fields: provider_name, provider_npi, order_date, expiration_date, notes, file.'
+    tags:
+    - Object
+    source: openapi/bodyspec-openapi.json#/components/schemas/Body__update_order_api_v1_partners__partner_id__orders__order_id__patch
+  - term: BoneDensity
+    definition: Bone density measurements for a specific site.
+    tags:
+    - Object
+    source: openapi/bodyspec-openapi.json#/components/schemas/BoneDensity
+  - term: ClassicPdfFormatRequest
+    definition: Request body for classic_pdf export format.
+    tags:
+    - Object
+    source: openapi/bodyspec-openapi.json#/components/schemas/ClassicPdfFormatRequest
+  - term: Coordinates
+    definition: Geographic coordinates for a location.
+    tags:
+    - Object
+    source: openapi/bodyspec-openapi.json#/components/schemas/Coordinates
+  - term: DexaBoneDensity
+    definition: DEXA bone density results by region.
+    tags:
+    - Object
+    source: openapi/bodyspec-openapi.json#/components/schemas/DexaBoneDensityResponse
+  - term: DexaComposition
+    definition: DEXA body composition results by region.
+    tags:
+    - Object
+    source: openapi/bodyspec-openapi.json#/components/schemas/DexaCompositionResponse
+  - term: DexaPercentiles
+    definition: Age and gender-matched percentile rankings.
+    tags:
+    - Object
+    source: openapi/bodyspec-openapi.json#/components/schemas/DexaPercentilesResponse
+  - term: DexaRmr
+    definition: Resting metabolic rate (RMR) estimates derived from DEXA body composition.
+    tags:
+    - Object
+    source: openapi/bodyspec-openapi.json#/components/schemas/DexaRmrResponse
+  - term: DexaScanInfo
+    definition: DEXA scan metadata and information.
+    tags:
+    - Object
+    source: openapi/bodyspec-openapi.json#/components/schemas/DexaScanInfoResponse
+  - term: DexaVisceralFat
+    definition: Visceral adipose tissue (VAT) analysis results.
+    tags:
+    - Object
+    source: openapi/bodyspec-openapi.json#/components/schemas/DexaVisceralFatResponse
+  - term: ExternalIds
+    definition: Optional external IDs for partner tracking.
+    tags:
+    - Object
+    source: openapi/bodyspec-openapi.json#/components/schemas/ExternalIds
+  - term: HTTPValidationError
+    definition: 'Object declared by the contract with fields: detail.'
+    tags:
+    - Object
+    source: openapi/bodyspec-openapi.json#/components/schemas/HTTPValidationError
+  - term: IntakeAdditionalContact
+    definition: Optional additional contact information.
+    tags:
+    - Object
+    source: openapi/bodyspec-openapi.json#/components/schemas/IntakeAdditionalContact
+  - term: IntakeCreateRequest
+    definition: Request to create an intake for a user.
+    tags:
+    - Object
+    source: openapi/bodyspec-openapi.json#/components/schemas/IntakeCreateRequest
+  - term: IntakeDisqualifiers
+    definition: Disqualifier questions - all must be false.
+    tags:
+    - Object
+    source: openapi/bodyspec-openapi.json#/components/schemas/IntakeDisqualifiers
+  - term: IntakeQualifiers
+    definition: Qualifier questions - at least one must be true.
+    tags:
+    - Object
+    source: openapi/bodyspec-openapi.json#/components/schemas/IntakeQualifiers
+  - term: Intake
+    definition: Response from intake creation.
+    tags:
+    - Object
+    source: openapi/bodyspec-openapi.json#/components/schemas/IntakeResponse
+  - term: IntakeUser
+    definition: User information for intake.
+    tags:
+    - Object
+    source: openapi/bodyspec-openapi.json#/components/schemas/IntakeUser
+  - term: InteractiveFormatRequest
+    definition: Request body for bodyspec_interactive export format.
+    tags:
+    - Object
+    source: openapi/bodyspec-openapi.json#/components/schemas/InteractiveFormatRequest
+  - term: Location
+    definition: Location model representing a scan location with full details.
+    tags:
+    - Object
+    source: openapi/bodyspec-openapi.json#/components/schemas/Location
+  - term: LocationResponse
+    definition: Response model for getting a single location.
+    tags:
+    - Object
+    source: openapi/bodyspec-openapi.json#/components/schemas/LocationResponse
+  - term: LocationsListResponse
+    definition: Response model for listing locations.
+    tags:
+    - Object
+    source: openapi/bodyspec-openapi.json#/components/schemas/LocationsListResponse
+  - term: MultiLocationAvailabilityResponse
+    definition: Response model for multi-location availability endpoint.
+    tags:
+    - Object
+    source: openapi/bodyspec-openapi.json#/components/schemas/MultiLocationAvailabilityResponse
+  - term: OrderCreateResponse
+    definition: Response from order creation.
+    tags:
+    - Object
+    source: openapi/bodyspec-openapi.json#/components/schemas/OrderCreateResponse
+  - term: OrderResponse
+    definition: Response for a single order.
+    tags:
+    - Object
+    source: openapi/bodyspec-openapi.json#/components/schemas/OrderResponse
+  - term: OrdersListResponse
+    definition: Paginated list of orders.
+    tags:
+    - Object
+    source: openapi/bodyspec-openapi.json#/components/schemas/OrdersListResponse
+  - term: Pagination
+    definition: Pagination information for list responses.
+    tags:
+    - Object
+    source: openapi/bodyspec-openapi.json#/components/schemas/Pagination
+  - term: PartnerReservation
+    definition: Combined user and appointment for a partner reservation.
+    tags:
+    - Object
+    source: openapi/bodyspec-openapi.json#/components/schemas/PartnerReservation
+  - term: PartnerReservationsListResponse
+    definition: Paginated partner reservations list response.
+    tags:
+    - Object
+    source: openapi/bodyspec-openapi.json#/components/schemas/PartnerReservationsListResponse
+  - term: PartnerUser
+    definition: User information provided by integration partner.
+    tags:
+    - Object
+    source: openapi/bodyspec-openapi.json#/components/schemas/PartnerUser
+  - term: PartnerUser
+    definition: User model for partner API responses, includes link_time.
+    tags:
+    - Object
+    source: openapi/bodyspec-openapi.json#/components/schemas/PartnerUserResponse
+  - term: PartnerUsersListResponse
+    definition: Paginated partner users list response.
+    tags:
+    - Object
+    source: openapi/bodyspec-openapi.json#/components/schemas/PartnerUsersListResponse
+  - term: PatientInfo
+    definition: Patient information at time of scan.
+    tags:
+    - Object
+    source: openapi/bodyspec-openapi.json#/components/schemas/PatientInfo
+  - term: PdfFormatRequest
+    definition: Request body for bodyspec_pdf export format.
+    tags:
+    - Object
+    source: openapi/bodyspec-openapi.json#/components/schemas/PdfFormatRequest
+  - term: PercentileMetric
+    definition: Individual percentile metric data.
+    tags:
+    - Object
+    source: openapi/bodyspec-openapi.json#/components/schemas/PercentileMetric
+  - term: PercentileParams
+    definition: Parameters used for percentile calculation.
+    tags:
+    - Object
+    source: openapi/bodyspec-openapi.json#/components/schemas/PercentileParams
+  - term: ReservationCancelRequest
+    definition: Request to cancel a reservation (optional body).
+    tags:
+    - Object
+    source: openapi/bodyspec-openapi.json#/components/schemas/ReservationCancelRequest
+  - term: ReservationCreateRequest
+    definition: Request to create an appointment reservation.
+    tags:
+    - Object
+    source: openapi/bodyspec-openapi.json#/components/schemas/ReservationCreateRequest
+  - term: Reservation
+    definition: Response for reservation creation.
+    tags:
+    - Object
+    source: openapi/bodyspec-openapi.json#/components/schemas/ReservationResponse
+  - term: Result
+    definition: Response for getting result details.
+    tags:
+    - Object
+    source: openapi/bodyspec-openapi.json#/components/schemas/ResultDetailResponse
+  - term: ResultExportResponse
+    definition: Response for result export endpoint.
+    tags:
+    - Object
+    source: openapi/bodyspec-openapi.json#/components/schemas/ResultExportResponse
+  - term: ResultFormatType
+    definition: Available result output format types.
+    tags:
+    - Enumeration
+    source: openapi/bodyspec-openapi.json#/components/schemas/ResultFormatType
+  - term: ResultSummary
+    definition: Summary information for a single result.
+    tags:
+    - Object
+    source: openapi/bodyspec-openapi.json#/components/schemas/ResultSummary
+  - term: ResultsListResponse
+    definition: Response for listing user results.
+    tags:
+    - Object
+    source: openapi/bodyspec-openapi.json#/components/schemas/ResultsListResponse
+  - term: RmrEstimate
+    definition: Individual RMR estimate from a scientific formula.
+    tags:
+    - Object
+    source: openapi/bodyspec-openapi.json#/components/schemas/RmrEstimate
+  - term: Service
+    definition: Service model representing a bookable scan or test type.
+    tags:
+    - Object
+    source: openapi/bodyspec-openapi.json#/components/schemas/Service
+  - term: ServiceResponse
+    definition: Response model for getting a single service.
+    tags:
+    - Object
+    source: openapi/bodyspec-openapi.json#/components/schemas/ServiceResponse
+  - term: ServicesListResponse
+    definition: Response model for listing services.
+    tags:
+    - Object
+    source: openapi/bodyspec-openapi.json#/components/schemas/ServicesListResponse
+  - term: SortOrder
+    definition: Sort order options for appointment lists.
+    tags:
+    - Enumeration
+    source: openapi/bodyspec-openapi.json#/components/schemas/SortOrder
+  - term: User
+    definition: 'User model for API responses. Note: This model intentionally excludes sensitive or internal fields like: - is_admin: Admin status
+      is determined from token claims, not exposed in responses - created_at/updated_at: Internal timestamps not needed in public API'
+    tags:
+    - Object
+    source: openapi/bodyspec-openapi.json#/components/schemas/UserResponse
+  - term: UserUpdateRequest
+    definition: User update request model.
+    tags:
+    - Object
+    source: openapi/bodyspec-openapi.json#/components/schemas/UserUpdateRequest
+  - term: ValidationError
+    definition: 'Object declared by the contract with fields: loc, msg, type.'
+    tags:
+    - Object
+    source: openapi/bodyspec-openapi.json#/components/schemas/ValidationError
+  - term: WebhookCreateRequest
+    definition: Request model for creating a webhook.
+    tags:
+    - Object
+    source: openapi/bodyspec-openapi.json#/components/schemas/WebhookCreateRequest
+  - term: WebhookEventType
+    definition: Supported webhook event types.
+    tags:
+    - Enumeration
+    source: openapi/bodyspec-openapi.json#/components/schemas/WebhookEventType
+  - term: WebhookReservationCanceledData
+    definition: Data payload for reservation_canceled webhook event.
+    tags:
+    - Object
+    source: openapi/bodyspec-openapi.json#/components/schemas/WebhookReservationCanceledData
+  - term: WebhookReservationCanceledPayload
+    definition: Webhook payload for reservation_canceled events. Sent when a reservation is cancelled, regardless of who initiated it.
+    tags:
+    - Object
+    source: openapi/bodyspec-openapi.json#/components/schemas/WebhookReservationCanceledPayload
+  - term: WebhookReservationCreatedData
+    definition: Data payload for reservation_created webhook event.
+    tags:
+    - Object
+    source: openapi/bodyspec-openapi.json#/components/schemas/WebhookReservationCreatedData
+  - term: WebhookReservationCreatedPayload
+    definition: Webhook payload for reservation_created events. Sent when a new reservation is created for a user.
+    tags:
+    - Object
+    source: openapi/bodyspec-openapi.json#/components/schemas/WebhookReservationCreatedPayload

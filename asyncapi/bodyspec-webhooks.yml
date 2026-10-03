@@ -1,0 +1,23 @@
+generated: '2026-10-02'
+method: searched
+generator: extract-docs-artifacts.py (local)
+source: https://app.bodyspec.com/docs#tag/partner-webhooks
+sources:
+- https://app.bodyspec.com/docs#tag/partner-webhooks
+- https://app.bodyspec.com/docs#webhook/undefined/
+- https://app.bodyspec.com/docs
+description: BodySpec provides partner webhooks for four event types.
+events:
+- event: results_ready
+  description: When a user's scan results are ready to pull, BodySpec sends a POST request with this payload to your registered webhook URL. The
+    event fires once the underlying analysis has landed in BodySpec's database, so the results are queryable by the time you receive it.
+- event: reservation_created
+  description: When a new reservation is created for a user, BodySpec sends a POST request with this payload to your registered webhook URL.
+- event: reservation_canceled
+- event: reservation_no_show
+delivery:
+  retries: Delivery is at‑least‑once for results_ready events; repeats may occur and should be deduplicated. No retry details are provided for
+    the other events.
+note: 'Optional secret is base64‑encoded and sent as a Bearer token in the Authorization header of every webhook delivery (Authorization: Bearer
+  <base64(secret)>).'
+docs: https://app.bodyspec.com/docs#tag/partner-webhooks

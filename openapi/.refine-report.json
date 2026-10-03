@@ -1,0 +1,38 @@
+{
+  "provider": "bodyspec",
+  "sources": [
+    "bodyspec-openapi.json"
+  ],
+  "outputs": [
+    "bodyspec-api-status-api-openapi.yml",
+    "bodyspec-appointments-api-openapi.yml",
+    "bodyspec-availability-api-openapi.yml",
+    "bodyspec-bodyspec-api-api-openapi.yml",
+    "bodyspec-locations-api-openapi.yml",
+    "bodyspec-partner-appointments-api-openapi.yml",
+    "bodyspec-partner-intake-api-openapi.yml",
+    "bodyspec-partner-orders-api-openapi.yml",
+    "bodyspec-partner-results-api-openapi.yml",
+    "bodyspec-partner-users-api-openapi.yml",
+    "bodyspec-partner-webhooks-api-openapi.yml",
+    "bodyspec-reservations-api-openapi.yml",
+    "bodyspec-results-api-openapi.yml",
+    "bodyspec-services-api-openapi.yml",
+    "bodyspec-users-api-openapi.yml"
+  ],
+  "archived": [
+    "archived openapi/bodyspec-openapi.json"
+  ],
+  "errors": [],
+  "warnings": [],
+  "notes": [
+    "bodyspec-openapi.json: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "bodyspec-openapi.json: tagged webhooks POST results_ready -> BodySpec API",
+    "bodyspec-openapi.json: tagged webhooks POST reservation_created -> BodySpec API",
+    "bodyspec-openapi.json: tagged webhooks POST reservation_canceled -> BodySpec API",
+    "bodyspec-openapi.json: tagged webhooks POST reservation_no_show -> BodySpec API",
+    "bodyspec-openapi.json: declared missing tag: BodySpec API",
+    "apis.yml register: written (+15 apis, 15 total)"
+  ],
+  "skipped": []
+}

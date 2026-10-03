@@ -1,0 +1,30 @@
+generated: '2026-10-02'
+method: derived
+source: openapi/bodyspec-openapi.json
+schemes:
+- name: OAuth2
+  source: openapi/bodyspec-openapi.json
+  flows:
+  - flow: authorizationCode
+    authorizationUrl: https://auth.bodyspec.com/realms/bodyspec/protocol/openid-connect/auth
+    tokenUrl: https://auth.bodyspec.com/realms/bodyspec/protocol/openid-connect/token
+  description: OAuth2 authentication via Keycloak with PKCE
+scopes:
+- scope: email
+  description: Access to user email
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/bodyspec-openapi.json
+- scope: openid
+  description: OpenID Connect scope
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/bodyspec-openapi.json
+- scope: profile
+  description: Access to user profile
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/bodyspec-openapi.json

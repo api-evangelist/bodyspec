@@ -1,0 +1,73 @@
+generated: '2026-10-02'
+method: derived
+generator: derive-problem-types.py
+source:
+- openapi/bodyspec-openapi.json
+format: custom
+envelope:
+  media_type: application/json
+  schema: HTTPValidationError
+coverage:
+  operations: 45
+  statuses_declared: 9
+problems:
+- status: 400
+  title: Bad Request
+  description: Result is not a DEXA scan
+  operations: 24
+  media_types:
+  - application/json
+  schema: null
+- status: 401
+  title: Unauthorized
+  description: Invalid partner authentication
+  operations: 37
+  media_types:
+  - application/json
+  schema: null
+- status: 403
+  title: Forbidden
+  description: Insufficient permissions
+  operations: 37
+  media_types:
+  - application/json
+  schema: null
+- status: 404
+  title: Not Found
+  description: Result not found or section not available
+  operations: 32
+  media_types:
+  - application/json
+  schema: null
+- status: 405
+  title: Method Not Allowed
+  description: Appointment cannot be cancelled
+  operations: 1
+  media_types: []
+  schema: null
+- status: 409
+  title: Conflict
+  description: Appointment already reserved
+  operations: 1
+  media_types: []
+  schema: null
+- status: 422
+  title: Unprocessable Content
+  description: Validation Error
+  operations: 42
+  media_types:
+  - application/json
+  schema: HTTPValidationError
+- status: 500
+  title: Internal Server Error
+  description: Internal server error
+  operations: 2
+  media_types:
+  - application/json
+  schema: null
+- status: 503
+  title: Service Unavailable
+  description: Webhook system not configured
+  operations: 1
+  media_types: []
+  schema: null

@@ -1,0 +1,335 @@
+openapi: 3.2.0
+info:
+  title: BodySpec Partner Intake API
+  description: This API allows BodySpec users to integrate their DEXA scan data with other platforms.
+  license:
+    name: Proprietary
+  version: 0.18.2
+servers:
+- url: https://app.bodyspec.com
+  description: Production server
+security:
+- OAuth2:
+  - openid
+  - profile
+  - email
+- BearerAuth: []
+tags:
+- name: Partner Intake
+  description: Partner integration endpoints for intake form submission
+paths:
+  /api/v1/partners/{partner_id}/users/{user_id}/intake:
+    post:
+      tags:
+      - Partner Intake
+      summary: Create intake
+      description: Create an intake form for a user linked to the partner.
+      operationId: _create_intake_api_v1_partners__partner_id__users__user_id__intake_post
+      security:
+      - HTTPBasic: []
+      - PartnerAuth: []
+      parameters:
+      - name: partner_id
+        in: path
+        required: true
+        schema:
+          type: string
+          description: Partner ID
+          title: Partner Id
+        description: Partner ID
+      - name: user_id
+        in: path
+        required: true
+        schema:
+          type: string
+          description: User ID
+          title: User Id
+        description: User ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IntakeCreateRequest'
+      responses:
+        '201':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IntakeResponse'
+              example:
+                intake_id: b8a5859c778f48c491eff5a294c67ab9
+        '400':
+          description: Invalid request or intake creation failed
+        '401':
+          description: Invalid partner authentication
+        '403':
+          description: Partner ID mismatch or user not linked to partner
+        '404':
+          description: User not found
+        '422':
+          description: Validation error
+components:
+  schemas:
+    IntakeDisqualifiers:
+      properties:
+        neg_q1_pregnant:
+          type: boolean
+          title: Neg Q1 Pregnant
+          description: Pregnant or possibly pregnant
+          default: false
+        neg_q2_barium_xray:
+          type: boolean
+          title: Neg Q2 Barium Xray
+          description: Barium X-ray in last 2 weeks
+          default: false
+        neg_q3_nuclear:
+          type: boolean
+          title: Neg Q3 Nuclear
+          description: Nuclear medicine test in last 2 weeks
+          default: false
+      type: object
+      title: IntakeDisqualifiers
+      description: Disqualifier questions - all must be false.
+      x-internal: true
+    IntakeUser:
+      properties:
+        first_name:
+          type: string
+          minLength: 1
+          title: First Name
+          description: User's first name
+        last_name:
+          type: string
+          minLength: 1
+          title: Last Name
+          description: User's last name
+        email:
+          type: string
+          format: email
+          title: Email
+          description: User's email address
+        phone_number:
+          type: string
+          title: Phone Number
+          description: Phone number
+        birth_date:
+          type: string
+          title: Birth Date
+          description: Birth date in ISO format (YYYY-MM-DD)
+        gender:
+          type: string
+          title: Gender
+          description: Gender (Male, Female)
+        height_inches:
+          type: integer
+          maximum: 96.0
+          minimum: 30.0
+          title: Height Inches
+          description: Height in inches (30-96)
+        weight_pounds:
+          type: integer
+          maximum: 600.0
+          minimum: 30.0
+          title: Weight Pounds
+          description: Weight in pounds (30-600)
+        ethnicity:
+          type: string
+          title: Ethnicity
+          description: Ethnicity (Asian, Black, Hispanic, White, Other)
+        signature:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Signature
+          description: PNG signature image, max 500KB. Provide as raw base64 or data URL (data:image/png;base64,...).
+      type: object
+      required:
+      - first_name
+      - last_name
+      - email
+      - phone_number
+      - birth_date
+      - gender
+      - height_inches
+      - weight_pounds
+      - ethnicity
+      title: IntakeUser
+      description: User information for intake.
+      x-internal: true
+    IntakeResponse:
+      properties:
+        intake_id:
+          type: string
+          title: Intake Id
+          description: Created intake ID
+      type: object
+      required:
+      - intake_id
+      title: Intake
+      description: Response from intake creation.
+    IntakeQualifiers:
+      properties:
+        qual_q1_weight:
+          type: boolean
+          title: Qual Q1 Weight
+          description: Weight management qualification
+          default: false
+        qual_q2_body_fat:
+          type: boolean
+          title: Qual Q2 Body Fat
+          description: Body fat tracking qualification
+          default: false
+        qual_q3_athlete:
+          type: boolean
+          title: Qual Q3 Athlete
+          description: Athletic performance qualification
+          default: false
+        qual_q4_heart_disease:
+          type: boolean
+          title: Qual Q4 Heart Disease
+          description: Heart disease risk qualification
+          default: false
+        qual_q5_high_blood_pressure:
+          type: boolean
+          title: Qual Q5 High Blood Pressure
+          description: High blood pressure qualification
+          default: false
+        qual_q6_injuries:
+          type: boolean
+          title: Qual Q6 Injuries
+          description: Injury recovery qualification
+          default: false
+        qual_q7_research_study:
+          type: boolean
+          title: Qual Q7 Research Study
+          description: Research study qualification
+          default: false
+      type: object
+      title: IntakeQualifiers
+      description: Qualifier questions - at least one must be true.
+      x-internal: true
+    IntakeAdditionalContact:
+      properties:
+        name:
+          type: string
+          minLength: 1
+          title: Name
+          description: Contact name
+        relationship:
+          type: string
+          minLength: 1
+          title: Relationship
+          description: Relationship to user
+        email:
+          type: string
+          format: email
+          title: Email
+          description: Contact email
+        phone_number:
+          type: string
+          title: Phone Number
+          description: Contact phone number
+      type: object
+      required:
+      - name
+      - relationship
+      - email
+      - phone_number
+      title: IntakeAdditionalContact
+      description: Optional additional contact information.
+      x-internal: true
+    IntakeCreateRequest:
+      properties:
+        user:
+          $ref: '#/components/schemas/IntakeUser'
+          description: User information
+        qualifiers:
+          $ref: '#/components/schemas/IntakeQualifiers'
+          description: Qualification questions
+        disqualifiers:
+          $ref: '#/components/schemas/IntakeDisqualifiers'
+          description: Disqualification questions
+        addl_contact:
+          anyOf:
+          - $ref: '#/components/schemas/IntakeAdditionalContact'
+          - type: 'null'
+          description: Optional additional contact
+      type: object
+      required:
+      - user
+      - qualifiers
+      - disqualifiers
+      title: IntakeCreateRequest
+      description: Request to create an intake for a user.
+      examples:
+      - disqualifiers:
+          neg_q1_pregnant: false
+          neg_q2_barium_xray: false
+          neg_q3_nuclear: false
+        qualifiers:
+          qual_q1_weight: true
+          qual_q2_body_fat: false
+          qual_q3_athlete: false
+          qual_q4_heart_disease: false
+          qual_q5_high_blood_pressure: false
+          qual_q6_injuries: false
+          qual_q7_research_study: false
+        user:
+          birth_date: '1990-05-15'
+          email: jane@example.com
+          ethnicity: White
+          first_name: Jane
+          gender: Female
+          height_inches: 65
+          last_name: Smith
+          phone_number: '+14155551234'
+          weight_pounds: 140
+      x-internal: true
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      description: OAuth2 authentication via Keycloak with PKCE
+      flows:
+        authorizationCode:
+          authorizationUrl: https://auth.bodyspec.com/realms/bodyspec/protocol/openid-connect/auth
+          tokenUrl: https://auth.bodyspec.com/realms/bodyspec/protocol/openid-connect/token
+          scopes:
+            openid: OpenID Connect scope
+            profile: Access to user profile
+            email: Access to user email
+          x-usePkce: SHA-256
+          x-scalar-client-id: bodyspec-api-ext-v1
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT Bearer token for authentication
+    PartnerAuth:
+      type: http
+      scheme: basic
+      description: For partner integrations only. Contact BodySpec to obtain credentials.
+x-tagGroups:
+- name: 👤 User Data
+  tags:
+  - Users
+  - Appointments
+  - Results
+- name: 📅 Availability
+  tags:
+  - Locations
+  - Services
+  - Availability
+- name: 🤝 Partners
+  tags:
+  - Reservations
+  - Partner Users
+  - Partner Appointments
+  - Partner Results
+  - Partner Intake
+  - Partner Orders
+  - Partner Webhooks
+- name: 🏥 API Status
+  tags:
+  - API Status

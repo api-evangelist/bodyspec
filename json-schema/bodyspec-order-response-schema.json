@@ -1,0 +1,95 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/bodyspec/main/json-schema/bodyspec-order-response-schema.json",
+  "title": "OrderResponse",
+  "description": "Response for a single order.",
+  "x-generated": "2026-10-02",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/bodyspec-openapi.json#/components/schemas/OrderResponse",
+  "properties": {
+    "order_id": {
+      "type": "string",
+      "title": "Order Id",
+      "description": "Order ID"
+    },
+    "user_id": {
+      "type": "string",
+      "title": "User Id",
+      "description": "User ID"
+    },
+    "provider_name": {
+      "type": "string",
+      "title": "Provider Name",
+      "description": "Ordering provider name"
+    },
+    "provider_npi": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Provider Npi",
+      "description": "Provider NPI number"
+    },
+    "order_date": {
+      "type": "string",
+      "title": "Order Date",
+      "description": "Date order was written (YYYY-MM-DD)"
+    },
+    "expiration_date": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Expiration Date",
+      "description": "Order expiration date (YYYY-MM-DD)"
+    },
+    "notes": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Notes",
+      "description": "Additional notes"
+    },
+    "status": {
+      "type": "string",
+      "title": "Status",
+      "description": "Order status"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Created At",
+      "description": "Creation timestamp (ISO 8601 UTC)"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Updated At",
+      "description": "Last update timestamp (ISO 8601 UTC)"
+    }
+  },
+  "type": "object",
+  "required": [
+    "order_id",
+    "user_id",
+    "provider_name",
+    "order_date",
+    "status",
+    "created_at",
+    "updated_at"
+  ]
+}

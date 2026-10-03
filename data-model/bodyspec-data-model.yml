@@ -1,0 +1,435 @@
+generated: '2026-10-02'
+method: derived
+generator: derive-data-model.py
+source:
+- openapi/bodyspec-openapi.json
+notation: has_one = property $ref; has_many = array of $ref; belongs_to = <entity>_id field
+summary:
+  entities: 69
+  entities_in_spec: 69
+  relationships: 55
+entities:
+- name: Address
+  fields: 6
+  description: Address information for a location.
+- name: Appointment
+  fields: 7
+  description: Appointment information.
+- name: ApptListResponse
+  fields: 2
+  description: Paginated appointment list response.
+- name: AvailabilityResponse
+  fields: 3
+  description: Response model for availability endpoint.
+- name: AvailabilitySlot
+  fields: 7
+  description: Represents an available appointment slot.
+- name: BodyRegion
+  fields: 6
+  description: Body composition data for a specific region.
+- name: Body__create_order_api_v1_partners__partner_id__orders_post
+  fields: 7
+- name: Body__update_order_api_v1_partners__partner_id__orders__order_id__patch
+  fields: 6
+- name: BoneDensity
+  fields: 5
+  description: Bone density measurements for a specific site.
+- name: ClassicPdfFormatRequest
+  fields: 1
+  description: Request body for classic_pdf export format.
+- name: Coordinates
+  fields: 2
+  description: Geographic coordinates for a location.
+- name: DexaBoneDensityResponse
+  fields: 4
+  description: DEXA bone density results by region.
+- name: DexaCompositionResponse
+  fields: 5
+  description: DEXA body composition results by region.
+- name: DexaPercentilesResponse
+  fields: 4
+  description: Age and gender-matched percentile rankings.
+- name: DexaRmrResponse
+  fields: 3
+  description: Resting metabolic rate (RMR) estimates derived from DEXA body composition.
+- name: DexaScanInfoResponse
+  fields: 6
+  description: DEXA scan metadata and information.
+- name: DexaVisceralFatResponse
+  fields: 4
+  description: Visceral adipose tissue (VAT) analysis results.
+- name: ExternalIds
+  fields: 2
+  description: Optional external IDs for partner tracking.
+- name: HTTPValidationError
+  fields: 1
+- name: IntakeAdditionalContact
+  fields: 4
+  description: Optional additional contact information.
+- name: IntakeCreateRequest
+  fields: 4
+  description: Request to create an intake for a user.
+- name: IntakeDisqualifiers
+  fields: 3
+  description: Disqualifier questions - all must be false.
+- name: IntakeQualifiers
+  fields: 7
+  description: Qualifier questions - at least one must be true.
+- name: IntakeResponse
+  fields: 1
+  description: Response from intake creation.
+- name: IntakeUser
+  fields: 10
+  description: User information for intake.
+- name: InteractiveFormatRequest
+  fields: 6
+  description: Request body for bodyspec_interactive export format.
+- name: Location
+  fields: 9
+  description: Location model representing a scan location with full details.
+- name: LocationResponse
+  fields: 1
+  description: Response model for getting a single location.
+- name: LocationsListResponse
+  fields: 2
+  description: Response model for listing locations.
+- name: MultiLocationAvailabilityResponse
+  fields: 4
+  description: Response model for multi-location availability endpoint.
+- name: OrderCreateResponse
+  fields: 1
+  description: Response from order creation.
+- name: OrderResponse
+  fields: 10
+  description: Response for a single order.
+- name: OrdersListResponse
+  fields: 2
+  description: Paginated list of orders.
+- name: Pagination
+  fields: 4
+  description: Pagination information for list responses.
+- name: PartnerReservation
+  fields: 2
+  description: Combined user and appointment for a partner reservation.
+- name: PartnerReservationsListResponse
+  fields: 2
+  description: Paginated partner reservations list response.
+- name: PartnerUser
+  fields: 4
+  description: User information provided by integration partner.
+- name: PartnerUserResponse
+  fields: 6
+  description: User model for partner API responses, includes link_time.
+- name: PartnerUsersListResponse
+  fields: 2
+  description: Paginated partner users list response.
+- name: PatientInfo
+  fields: 3
+  description: Patient information at time of scan.
+- name: PdfFormatRequest
+  fields: 6
+  description: Request body for bodyspec_pdf export format.
+- name: PercentileMetric
+  fields: 2
+  description: Individual percentile metric data.
+- name: PercentileParams
+  fields: 3
+  description: Parameters used for percentile calculation.
+- name: ReservationCancelRequest
+  fields: 1
+  description: Request to cancel a reservation (optional body).
+- name: ReservationCreateRequest
+  fields: 3
+  description: Request to create an appointment reservation.
+- name: ReservationResponse
+  fields: 6
+  description: Response for reservation creation.
+- name: ResultDetailResponse
+  fields: 7
+  description: Response for getting result details.
+- name: ResultExportResponse
+  fields: 4
+  description: Response for result export endpoint.
+- name: ResultSummary
+  fields: 6
+  description: Summary information for a single result.
+- name: ResultsListResponse
+  fields: 2
+  description: Response for listing user results.
+- name: RmrEstimate
+  fields: 2
+  description: Individual RMR estimate from a scientific formula.
+- name: Service
+  fields: 6
+  description: Service model representing a bookable scan or test type.
+- name: ServiceResponse
+  fields: 1
+  description: Response model for getting a single service.
+- name: ServicesListResponse
+  fields: 2
+  description: Response model for listing services.
+- name: UserResponse
+  fields: 5
+  description: User model for API responses.
+- name: UserUpdateRequest
+  fields: 3
+  description: User update request model.
+- name: ValidationError
+  fields: 3
+- name: WebhookCreateRequest
+  fields: 4
+  description: Request model for creating a webhook.
+- name: WebhookReservationCanceledData
+  fields: 6
+  description: Data payload for reservation_canceled webhook event.
+- name: WebhookReservationCanceledPayload
+  fields: 4
+  description: Webhook payload for reservation_canceled events.
+- name: WebhookReservationCreatedData
+  fields: 4
+  description: Data payload for reservation_created webhook event.
+- name: WebhookReservationCreatedPayload
+  fields: 4
+  description: Webhook payload for reservation_created events.
+- name: WebhookReservationNoShowData
+  fields: 5
+  description: Data payload for reservation_no_show webhook event.
+- name: WebhookReservationNoShowPayload
+  fields: 4
+  description: Webhook payload for reservation_no_show events.
+- name: WebhookResponse
+  fields: 6
+  description: Response model for a webhook configuration.
+- name: WebhookResultsReadyData
+  fields: 5
+  description: Data payload for results_ready webhook event.
+- name: WebhookResultsReadyPayload
+  fields: 4
+  description: Webhook payload for results_ready events.
+- name: WebhookUpdateRequest
+  fields: 3
+  description: Request model for updating a webhook (partial update).
+- name: WebhooksListResponse
+  fields: 1
+  description: Response model for listing webhooks.
+relationships:
+- from: Appointment
+  to: Location
+  type: has_one
+  via: location
+- from: Appointment
+  to: Service
+  type: has_one
+  via: service
+- from: ApptListResponse
+  to: Appointment
+  type: has_many
+  via: appts
+- from: ApptListResponse
+  to: Pagination
+  type: has_one
+  via: pagination
+- from: AvailabilityResponse
+  to: AvailabilitySlot
+  type: has_many
+  via: slots
+- from: AvailabilityResponse
+  to: Pagination
+  type: has_one
+  via: pagination
+- from: AvailabilitySlot
+  to: Location
+  type: belongs_to
+  via: location_id
+- from: AvailabilitySlot
+  to: Service
+  type: belongs_to
+  via: service_id
+- from: DexaBoneDensityResponse
+  to: BoneDensity
+  type: has_one
+  via: total
+- from: DexaCompositionResponse
+  to: BodyRegion
+  type: has_one
+  via: total
+- from: DexaPercentilesResponse
+  to: PercentileParams
+  type: has_one
+  via: params
+- from: DexaRmrResponse
+  to: RmrEstimate
+  type: has_many
+  via: estimates
+- from: DexaScanInfoResponse
+  to: PatientInfo
+  type: has_one
+  via: patient_intake
+- from: HTTPValidationError
+  to: ValidationError
+  type: has_many
+  via: detail
+- from: IntakeCreateRequest
+  to: IntakeUser
+  type: has_one
+  via: user
+- from: IntakeCreateRequest
+  to: IntakeQualifiers
+  type: has_one
+  via: qualifiers
+- from: IntakeCreateRequest
+  to: IntakeDisqualifiers
+  type: has_one
+  via: disqualifiers
+- from: IntakeCreateRequest
+  to: IntakeAdditionalContact
+  type: has_one
+  via: addl_contact
+- from: Location
+  to: Address
+  type: has_one
+  via: address
+- from: Location
+  to: Coordinates
+  type: has_one
+  via: coordinates
+- from: LocationResponse
+  to: Location
+  type: has_one
+  via: location
+- from: LocationsListResponse
+  to: Location
+  type: has_many
+  via: locations
+- from: LocationsListResponse
+  to: Pagination
+  type: has_one
+  via: pagination
+- from: MultiLocationAvailabilityResponse
+  to: AvailabilitySlot
+  type: has_many
+  via: slots
+- from: MultiLocationAvailabilityResponse
+  to: Pagination
+  type: has_one
+  via: pagination
+- from: OrdersListResponse
+  to: OrderResponse
+  type: has_many
+  via: orders
+- from: OrdersListResponse
+  to: Pagination
+  type: has_one
+  via: pagination
+- from: PartnerReservation
+  to: UserResponse
+  type: has_one
+  via: user
+- from: PartnerReservation
+  to: Appointment
+  type: has_one
+  via: appt
+- from: PartnerReservationsListResponse
+  to: PartnerReservation
+  type: has_many
+  via: reservations
+- from: PartnerReservationsListResponse
+  to: Pagination
+  type: has_one
+  via: pagination
+- from: PartnerUsersListResponse
+  to: PartnerUserResponse
+  type: has_many
+  via: users
+- from: PartnerUsersListResponse
+  to: Pagination
+  type: has_one
+  via: pagination
+- from: ReservationCreateRequest
+  to: PartnerUser
+  type: has_one
+  via: user
+- from: ReservationCreateRequest
+  to: ExternalIds
+  type: has_one
+  via: external
+- from: ReservationResponse
+  to: Location
+  type: has_one
+  via: location
+- from: ReservationResponse
+  to: ExternalIds
+  type: has_one
+  via: external
+- from: ResultDetailResponse
+  to: Location
+  type: has_one
+  via: location
+- from: ResultDetailResponse
+  to: Service
+  type: has_one
+  via: service
+- from: ResultSummary
+  to: Location
+  type: has_one
+  via: location
+- from: ResultSummary
+  to: Service
+  type: has_one
+  via: service
+- from: ResultsListResponse
+  to: ResultSummary
+  type: has_many
+  via: results
+- from: ResultsListResponse
+  to: Pagination
+  type: has_one
+  via: pagination
+- from: ServiceResponse
+  to: Service
+  type: has_one
+  via: service
+- from: ServicesListResponse
+  to: Service
+  type: has_many
+  via: services
+- from: ServicesListResponse
+  to: Pagination
+  type: has_one
+  via: pagination
+- from: WebhookReservationCanceledData
+  to: Service
+  type: belongs_to
+  via: service_id
+- from: WebhookReservationCanceledPayload
+  to: WebhookReservationCanceledData
+  type: has_one
+  via: data
+- from: WebhookReservationCreatedData
+  to: Service
+  type: belongs_to
+  via: service_id
+- from: WebhookReservationCreatedPayload
+  to: WebhookReservationCreatedData
+  type: has_one
+  via: data
+- from: WebhookReservationNoShowData
+  to: Service
+  type: belongs_to
+  via: service_id
+- from: WebhookReservationNoShowPayload
+  to: WebhookReservationNoShowData
+  type: has_one
+  via: data
+- from: WebhookResultsReadyData
+  to: Service
+  type: belongs_to
+  via: service_id
+- from: WebhookResultsReadyPayload
+  to: WebhookResultsReadyData
+  type: has_one
+  via: data
+- from: WebhooksListResponse
+  to: WebhookResponse
+  type: has_many
+  via: webhooks

@@ -1,0 +1,278 @@
+openapi: 3.2.0
+info:
+  title: BodySpec Users API
+  description: This API allows BodySpec users to integrate their DEXA scan data with other platforms.
+  license:
+    name: Proprietary
+  version: 0.18.2
+servers:
+- url: https://app.bodyspec.com
+  description: Production server
+security:
+- OAuth2:
+  - openid
+  - profile
+  - email
+- BearerAuth: []
+tags:
+- name: Users
+  description: Operations related to user management and profiles
+paths:
+  /api/v1/users/me:
+    get:
+      tags:
+      - Users
+      summary: Get user info
+      description: Retrieve the profile information of the currently authenticated user.
+      operationId: _get_user_api_v1_users_me_get
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+              example:
+                user_id: '12345678901234567890123456789012'
+                email: user@example.com
+                first_name: John
+                last_name: Doe
+                phone: '+14155551234'
+        '401':
+          description: Not authenticated
+          content:
+            application/json:
+              example:
+                detail: Not authenticated
+        '403':
+          description: Insufficient permissions
+          content:
+            application/json:
+              example:
+                detail: Insufficient permissions
+        '404':
+          description: User not found
+          content:
+            application/json:
+              example:
+                detail: User not found
+      security:
+      - HTTPBearer: []
+      - OAuth2AuthorizationCodeBearer: []
+    patch:
+      tags:
+      - Users
+      summary: Update user info
+      description: Update the profile information of the currently authenticated user.
+      operationId: _update_user_api_v1_users_me_patch
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserUpdateRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+              example:
+                user_id: '12345678901234567890123456789012'
+                email: user@example.com
+                first_name: John
+                last_name: Smith
+                phone: '+14155559999'
+        '400':
+          description: Invalid request data
+          content:
+            application/json:
+              example:
+                detail:
+                - loc:
+                  - body
+                  - phone
+                  msg: string does not match regex
+                  type: value_error.str.regex
+        '401':
+          description: Not authenticated
+          content:
+            application/json:
+              example:
+                detail: Not authenticated
+        '403':
+          description: Insufficient permissions
+          content:
+            application/json:
+              example:
+                detail: Insufficient permissions
+        '404':
+          description: User not found
+          content:
+            application/json:
+              example:
+                detail: User not found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - HTTPBearer: []
+      - OAuth2AuthorizationCodeBearer: []
+components:
+  schemas:
+    UserUpdateRequest:
+      properties:
+        first_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: First Name
+          description: User's first name
+        last_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Name
+          description: User's last name
+        phone:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Phone
+          description: Phone number in E.164 format
+          examples:
+          - '+14155551234'
+      type: object
+      title: UserUpdateRequest
+      description: User update request model.
+      examples:
+      - first_name: Jane
+        last_name: Smith
+        phone: '+14155559999'
+      x-internal: true
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+      x-internal: true
+    UserResponse:
+      properties:
+        user_id:
+          type: string
+          title: User Id
+          description: Unique identifier for the user
+        email:
+          type: string
+          format: email
+          title: Email
+          description: User's email address
+        first_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: First Name
+          description: User's first name
+        last_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Name
+          description: User's last name
+        phone:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Phone
+          description: Phone number in E.164 format
+          examples:
+          - '+14155551234'
+      type: object
+      required:
+      - user_id
+      - email
+      title: User
+      description: 'User model for API responses.
+
+
+        Note: This model intentionally excludes sensitive or internal fields like:
+
+        - is_admin: Admin status is determined from token claims, not exposed in responses
+
+        - created_at/updated_at: Internal timestamps not needed in public API'
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+      x-internal: true
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      description: OAuth2 authentication via Keycloak with PKCE
+      flows:
+        authorizationCode:
+          authorizationUrl: https://auth.bodyspec.com/realms/bodyspec/protocol/openid-connect/auth
+          tokenUrl: https://auth.bodyspec.com/realms/bodyspec/protocol/openid-connect/token
+          scopes:
+            openid: OpenID Connect scope
+            profile: Access to user profile
+            email: Access to user email
+          x-usePkce: SHA-256
+          x-scalar-client-id: bodyspec-api-ext-v1
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT Bearer token for authentication
+    PartnerAuth:
+      type: http
+      scheme: basic
+      description: For partner integrations only. Contact BodySpec to obtain credentials.
+x-tagGroups:
+- name: 👤 User Data
+  tags:
+  - Users
+  - Appointments
+  - Results
+- name: 📅 Availability
+  tags:
+  - Locations
+  - Services
+  - Availability
+- name: 🤝 Partners
+  tags:
+  - Reservations
+  - Partner Users
+  - Partner Appointments
+  - Partner Results
+  - Partner Intake
+  - Partner Orders
+  - Partner Webhooks
+- name: 🏥 API Status
+  tags:
+  - API Status

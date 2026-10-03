@@ -1,0 +1,25 @@
+generated: '2026-10-02'
+method: probed
+source: "https://www.bodyspec.com/privacy-policy"
+signals:
+  data_subject_request:
+    evidence:
+      - source: "https://www.bodyspec.com/privacy-policy"
+        http_status: 200
+        fetched: "/tmp/privacy.html"
+        quote: "The categories of personal data we collect depend on how you interact with us and our services. For example, you may provide us your personal data directly when you make an account with us, upload content to our website, undergo a body scan, or otherwise contact us or interact with us."
+        note: "Describes data collection and implies ability to request access via contact."
+  subprocessors:
+    evidence:
+      - source: "https://www.bodyspec.com/privacy-policy"
+        http_status: 200
+        fetched: "/tmp/privacy.html"
+        quote: "We use third-party payment providers, including Stripe, to process payments made to us."
+        note: "Identifies Stripe as a subprocessor for payment processing."
+  data_retention:
+    evidence:
+      - source: "https://www.bodyspec.com/privacy-policy"
+        http_status: 200
+        fetched: "/tmp/privacy.html"
+        quote: "We do not retain any personally identifiable financial information, such as payment card number."
+        note: "States that financial data is not retained."

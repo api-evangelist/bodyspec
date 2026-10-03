@@ -1,0 +1,313 @@
+openapi: 3.2.0
+info:
+  title: BodySpec Partner Users API
+  description: This API allows BodySpec users to integrate their DEXA scan data with other platforms.
+  license:
+    name: Proprietary
+  version: 0.18.2
+servers:
+- url: https://app.bodyspec.com
+  description: Production server
+security:
+- OAuth2:
+  - openid
+  - profile
+  - email
+- BearerAuth: []
+tags:
+- name: Partner Users
+  description: Partner integration endpoints for user management
+paths:
+  /api/v1/partners/{partner_id}/users:
+    get:
+      tags:
+      - Partner Users
+      summary: List partner users
+      description: Retrieve paginated list of users linked to the authenticated partner.
+      operationId: _list_partner_users_api_v1_partners__partner_id__users_get
+      security:
+      - HTTPBasic: []
+      - PartnerAuth: []
+      parameters:
+      - name: partner_id
+        in: path
+        required: true
+        schema:
+          type: string
+          description: Partner ID
+          title: Partner Id
+        description: Partner ID
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: Page number (starts at 1)
+          default: 1
+          title: Page
+        description: Page number (starts at 1)
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 100
+          minimum: 1
+          description: Items per page (max 100)
+          default: 20
+          title: Page Size
+        description: Items per page (max 100)
+      - name: link_time[eq]
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          description: 'ISO 8601 datetime: link_time = value'
+          title: Link Time[Eq]
+        description: 'ISO 8601 datetime: link_time = value'
+      - name: link_time[gt]
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          description: 'ISO 8601 datetime: link_time > value'
+          title: Link Time[Gt]
+        description: 'ISO 8601 datetime: link_time > value'
+      - name: link_time[gte]
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          description: 'ISO 8601 datetime: link_time >= value'
+          title: Link Time[Gte]
+        description: 'ISO 8601 datetime: link_time >= value'
+      - name: link_time[lt]
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          description: 'ISO 8601 datetime: link_time < value'
+          title: Link Time[Lt]
+        description: 'ISO 8601 datetime: link_time < value'
+      - name: link_time[lte]
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          description: 'ISO 8601 datetime: link_time <= value'
+          title: Link Time[Lte]
+        description: 'ISO 8601 datetime: link_time <= value'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerUsersListResponse'
+              example:
+                users:
+                - user_id: a5950beea2a7487fb79cfdbeb77fa555
+                  email: user@example.com
+                  first_name: Jane
+                  last_name: Smith
+                  phone: '+14155551234'
+                  link_time: '2024-01-15T10:30:00Z'
+                pagination:
+                  page: 1
+                  page_size: 20
+                  results: 1
+                  has_more: false
+        '401':
+          description: Invalid partner authentication
+        '403':
+          description: Partner ID mismatch
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+      x-internal: true
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+      x-internal: true
+    PartnerUserResponse:
+      properties:
+        user_id:
+          type: string
+          title: User Id
+          description: Unique identifier for the user
+        email:
+          type: string
+          format: email
+          title: Email
+          description: User's email address
+        first_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: First Name
+          description: User's first name
+        last_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Name
+          description: User's last name
+        phone:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Phone
+          description: Phone number in E.164 format
+          examples:
+          - '+14155551234'
+        link_time:
+          type: string
+          format: date-time
+          title: Link Time
+          description: UTC timestamp when user was linked to partner
+      type: object
+      required:
+      - user_id
+      - email
+      - link_time
+      title: PartnerUser
+      description: User model for partner API responses, includes link_time.
+    Pagination:
+      properties:
+        page:
+          type: integer
+          title: Page
+          description: Current page number
+        page_size:
+          type: integer
+          title: Page Size
+          description: Number of items per page
+        results:
+          type: integer
+          title: Results
+          description: Number of results in this page
+        has_more:
+          type: boolean
+          title: Has More
+          description: Whether more results exist after this page
+      type: object
+      required:
+      - page
+      - page_size
+      - results
+      - has_more
+      title: Pagination
+      description: Pagination information for list responses.
+      x-internal: true
+    PartnerUsersListResponse:
+      properties:
+        users:
+          items:
+            $ref: '#/components/schemas/PartnerUserResponse'
+          type: array
+          title: Users
+          description: List of users linked to the partner
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+          description: Pagination information
+      type: object
+      required:
+      - users
+      - pagination
+      title: PartnerUsersListResponse
+      description: Paginated partner users list response.
+      x-internal: true
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      description: OAuth2 authentication via Keycloak with PKCE
+      flows:
+        authorizationCode:
+          authorizationUrl: https://auth.bodyspec.com/realms/bodyspec/protocol/openid-connect/auth
+          tokenUrl: https://auth.bodyspec.com/realms/bodyspec/protocol/openid-connect/token
+          scopes:
+            openid: OpenID Connect scope
+            profile: Access to user profile
+            email: Access to user email
+          x-usePkce: SHA-256
+          x-scalar-client-id: bodyspec-api-ext-v1
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT Bearer token for authentication
+    PartnerAuth:
+      type: http
+      scheme: basic
+      description: For partner integrations only. Contact BodySpec to obtain credentials.
+x-tagGroups:
+- name: 👤 User Data
+  tags:
+  - Users
+  - Appointments
+  - Results
+- name: 📅 Availability
+  tags:
+  - Locations
+  - Services
+  - Availability
+- name: 🤝 Partners
+  tags:
+  - Reservations
+  - Partner Users
+  - Partner Appointments
+  - Partner Results
+  - Partner Intake
+  - Partner Orders
+  - Partner Webhooks
+- name: 🏥 API Status
+  tags:
+  - API Status

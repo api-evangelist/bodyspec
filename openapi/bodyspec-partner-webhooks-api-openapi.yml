@@ -1,0 +1,483 @@
+openapi: 3.2.0
+info:
+  title: BodySpec Partner Webhooks API
+  description: This API allows BodySpec users to integrate their DEXA scan data with other platforms.
+  license:
+    name: Proprietary
+  version: 0.18.2
+servers:
+- url: https://app.bodyspec.com
+  description: Production server
+security:
+- OAuth2:
+  - openid
+  - profile
+  - email
+- BearerAuth: []
+tags:
+- name: Partner Webhooks
+  description: Partner integration endpoints for webhook configuration
+paths:
+  /api/v1/partners/{partner_id}/webhooks:
+    get:
+      tags:
+      - Partner Webhooks
+      summary: List webhooks
+      description: Retrieve all webhook configurations for the authenticated partner.
+      operationId: list_webhooks_api_v1_partners__partner_id__webhooks_get
+      security:
+      - HTTPBasic: []
+      - PartnerAuth: []
+      parameters:
+      - name: partner_id
+        in: path
+        required: true
+        schema:
+          type: string
+          description: Partner ID
+          title: Partner Id
+        description: Partner ID
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhooksListResponse'
+              example:
+                webhooks:
+                - webhook_id: a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4
+                  url: https://your-server.example.com/webhooks/bodyspec
+                  event_type: results_ready
+                  enabled: true
+                  has_secret: true
+                  create_time: '2024-03-15T10:30:00Z'
+        '401':
+          description: Invalid partner authentication
+        '403':
+          description: Partner ID mismatch
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    post:
+      tags:
+      - Partner Webhooks
+      summary: Create webhook
+      description: Create a new webhook configuration for the authenticated partner.
+      operationId: create_webhook_api_v1_partners__partner_id__webhooks_post
+      security:
+      - HTTPBasic: []
+      - PartnerAuth: []
+      parameters:
+      - name: partner_id
+        in: path
+        required: true
+        schema:
+          type: string
+          description: Partner ID
+          title: Partner Id
+        description: Partner ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WebhookCreateRequest'
+      responses:
+        '201':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhookResponse'
+              example:
+                webhook_id: a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4
+                url: https://partner.example.com/webhooks
+                event_type: results_ready
+                enabled: true
+                has_secret: true
+                create_time: '2024-03-15T10:30:00Z'
+        '400':
+          description: Invalid webhook configuration
+        '401':
+          description: Invalid partner authentication
+        '403':
+          description: Partner ID mismatch
+        '503':
+          description: Webhook system not configured
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/partners/{partner_id}/webhooks/{webhook_id}:
+    get:
+      tags:
+      - Partner Webhooks
+      summary: Get webhook
+      description: Retrieve details for a specific webhook configuration.
+      operationId: get_webhook_api_v1_partners__partner_id__webhooks__webhook_id__get
+      security:
+      - HTTPBasic: []
+      - PartnerAuth: []
+      parameters:
+      - name: partner_id
+        in: path
+        required: true
+        schema:
+          type: string
+          description: Partner ID
+          title: Partner Id
+        description: Partner ID
+      - name: webhook_id
+        in: path
+        required: true
+        schema:
+          type: string
+          description: Webhook ID (32-character hex string)
+          title: Webhook Id
+        description: Webhook ID (32-character hex string)
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhookResponse'
+              example:
+                webhook_id: a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4
+                url: https://partner.example.com/webhooks
+                event_type: results_ready
+                enabled: true
+                has_secret: true
+                create_time: '2024-03-15T10:30:00Z'
+        '401':
+          description: Invalid partner authentication
+        '403':
+          description: Partner ID mismatch or webhook belongs to different partner
+        '404':
+          description: Webhook not found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    patch:
+      tags:
+      - Partner Webhooks
+      summary: Update webhook
+      description: Update an existing webhook configuration (partial update).
+      operationId: update_webhook_api_v1_partners__partner_id__webhooks__webhook_id__patch
+      security:
+      - HTTPBasic: []
+      - PartnerAuth: []
+      parameters:
+      - name: partner_id
+        in: path
+        required: true
+        schema:
+          type: string
+          description: Partner ID
+          title: Partner Id
+        description: Partner ID
+      - name: webhook_id
+        in: path
+        required: true
+        schema:
+          type: string
+          description: Webhook ID (32-character hex string)
+          title: Webhook Id
+        description: Webhook ID (32-character hex string)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WebhookUpdateRequest'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhookResponse'
+              example:
+                webhook_id: a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4
+                url: https://partner.example.com/webhooks
+                event_type: results_ready
+                enabled: false
+                has_secret: true
+                create_time: '2024-03-15T10:30:00Z'
+        '400':
+          description: Invalid webhook configuration
+        '401':
+          description: Invalid partner authentication
+        '403':
+          description: Partner ID mismatch or webhook belongs to different partner
+        '404':
+          description: Webhook not found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - Partner Webhooks
+      summary: Delete webhook
+      description: Delete a webhook configuration.
+      operationId: delete_webhook_api_v1_partners__partner_id__webhooks__webhook_id__delete
+      security:
+      - HTTPBasic: []
+      - PartnerAuth: []
+      parameters:
+      - name: partner_id
+        in: path
+        required: true
+        schema:
+          type: string
+          description: Partner ID
+          title: Partner Id
+        description: Partner ID
+      - name: webhook_id
+        in: path
+        required: true
+        schema:
+          type: string
+          description: Webhook ID (32-character hex string)
+          title: Webhook Id
+        description: Webhook ID (32-character hex string)
+      responses:
+        '204':
+          description: Webhook deleted successfully
+        '401':
+          description: Invalid partner authentication
+        '403':
+          description: Partner ID mismatch or webhook belongs to different partner
+        '404':
+          description: Webhook not found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+      x-internal: true
+    WebhookCreateRequest:
+      properties:
+        url:
+          type: string
+          maxLength: 2083
+          minLength: 1
+          format: uri
+          title: Url
+          description: HTTPS URL to receive webhook events
+        event_type:
+          $ref: '#/components/schemas/WebhookEventType'
+          description: Event type to subscribe to
+        secret:
+          anyOf:
+          - type: string
+            maxLength: 256
+            minLength: 8
+          - type: 'null'
+          title: Secret
+          description: 'Optional secret for webhook authentication. BodySpec base64-encodes this value and sends it as a Bearer token in the Authorization header of every webhook delivery — i.e. `Authorization: Bearer <base64(secret)>` (standard base64, with padding).'
+        enabled:
+          type: boolean
+          title: Enabled
+          description: Whether the webhook is enabled
+          default: true
+      type: object
+      required:
+      - url
+      - event_type
+      title: WebhookCreateRequest
+      description: Request model for creating a webhook.
+      examples:
+      - enabled: true
+        event_type: results_ready
+        secret: my-webhook-secret
+        url: https://your-server.example.com/webhooks/bodyspec
+      x-internal: true
+    WebhookEventType:
+      type: string
+      enum:
+      - results_ready
+      - reservation_created
+      - reservation_canceled
+      - reservation_no_show
+      title: WebhookEventType
+      description: Supported webhook event types.
+      x-internal: true
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+      x-internal: true
+    WebhookUpdateRequest:
+      properties:
+        url:
+          anyOf:
+          - type: string
+            maxLength: 2083
+            minLength: 1
+            format: uri
+          - type: 'null'
+          title: Url
+          description: HTTPS URL to receive webhook events
+        secret:
+          anyOf:
+          - type: string
+            maxLength: 256
+          - type: 'null'
+          title: Secret
+          description: New secret for webhook authentication. Pass empty string to remove.
+        enabled:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Enabled
+          description: Whether the webhook is enabled
+      type: object
+      title: WebhookUpdateRequest
+      description: 'Request model for updating a webhook (partial update).
+
+
+        Note: event_type cannot be changed after creation.'
+      examples:
+      - enabled: false
+      - secret: new-secret-value
+        url: https://your-server.example.com/webhooks/v2
+      x-internal: true
+    WebhooksListResponse:
+      properties:
+        webhooks:
+          items:
+            $ref: '#/components/schemas/WebhookResponse'
+          type: array
+          title: Webhooks
+          description: List of webhook configurations
+      type: object
+      required:
+      - webhooks
+      title: WebhooksListResponse
+      description: Response model for listing webhooks.
+      x-internal: true
+    WebhookResponse:
+      properties:
+        webhook_id:
+          type: string
+          title: Webhook Id
+          description: Unique identifier for the webhook (Airtable record ID)
+        url:
+          type: string
+          title: Url
+          description: URL configured to receive webhook events
+        event_type:
+          $ref: '#/components/schemas/WebhookEventType'
+          description: Event type this webhook is subscribed to
+        enabled:
+          type: boolean
+          title: Enabled
+          description: Whether the webhook is currently enabled
+        has_secret:
+          type: boolean
+          title: Has Secret
+          description: Whether a secret is configured for this webhook
+        create_time:
+          type: string
+          format: date-time
+          title: Create Time
+          description: When the webhook was created (UTC)
+      type: object
+      required:
+      - webhook_id
+      - url
+      - event_type
+      - enabled
+      - has_secret
+      - create_time
+      title: WebhookResponse
+      description: Response model for a webhook configuration.
+      x-internal: true
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      description: OAuth2 authentication via Keycloak with PKCE
+      flows:
+        authorizationCode:
+          authorizationUrl: https://auth.bodyspec.com/realms/bodyspec/protocol/openid-connect/auth
+          tokenUrl: https://auth.bodyspec.com/realms/bodyspec/protocol/openid-connect/token
+          scopes:
+            openid: OpenID Connect scope
+            profile: Access to user profile
+            email: Access to user email
+          x-usePkce: SHA-256
+          x-scalar-client-id: bodyspec-api-ext-v1
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT Bearer token for authentication
+    PartnerAuth:
+      type: http
+      scheme: basic
+      description: For partner integrations only. Contact BodySpec to obtain credentials.
+x-tagGroups:
+- name: 👤 User Data
+  tags:
+  - Users
+  - Appointments
+  - Results
+- name: 📅 Availability
+  tags:
+  - Locations
+  - Services
+  - Availability
+- name: 🤝 Partners
+  tags:
+  - Reservations
+  - Partner Users
+  - Partner Appointments
+  - Partner Results
+  - Partner Intake
+  - Partner Orders
+  - Partner Webhooks
+- name: 🏥 API Status
+  tags:
+  - API Status
