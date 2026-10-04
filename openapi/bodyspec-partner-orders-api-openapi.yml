@@ -230,27 +230,6 @@ paths:
           description: Validation error in order metadata
 components:
   schemas:
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-      x-internal: true
-    OrderCreateResponse:
-      properties:
-        order_id:
-          type: string
-          title: Order Id
-          description: Created order ID
-      type: object
-      required:
-      - order_id
-      title: OrderCreateResponse
-      description: Response from order creation.
     Body__update_order_api_v1_partners__partner_id__orders__order_id__patch:
       properties:
         provider_name:
@@ -294,27 +273,63 @@ components:
       type: object
       title: Body__update_order_api_v1_partners__partner_id__orders__order_id__patch
       x-internal: true
-    ValidationError:
+    HTTPValidationError:
       properties:
-        loc:
+        detail:
           items:
-            anyOf:
-            - type: string
-            - type: integer
+            $ref: '#/components/schemas/ValidationError'
           type: array
-          title: Location
-        msg:
+          title: Detail
+      type: object
+      title: HTTPValidationError
+      x-internal: true
+    Body__create_order_api_v1_partners__partner_id__orders_post:
+      properties:
+        user_id:
           type: string
-          title: Message
-        type:
+          minLength: 1
+          title: User Id
+          description: BodySpec user ID
+        provider_name:
           type: string
-          title: Error Type
+          minLength: 1
+          title: Provider Name
+          description: Ordering provider name
+        provider_npi:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Provider Npi
+          description: Provider NPI number (10 digits)
+        order_date:
+          type: string
+          title: Order Date
+          description: Date order was written (YYYY-MM-DD)
+        expiration_date:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Expiration Date
+          description: Order expiration date (YYYY-MM-DD)
+        notes:
+          anyOf:
+          - type: string
+            maxLength: 2000
+          - type: 'null'
+          title: Notes
+          description: Additional notes
+        file:
+          type: string
+          format: binary
+          title: File
+          description: PDF file of the medical order
       type: object
       required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
+      - user_id
+      - provider_name
+      - order_date
+      - file
+      title: Body__create_order_api_v1_partners__partner_id__orders_post
       x-internal: true
     OrderResponse:
       properties:
@@ -377,54 +392,6 @@ components:
       - updated_at
       title: OrderResponse
       description: Response for a single order.
-    Body__create_order_api_v1_partners__partner_id__orders_post:
-      properties:
-        user_id:
-          type: string
-          minLength: 1
-          title: User Id
-          description: BodySpec user ID
-        provider_name:
-          type: string
-          minLength: 1
-          title: Provider Name
-          description: Ordering provider name
-        provider_npi:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Provider Npi
-          description: Provider NPI number (10 digits)
-        order_date:
-          type: string
-          title: Order Date
-          description: Date order was written (YYYY-MM-DD)
-        expiration_date:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Expiration Date
-          description: Order expiration date (YYYY-MM-DD)
-        notes:
-          anyOf:
-          - type: string
-            maxLength: 2000
-          - type: 'null'
-          title: Notes
-          description: Additional notes
-        file:
-          type: string
-          format: binary
-          title: File
-          description: PDF file of the medical order
-      type: object
-      required:
-      - user_id
-      - provider_name
-      - order_date
-      - file
-      title: Body__create_order_api_v1_partners__partner_id__orders_post
-      x-internal: true
     OrdersListResponse:
       properties:
         orders:
@@ -443,6 +410,17 @@ components:
       title: OrdersListResponse
       description: Paginated list of orders.
       x-internal: true
+    OrderCreateResponse:
+      properties:
+        order_id:
+          type: string
+          title: Order Id
+          description: Created order ID
+      type: object
+      required:
+      - order_id
+      title: OrderCreateResponse
+      description: Response from order creation.
     Pagination:
       properties:
         page:
@@ -469,6 +447,28 @@ components:
       - has_more
       title: Pagination
       description: Pagination information for list responses.
+      x-internal: true
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
       x-internal: true
   securitySchemes:
     OAuth2:

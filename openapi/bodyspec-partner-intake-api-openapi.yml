@@ -72,103 +72,6 @@ paths:
           description: Validation error
 components:
   schemas:
-    IntakeDisqualifiers:
-      properties:
-        neg_q1_pregnant:
-          type: boolean
-          title: Neg Q1 Pregnant
-          description: Pregnant or possibly pregnant
-          default: false
-        neg_q2_barium_xray:
-          type: boolean
-          title: Neg Q2 Barium Xray
-          description: Barium X-ray in last 2 weeks
-          default: false
-        neg_q3_nuclear:
-          type: boolean
-          title: Neg Q3 Nuclear
-          description: Nuclear medicine test in last 2 weeks
-          default: false
-      type: object
-      title: IntakeDisqualifiers
-      description: Disqualifier questions - all must be false.
-      x-internal: true
-    IntakeUser:
-      properties:
-        first_name:
-          type: string
-          minLength: 1
-          title: First Name
-          description: User's first name
-        last_name:
-          type: string
-          minLength: 1
-          title: Last Name
-          description: User's last name
-        email:
-          type: string
-          format: email
-          title: Email
-          description: User's email address
-        phone_number:
-          type: string
-          title: Phone Number
-          description: Phone number
-        birth_date:
-          type: string
-          title: Birth Date
-          description: Birth date in ISO format (YYYY-MM-DD)
-        gender:
-          type: string
-          title: Gender
-          description: Gender (Male, Female)
-        height_inches:
-          type: integer
-          maximum: 96.0
-          minimum: 30.0
-          title: Height Inches
-          description: Height in inches (30-96)
-        weight_pounds:
-          type: integer
-          maximum: 600.0
-          minimum: 30.0
-          title: Weight Pounds
-          description: Weight in pounds (30-600)
-        ethnicity:
-          type: string
-          title: Ethnicity
-          description: Ethnicity (Asian, Black, Hispanic, White, Other)
-        signature:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Signature
-          description: PNG signature image, max 500KB. Provide as raw base64 or data URL (data:image/png;base64,...).
-      type: object
-      required:
-      - first_name
-      - last_name
-      - email
-      - phone_number
-      - birth_date
-      - gender
-      - height_inches
-      - weight_pounds
-      - ethnicity
-      title: IntakeUser
-      description: User information for intake.
-      x-internal: true
-    IntakeResponse:
-      properties:
-        intake_id:
-          type: string
-          title: Intake Id
-          description: Created intake ID
-      type: object
-      required:
-      - intake_id
-      title: Intake
-      description: Response from intake creation.
     IntakeQualifiers:
       properties:
         qual_q1_weight:
@@ -286,6 +189,103 @@ components:
           last_name: Smith
           phone_number: '+14155551234'
           weight_pounds: 140
+      x-internal: true
+    IntakeResponse:
+      properties:
+        intake_id:
+          type: string
+          title: Intake Id
+          description: Created intake ID
+      type: object
+      required:
+      - intake_id
+      title: Intake
+      description: Response from intake creation.
+    IntakeDisqualifiers:
+      properties:
+        neg_q1_pregnant:
+          type: boolean
+          title: Neg Q1 Pregnant
+          description: Pregnant or possibly pregnant
+          default: false
+        neg_q2_barium_xray:
+          type: boolean
+          title: Neg Q2 Barium Xray
+          description: Barium X-ray in last 2 weeks
+          default: false
+        neg_q3_nuclear:
+          type: boolean
+          title: Neg Q3 Nuclear
+          description: Nuclear medicine test in last 2 weeks
+          default: false
+      type: object
+      title: IntakeDisqualifiers
+      description: Disqualifier questions - all must be false.
+      x-internal: true
+    IntakeUser:
+      properties:
+        first_name:
+          type: string
+          minLength: 1
+          title: First Name
+          description: User's first name
+        last_name:
+          type: string
+          minLength: 1
+          title: Last Name
+          description: User's last name
+        email:
+          type: string
+          format: email
+          title: Email
+          description: User's email address
+        phone_number:
+          type: string
+          title: Phone Number
+          description: Phone number
+        birth_date:
+          type: string
+          title: Birth Date
+          description: Birth date in ISO format (YYYY-MM-DD)
+        gender:
+          type: string
+          title: Gender
+          description: Gender (Male, Female)
+        height_inches:
+          type: integer
+          maximum: 96.0
+          minimum: 30.0
+          title: Height Inches
+          description: Height in inches (30-96)
+        weight_pounds:
+          type: integer
+          maximum: 600.0
+          minimum: 30.0
+          title: Weight Pounds
+          description: Weight in pounds (30-600)
+        ethnicity:
+          type: string
+          title: Ethnicity
+          description: Ethnicity (Asian, Black, Hispanic, White, Other)
+        signature:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Signature
+          description: PNG signature image, max 500KB. Provide as raw base64 or data URL (data:image/png;base64,...).
+      type: object
+      required:
+      - first_name
+      - last_name
+      - email
+      - phone_number
+      - birth_date
+      - gender
+      - height_inches
+      - weight_pounds
+      - ethnicity
+      title: IntakeUser
+      description: User information for intake.
       x-internal: true
   securitySchemes:
     OAuth2:

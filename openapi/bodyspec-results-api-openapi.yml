@@ -469,28 +469,6 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-      x-internal: true
     Address:
       properties:
         address_line1:
@@ -532,102 +510,6 @@ components:
       title: Address
       description: Address information for a location.
       x-internal: true
-    BoneDensity:
-      properties:
-        bone_mineral_density:
-          type: number
-          title: Bone Mineral Density
-          description: Bone Mineral Density (g/cm²)
-        bone_area_cm2:
-          type: number
-          title: Bone Area Cm2
-          description: Bone area in cm²
-        bone_mineral_content_g:
-          type: number
-          title: Bone Mineral Content G
-          description: Bone mineral content in grams
-        age_sex_z_percentile:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Age Sex Z Percentile
-          description: Age and sex-matched percentile (1-99)
-        peak_sex_t_percentile:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Peak Sex T Percentile
-          description: Sex-matched percentile compared to 30-year-olds (1-99)
-      type: object
-      required:
-      - bone_mineral_density
-      - bone_area_cm2
-      - bone_mineral_content_g
-      title: BoneDensity
-      description: Bone density measurements for a specific site.
-      x-internal: true
-    ResultDetailResponse:
-      properties:
-        result_id:
-          type: string
-          title: Result Id
-          description: Unique identifier for the result
-        start_time:
-          type: string
-          format: date-time
-          title: Start Time
-          description: Result date/time in location timezone
-        location:
-          $ref: '#/components/schemas/Location'
-          description: Location where the result was obtained
-        service:
-          $ref: '#/components/schemas/Service'
-          description: Service information
-        create_time:
-          type: string
-          format: date-time
-          title: Create Time
-          description: When the result was created in location timezone
-        update_time:
-          type: string
-          format: date-time
-          title: Update Time
-          description: When the result was last updated in location timezone
-        sections:
-          items:
-            type: string
-          type: array
-          title: Sections
-          description: List of available section names (only present in detail response, not in list response)
-      type: object
-      required:
-      - result_id
-      - start_time
-      - location
-      - service
-      - create_time
-      - update_time
-      - sections
-      title: Result
-      description: Response for getting result details.
-    ResultsListResponse:
-      properties:
-        results:
-          items:
-            $ref: '#/components/schemas/ResultSummary'
-          type: array
-          title: Results
-          description: List of result summaries
-        pagination:
-          $ref: '#/components/schemas/Pagination'
-          description: Pagination information
-      type: object
-      required:
-      - results
-      - pagination
-      title: ResultsListResponse
-      description: Response for listing user results.
-      x-internal: true
     HTTPValidationError:
       properties:
         detail:
@@ -637,6 +519,104 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
+      x-internal: true
+    Coordinates:
+      properties:
+        latitude:
+          type: number
+          title: Latitude
+          description: Latitude in decimal degrees
+        longitude:
+          type: number
+          title: Longitude
+          description: Longitude in decimal degrees
+      type: object
+      required:
+      - latitude
+      - longitude
+      title: Coordinates
+      description: Geographic coordinates for a location.
+      x-internal: true
+    Location:
+      properties:
+        location_id:
+          type: string
+          title: Location Id
+          description: Unique identifier for the location
+        name:
+          type: string
+          title: Name
+          description: Location name
+        location_type:
+          type: string
+          title: Location Type
+          description: 'Type of location: ''mobile'' or ''storefront'''
+        address:
+          $ref: '#/components/schemas/Address'
+          description: Address information
+        coordinates:
+          anyOf:
+          - $ref: '#/components/schemas/Coordinates'
+          - type: 'null'
+          description: Geographic coordinates
+        timezone:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Timezone
+          description: IANA timezone identifier (e.g., 'America/Los_Angeles')
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: Public notes or description
+        last_updated:
+          type: string
+          format: date-time
+          title: Last Updated
+          description: Last update timestamp in ISO 8601 UTC format
+        distance_miles:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Distance Miles
+          description: Distance from search coordinates in miles. Only present when lat/lng search parameters are provided.
+      type: object
+      required:
+      - location_id
+      - name
+      - location_type
+      - address
+      - last_updated
+      title: Location
+      description: Location model representing a scan location with full details.
+    Pagination:
+      properties:
+        page:
+          type: integer
+          title: Page
+          description: Current page number
+        page_size:
+          type: integer
+          title: Page Size
+          description: Number of items per page
+        results:
+          type: integer
+          title: Results
+          description: Number of results in this page
+        has_more:
+          type: boolean
+          title: Has More
+          description: Whether more results exist after this page
+      type: object
+      required:
+      - page
+      - page_size
+      - results
+      - has_more
+      title: Pagination
+      description: Pagination information for list responses.
       x-internal: true
     PercentileMetric:
       properties:
@@ -655,6 +635,103 @@ components:
       title: PercentileMetric
       description: Individual percentile metric data.
       x-internal: true
+    RmrEstimate:
+      properties:
+        formula:
+          type: string
+          title: Formula
+          description: Scientific formula name and publication year
+        kcal_per_day:
+          type: integer
+          title: Kcal Per Day
+          description: Estimated resting metabolic rate in kilocalories per day
+      type: object
+      required:
+      - formula
+      - kcal_per_day
+      title: RmrEstimate
+      description: Individual RMR estimate from a scientific formula.
+      x-internal: true
+    DexaScanInfoResponse:
+      properties:
+        result_id:
+          type: string
+          title: Result Id
+          description: Unique identifier for the result
+        section_name:
+          type: string
+          title: Section Name
+          description: Name of this section
+          default: scan-info
+        scanner_model:
+          type: string
+          title: Scanner Model
+          description: Model of the DEXA scanner (e.g., 'GE Lunar iDXA', 'GE Lunar Prodigy')
+        acquire_time:
+          type: string
+          format: date-time
+          title: Acquire Time
+          description: When the scan was acquired in location timezone
+        analyze_time:
+          type: string
+          format: date-time
+          title: Analyze Time
+          description: When the scan was analyzed in location timezone
+        patient_intake:
+          $ref: '#/components/schemas/PatientInfo'
+          description: Patient information at time of scan (from intake)
+      type: object
+      required:
+      - result_id
+      - scanner_model
+      - acquire_time
+      - analyze_time
+      - patient_intake
+      title: DexaScanInfo
+      description: DEXA scan metadata and information.
+    DexaPercentilesResponse:
+      properties:
+        result_id:
+          type: string
+          title: Result Id
+          description: Unique identifier for the result
+        section_name:
+          type: string
+          title: Section Name
+          description: Name of this section
+          default: percentiles
+        params:
+          $ref: '#/components/schemas/PercentileParams'
+          description: Parameters used for percentile calculations
+        metrics:
+          additionalProperties:
+            $ref: '#/components/schemas/PercentileMetric'
+          type: object
+          title: Metrics
+          description: Percentile data for various metrics
+          examples:
+          - bone_density_g_cm2:
+              percentile: 82
+              value: 1.25
+            limb_lmi_kg_m2:
+              percentile: 85
+              value: 8.5
+            total_body_fat_pct:
+              percentile: 45
+              value: 25.5
+            total_lmi_kg_m2:
+              percentile: 68
+              value: 22.5
+            vat_mass_kg:
+              percentile: 72
+              value: 2.8
+      type: object
+      required:
+      - result_id
+      - params
+      - metrics
+      title: DexaPercentiles
+      description: Age and gender-matched percentile rankings.
     DexaBoneDensityResponse:
       properties:
         result_id:
@@ -786,6 +863,219 @@ components:
       - regions
       title: DexaComposition
       description: DEXA body composition results by region.
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+      x-internal: true
+    BoneDensity:
+      properties:
+        bone_mineral_density:
+          type: number
+          title: Bone Mineral Density
+          description: Bone Mineral Density (g/cm²)
+        bone_area_cm2:
+          type: number
+          title: Bone Area Cm2
+          description: Bone area in cm²
+        bone_mineral_content_g:
+          type: number
+          title: Bone Mineral Content G
+          description: Bone mineral content in grams
+        age_sex_z_percentile:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Age Sex Z Percentile
+          description: Age and sex-matched percentile (1-99)
+        peak_sex_t_percentile:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Peak Sex T Percentile
+          description: Sex-matched percentile compared to 30-year-olds (1-99)
+      type: object
+      required:
+      - bone_mineral_density
+      - bone_area_cm2
+      - bone_mineral_content_g
+      title: BoneDensity
+      description: Bone density measurements for a specific site.
+      x-internal: true
+    DexaVisceralFatResponse:
+      properties:
+        result_id:
+          type: string
+          title: Result Id
+          description: Unique identifier for the result
+        section_name:
+          type: string
+          title: Section Name
+          description: Name of this section
+          default: visceral-fat
+        vat_mass_kg:
+          type: number
+          title: Vat Mass Kg
+          description: Visceral adipose tissue mass in kilograms
+        vat_volume_cm3:
+          type: number
+          title: Vat Volume Cm3
+          description: Visceral adipose tissue volume in cubic centimeters
+      type: object
+      required:
+      - result_id
+      - vat_mass_kg
+      - vat_volume_cm3
+      title: DexaVisceralFat
+      description: Visceral adipose tissue (VAT) analysis results.
+    ResultDetailResponse:
+      properties:
+        result_id:
+          type: string
+          title: Result Id
+          description: Unique identifier for the result
+        start_time:
+          type: string
+          format: date-time
+          title: Start Time
+          description: Result date/time in location timezone
+        location:
+          $ref: '#/components/schemas/Location'
+          description: Location where the result was obtained
+        service:
+          $ref: '#/components/schemas/Service'
+          description: Service information
+        create_time:
+          type: string
+          format: date-time
+          title: Create Time
+          description: When the result was created in location timezone
+        update_time:
+          type: string
+          format: date-time
+          title: Update Time
+          description: When the result was last updated in location timezone
+        sections:
+          items:
+            type: string
+          type: array
+          title: Sections
+          description: List of available section names (only present in detail response, not in list response)
+      type: object
+      required:
+      - result_id
+      - start_time
+      - location
+      - service
+      - create_time
+      - update_time
+      - sections
+      title: Result
+      description: Response for getting result details.
+    BodyRegion:
+      properties:
+        fat_mass_kg:
+          type: number
+          title: Fat Mass Kg
+          description: Fat mass in kilograms
+        lean_mass_kg:
+          type: number
+          title: Lean Mass Kg
+          description: Lean mass in kilograms
+        bone_mass_kg:
+          type: number
+          title: Bone Mass Kg
+          description: Bone mass in kilograms
+        total_mass_kg:
+          type: number
+          title: Total Mass Kg
+          description: Total mass in kilograms
+        tissue_fat_pct:
+          type: number
+          title: Tissue Fat Pct
+          description: Fat percentage of soft tissue (excludes bone)
+        region_fat_pct:
+          type: number
+          title: Region Fat Pct
+          description: Fat percentage of total region (includes bone)
+      type: object
+      required:
+      - fat_mass_kg
+      - lean_mass_kg
+      - bone_mass_kg
+      - total_mass_kg
+      - tissue_fat_pct
+      - region_fat_pct
+      title: BodyRegion
+      description: Body composition data for a specific region.
+      x-internal: true
+    ResultsListResponse:
+      properties:
+        results:
+          items:
+            $ref: '#/components/schemas/ResultSummary'
+          type: array
+          title: Results
+          description: List of result summaries
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+          description: Pagination information
+      type: object
+      required:
+      - results
+      - pagination
+      title: ResultsListResponse
+      description: Response for listing user results.
+      x-internal: true
+    DexaRmrResponse:
+      properties:
+        result_id:
+          type: string
+          title: Result Id
+          description: Unique identifier for the result
+        section_name:
+          type: string
+          title: Section Name
+          description: Name of this section
+          default: rmr
+        estimates:
+          items:
+            $ref: '#/components/schemas/RmrEstimate'
+          type: array
+          title: Estimates
+          description: RMR estimates calculated using different scientific formulas
+          examples:
+          - - formula: ten Haaf (2014)
+              kcal_per_day: 1850
+            - formula: Cunningham (1980)
+              kcal_per_day: 1798
+            - formula: De Lorenzo (1999)
+              kcal_per_day: 1920
+            - formula: Mifflin-St. Jeor (1990)
+              kcal_per_day: 1780
+      type: object
+      required:
+      - result_id
+      - estimates
+      title: DexaRmr
+      description: Resting metabolic rate (RMR) estimates derived from DEXA body composition.
     PercentileParams:
       properties:
         gender:
@@ -812,6 +1102,28 @@ components:
       - reference_dataset_size
       title: PercentileParams
       description: Parameters used for percentile calculation.
+      x-internal: true
+    PatientInfo:
+      properties:
+        age_years:
+          type: number
+          title: Age Years
+          description: Patient's age at time of scan with one decimal precision
+        height_cm:
+          type: number
+          title: Height Cm
+          description: Patient's height in centimeters
+        weight_kg:
+          type: number
+          title: Weight Kg
+          description: Patient's weight in kilograms
+      type: object
+      required:
+      - age_years
+      - height_cm
+      - weight_kg
+      title: PatientInfo
+      description: Patient information at time of scan.
       x-internal: true
     ResultSummary:
       properties:
@@ -850,292 +1162,6 @@ components:
       - update_time
       title: ResultSummary
       description: Summary information for a single result.
-      x-internal: true
-    DexaScanInfoResponse:
-      properties:
-        result_id:
-          type: string
-          title: Result Id
-          description: Unique identifier for the result
-        section_name:
-          type: string
-          title: Section Name
-          description: Name of this section
-          default: scan-info
-        scanner_model:
-          type: string
-          title: Scanner Model
-          description: Model of the DEXA scanner (e.g., 'GE Lunar iDXA', 'GE Lunar Prodigy')
-        acquire_time:
-          type: string
-          format: date-time
-          title: Acquire Time
-          description: When the scan was acquired in location timezone
-        analyze_time:
-          type: string
-          format: date-time
-          title: Analyze Time
-          description: When the scan was analyzed in location timezone
-        patient_intake:
-          $ref: '#/components/schemas/PatientInfo'
-          description: Patient information at time of scan (from intake)
-      type: object
-      required:
-      - result_id
-      - scanner_model
-      - acquire_time
-      - analyze_time
-      - patient_intake
-      title: DexaScanInfo
-      description: DEXA scan metadata and information.
-    DexaPercentilesResponse:
-      properties:
-        result_id:
-          type: string
-          title: Result Id
-          description: Unique identifier for the result
-        section_name:
-          type: string
-          title: Section Name
-          description: Name of this section
-          default: percentiles
-        params:
-          $ref: '#/components/schemas/PercentileParams'
-          description: Parameters used for percentile calculations
-        metrics:
-          additionalProperties:
-            $ref: '#/components/schemas/PercentileMetric'
-          type: object
-          title: Metrics
-          description: Percentile data for various metrics
-          examples:
-          - bone_density_g_cm2:
-              percentile: 82
-              value: 1.25
-            limb_lmi_kg_m2:
-              percentile: 85
-              value: 8.5
-            total_body_fat_pct:
-              percentile: 45
-              value: 25.5
-            total_lmi_kg_m2:
-              percentile: 68
-              value: 22.5
-            vat_mass_kg:
-              percentile: 72
-              value: 2.8
-      type: object
-      required:
-      - result_id
-      - params
-      - metrics
-      title: DexaPercentiles
-      description: Age and gender-matched percentile rankings.
-    Coordinates:
-      properties:
-        latitude:
-          type: number
-          title: Latitude
-          description: Latitude in decimal degrees
-        longitude:
-          type: number
-          title: Longitude
-          description: Longitude in decimal degrees
-      type: object
-      required:
-      - latitude
-      - longitude
-      title: Coordinates
-      description: Geographic coordinates for a location.
-      x-internal: true
-    Location:
-      properties:
-        location_id:
-          type: string
-          title: Location Id
-          description: Unique identifier for the location
-        name:
-          type: string
-          title: Name
-          description: Location name
-        location_type:
-          type: string
-          title: Location Type
-          description: 'Type of location: ''mobile'' or ''storefront'''
-        address:
-          $ref: '#/components/schemas/Address'
-          description: Address information
-        coordinates:
-          anyOf:
-          - $ref: '#/components/schemas/Coordinates'
-          - type: 'null'
-          description: Geographic coordinates
-        timezone:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Timezone
-          description: IANA timezone identifier (e.g., 'America/Los_Angeles')
-        description:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Description
-          description: Public notes or description
-        last_updated:
-          type: string
-          format: date-time
-          title: Last Updated
-          description: Last update timestamp in ISO 8601 UTC format
-        distance_miles:
-          anyOf:
-          - type: number
-          - type: 'null'
-          title: Distance Miles
-          description: Distance from search coordinates in miles. Only present when lat/lng search parameters are provided.
-      type: object
-      required:
-      - location_id
-      - name
-      - location_type
-      - address
-      - last_updated
-      title: Location
-      description: Location model representing a scan location with full details.
-    DexaRmrResponse:
-      properties:
-        result_id:
-          type: string
-          title: Result Id
-          description: Unique identifier for the result
-        section_name:
-          type: string
-          title: Section Name
-          description: Name of this section
-          default: rmr
-        estimates:
-          items:
-            $ref: '#/components/schemas/RmrEstimate'
-          type: array
-          title: Estimates
-          description: RMR estimates calculated using different scientific formulas
-          examples:
-          - - formula: ten Haaf (2014)
-              kcal_per_day: 1850
-            - formula: Cunningham (1980)
-              kcal_per_day: 1798
-            - formula: De Lorenzo (1999)
-              kcal_per_day: 1920
-            - formula: Mifflin-St. Jeor (1990)
-              kcal_per_day: 1780
-      type: object
-      required:
-      - result_id
-      - estimates
-      title: DexaRmr
-      description: Resting metabolic rate (RMR) estimates derived from DEXA body composition.
-    Pagination:
-      properties:
-        page:
-          type: integer
-          title: Page
-          description: Current page number
-        page_size:
-          type: integer
-          title: Page Size
-          description: Number of items per page
-        results:
-          type: integer
-          title: Results
-          description: Number of results in this page
-        has_more:
-          type: boolean
-          title: Has More
-          description: Whether more results exist after this page
-      type: object
-      required:
-      - page
-      - page_size
-      - results
-      - has_more
-      title: Pagination
-      description: Pagination information for list responses.
-      x-internal: true
-    BodyRegion:
-      properties:
-        fat_mass_kg:
-          type: number
-          title: Fat Mass Kg
-          description: Fat mass in kilograms
-        lean_mass_kg:
-          type: number
-          title: Lean Mass Kg
-          description: Lean mass in kilograms
-        bone_mass_kg:
-          type: number
-          title: Bone Mass Kg
-          description: Bone mass in kilograms
-        total_mass_kg:
-          type: number
-          title: Total Mass Kg
-          description: Total mass in kilograms
-        tissue_fat_pct:
-          type: number
-          title: Tissue Fat Pct
-          description: Fat percentage of soft tissue (excludes bone)
-        region_fat_pct:
-          type: number
-          title: Region Fat Pct
-          description: Fat percentage of total region (includes bone)
-      type: object
-      required:
-      - fat_mass_kg
-      - lean_mass_kg
-      - bone_mass_kg
-      - total_mass_kg
-      - tissue_fat_pct
-      - region_fat_pct
-      title: BodyRegion
-      description: Body composition data for a specific region.
-      x-internal: true
-    PatientInfo:
-      properties:
-        age_years:
-          type: number
-          title: Age Years
-          description: Patient's age at time of scan with one decimal precision
-        height_cm:
-          type: number
-          title: Height Cm
-          description: Patient's height in centimeters
-        weight_kg:
-          type: number
-          title: Weight Kg
-          description: Patient's weight in kilograms
-      type: object
-      required:
-      - age_years
-      - height_cm
-      - weight_kg
-      title: PatientInfo
-      description: Patient information at time of scan.
-      x-internal: true
-    RmrEstimate:
-      properties:
-        formula:
-          type: string
-          title: Formula
-          description: Scientific formula name and publication year
-        kcal_per_day:
-          type: integer
-          title: Kcal Per Day
-          description: Estimated resting metabolic rate in kilocalories per day
-      type: object
-      required:
-      - formula
-      - kcal_per_day
-      title: RmrEstimate
-      description: Individual RMR estimate from a scientific formula.
       x-internal: true
     Service:
       properties:
@@ -1178,32 +1204,6 @@ components:
       - description
       title: Service
       description: Service model representing a bookable scan or test type.
-    DexaVisceralFatResponse:
-      properties:
-        result_id:
-          type: string
-          title: Result Id
-          description: Unique identifier for the result
-        section_name:
-          type: string
-          title: Section Name
-          description: Name of this section
-          default: visceral-fat
-        vat_mass_kg:
-          type: number
-          title: Vat Mass Kg
-          description: Visceral adipose tissue mass in kilograms
-        vat_volume_cm3:
-          type: number
-          title: Vat Volume Cm3
-          description: Visceral adipose tissue volume in cubic centimeters
-      type: object
-      required:
-      - result_id
-      - vat_mass_kg
-      - vat_volume_cm3
-      title: DexaVisceralFat
-      description: Visceral adipose tissue (VAT) analysis results.
   securitySchemes:
     OAuth2:
       type: oauth2

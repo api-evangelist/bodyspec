@@ -306,46 +306,80 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-      x-internal: true
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-      x-internal: true
-    SortOrder:
+    ApptStatus:
       type: string
       enum:
-      - newest_first
-      - oldest_first
-      title: SortOrder
-      description: Sort order options for appointment lists.
+      - scheduled
+      - pending_scan
+      - completed
+      - no_show
+      title: ApptStatus
+      description: 'Derived appointment outcome.
+
+
+        BodySpec does not record attendance, so the outcome is inferred from whether
+
+        published results exist and from what happened at the same location that day.'
       x-internal: true
+    ApptListResponse:
+      properties:
+        appts:
+          items:
+            $ref: '#/components/schemas/Appointment'
+          type: array
+          title: Appts
+          description: List of appointments
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+          description: Pagination information
+      type: object
+      required:
+      - appts
+      - pagination
+      title: ApptListResponse
+      description: Paginated appointment list response.
+      x-internal: true
+    Appointment:
+      properties:
+        appt_id:
+          type: string
+          title: Appt Id
+          description: Unique identifier for the appointment
+        start_time:
+          type: string
+          format: date-time
+          title: Start Time
+          description: Appointment start time in location timezone
+        duration_minutes:
+          type: integer
+          title: Duration Minutes
+          description: Duration of the appointment in minutes
+        location:
+          $ref: '#/components/schemas/Location'
+          description: Location details
+        service:
+          $ref: '#/components/schemas/Service'
+          description: Service information
+        status:
+          $ref: '#/components/schemas/ApptStatus'
+          description: 'Appointment outcome. `scheduled` — upcoming, results not expected yet. `pending_scan` — the appointment time has passed but results are not published yet, or no other scan at that location later that day produced results either (which reads as a site problem rather than a missed appointment). `completed` — results are published and retrievable. `no_show` — the appointment time has passed with no results, and a later scan at the same location that day did produce results, so the location was operating normally. Note that `pending_scan` can be a lasting state: BodySpec does not record attendance, so an appointment is only reported as `no_show` when there is positive evidence the location was operating. When BodySpec makes the `no_show` determination for a partner appointment, a `reservation_no_show` webhook is emitted.'
+        reserve_time:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Reserve Time
+          description: UTC timestamp when the appointment was reserved, if applicable
+      type: object
+      required:
+      - appt_id
+      - start_time
+      - duration_minutes
+      - location
+      - service
+      - status
+      title: Appointment
+      description: Appointment information.
     Address:
       properties:
         address_line1:
@@ -387,6 +421,16 @@ components:
       title: Address
       description: Address information for a location.
       x-internal: true
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+      x-internal: true
     Coordinates:
       properties:
         latitude:
@@ -404,23 +448,89 @@ components:
       title: Coordinates
       description: Geographic coordinates for a location.
       x-internal: true
-    ApptListResponse:
+    Location:
       properties:
-        appts:
-          items:
-            $ref: '#/components/schemas/Appointment'
-          type: array
-          title: Appts
-          description: List of appointments
-        pagination:
-          $ref: '#/components/schemas/Pagination'
-          description: Pagination information
+        location_id:
+          type: string
+          title: Location Id
+          description: Unique identifier for the location
+        name:
+          type: string
+          title: Name
+          description: Location name
+        location_type:
+          type: string
+          title: Location Type
+          description: 'Type of location: ''mobile'' or ''storefront'''
+        address:
+          $ref: '#/components/schemas/Address'
+          description: Address information
+        coordinates:
+          anyOf:
+          - $ref: '#/components/schemas/Coordinates'
+          - type: 'null'
+          description: Geographic coordinates
+        timezone:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Timezone
+          description: IANA timezone identifier (e.g., 'America/Los_Angeles')
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: Public notes or description
+        last_updated:
+          type: string
+          format: date-time
+          title: Last Updated
+          description: Last update timestamp in ISO 8601 UTC format
+        distance_miles:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Distance Miles
+          description: Distance from search coordinates in miles. Only present when lat/lng search parameters are provided.
       type: object
       required:
-      - appts
-      - pagination
-      title: ApptListResponse
-      description: Paginated appointment list response.
+      - location_id
+      - name
+      - location_type
+      - address
+      - last_updated
+      title: Location
+      description: Location model representing a scan location with full details.
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+      x-internal: true
+    SortOrder:
+      type: string
+      enum:
+      - newest_first
+      - oldest_first
+      title: SortOrder
+      description: Sort order options for appointment lists.
       x-internal: true
     Pagination:
       properties:
@@ -490,116 +600,6 @@ components:
       - description
       title: Service
       description: Service model representing a bookable scan or test type.
-    Location:
-      properties:
-        location_id:
-          type: string
-          title: Location Id
-          description: Unique identifier for the location
-        name:
-          type: string
-          title: Name
-          description: Location name
-        location_type:
-          type: string
-          title: Location Type
-          description: 'Type of location: ''mobile'' or ''storefront'''
-        address:
-          $ref: '#/components/schemas/Address'
-          description: Address information
-        coordinates:
-          anyOf:
-          - $ref: '#/components/schemas/Coordinates'
-          - type: 'null'
-          description: Geographic coordinates
-        timezone:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Timezone
-          description: IANA timezone identifier (e.g., 'America/Los_Angeles')
-        description:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Description
-          description: Public notes or description
-        last_updated:
-          type: string
-          format: date-time
-          title: Last Updated
-          description: Last update timestamp in ISO 8601 UTC format
-        distance_miles:
-          anyOf:
-          - type: number
-          - type: 'null'
-          title: Distance Miles
-          description: Distance from search coordinates in miles. Only present when lat/lng search parameters are provided.
-      type: object
-      required:
-      - location_id
-      - name
-      - location_type
-      - address
-      - last_updated
-      title: Location
-      description: Location model representing a scan location with full details.
-    ApptStatus:
-      type: string
-      enum:
-      - scheduled
-      - pending_scan
-      - completed
-      - no_show
-      title: ApptStatus
-      description: 'Derived appointment outcome.
-
-
-        BodySpec does not record attendance, so the outcome is inferred from whether
-
-        published results exist and from what happened at the same location that day.'
-      x-internal: true
-    Appointment:
-      properties:
-        appt_id:
-          type: string
-          title: Appt Id
-          description: Unique identifier for the appointment
-        start_time:
-          type: string
-          format: date-time
-          title: Start Time
-          description: Appointment start time in location timezone
-        duration_minutes:
-          type: integer
-          title: Duration Minutes
-          description: Duration of the appointment in minutes
-        location:
-          $ref: '#/components/schemas/Location'
-          description: Location details
-        service:
-          $ref: '#/components/schemas/Service'
-          description: Service information
-        status:
-          $ref: '#/components/schemas/ApptStatus'
-          description: 'Appointment outcome. `scheduled` — upcoming, results not expected yet. `pending_scan` — the appointment time has passed but results are not published yet, or no other scan at that location later that day produced results either (which reads as a site problem rather than a missed appointment). `completed` — results are published and retrievable. `no_show` — the appointment time has passed with no results, and a later scan at the same location that day did produce results, so the location was operating normally. Note that `pending_scan` can be a lasting state: BodySpec does not record attendance, so an appointment is only reported as `no_show` when there is positive evidence the location was operating. When BodySpec makes the `no_show` determination for a partner appointment, a `reservation_no_show` webhook is emitted.'
-        reserve_time:
-          anyOf:
-          - type: string
-            format: date-time
-          - type: 'null'
-          title: Reserve Time
-          description: UTC timestamp when the appointment was reserved, if applicable
-      type: object
-      required:
-      - appt_id
-      - start_time
-      - duration_minutes
-      - location
-      - service
-      - status
-      title: Appointment
-      description: Appointment information.
   securitySchemes:
     OAuth2:
       type: oauth2

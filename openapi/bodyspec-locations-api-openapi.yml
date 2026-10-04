@@ -184,47 +184,21 @@ paths:
       security: []
 components:
   schemas:
-    HTTPValidationError:
+    LocationsListResponse:
       properties:
-        detail:
+        locations:
           items:
-            $ref: '#/components/schemas/ValidationError'
+            $ref: '#/components/schemas/Location'
           type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-      x-internal: true
-    LocationResponse:
-      properties:
-        location:
-          $ref: '#/components/schemas/Location'
+          title: Locations
+        pagination:
+          $ref: '#/components/schemas/Pagination'
       type: object
       required:
-      - location
-      title: LocationResponse
-      description: Response model for getting a single location.
-      x-internal: true
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
+      - locations
+      - pagination
+      title: LocationsListResponse
+      description: Response model for listing locations.
       x-internal: true
     Address:
       properties:
@@ -267,6 +241,16 @@ components:
       title: Address
       description: Address information for a location.
       x-internal: true
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+      x-internal: true
     Coordinates:
       properties:
         latitude:
@@ -283,33 +267,6 @@ components:
       - longitude
       title: Coordinates
       description: Geographic coordinates for a location.
-      x-internal: true
-    Pagination:
-      properties:
-        page:
-          type: integer
-          title: Page
-          description: Current page number
-        page_size:
-          type: integer
-          title: Page Size
-          description: Number of items per page
-        results:
-          type: integer
-          title: Results
-          description: Number of results in this page
-        has_more:
-          type: boolean
-          title: Has More
-          description: Whether more results exist after this page
-      type: object
-      required:
-      - page
-      - page_size
-      - results
-      - has_more
-      title: Pagination
-      description: Pagination information for list responses.
       x-internal: true
     Location:
       properties:
@@ -365,21 +322,64 @@ components:
       - last_updated
       title: Location
       description: Location model representing a scan location with full details.
-    LocationsListResponse:
+    Pagination:
       properties:
-        locations:
-          items:
-            $ref: '#/components/schemas/Location'
-          type: array
-          title: Locations
-        pagination:
-          $ref: '#/components/schemas/Pagination'
+        page:
+          type: integer
+          title: Page
+          description: Current page number
+        page_size:
+          type: integer
+          title: Page Size
+          description: Number of items per page
+        results:
+          type: integer
+          title: Results
+          description: Number of results in this page
+        has_more:
+          type: boolean
+          title: Has More
+          description: Whether more results exist after this page
       type: object
       required:
-      - locations
-      - pagination
-      title: LocationsListResponse
-      description: Response model for listing locations.
+      - page
+      - page_size
+      - results
+      - has_more
+      title: Pagination
+      description: Pagination information for list responses.
+      x-internal: true
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+      x-internal: true
+    LocationResponse:
+      properties:
+        location:
+          $ref: '#/components/schemas/Location'
+      type: object
+      required:
+      - location
+      title: LocationResponse
+      description: Response model for getting a single location.
       x-internal: true
   securitySchemes:
     OAuth2:

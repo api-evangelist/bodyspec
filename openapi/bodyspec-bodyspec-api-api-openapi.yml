@@ -151,56 +151,6 @@ webhooks:
       - BodySpec API
 components:
   schemas:
-    WebhookResultsReadyPayload:
-      properties:
-        event_type:
-          type: string
-          const: results_ready
-          title: Event Type
-          description: Type of event (always 'results_ready' for this payload)
-        event_id:
-          type: string
-          title: Event Id
-          description: Unique identifier for this event
-        partner_id:
-          type: string
-          title: Partner Id
-          description: Partner ID this event is for
-        data:
-          $ref: '#/components/schemas/WebhookResultsReadyData'
-          description: Event data containing user and result information
-      type: object
-      required:
-      - event_type
-      - event_id
-      - partner_id
-      - data
-      title: WebhookResultsReadyPayload
-      description: 'Webhook payload for results_ready events.
-
-
-        Sent when scan results are ready for a user.'
-      examples:
-      - data:
-          appt_id: d7ecde6e9518008607e0e1e3b4b960d9
-          result_id: d7ecde6e9518008607e0e1e3b4b960d9
-          service_id: 8d0e0a1f561f4ec69dbca50ea14336d
-          start_time: '2024-03-15T10:30:00-07:00'
-          user_id: a5950beea2a7487fb79cfdbeb77fa555
-        event_id: 550e8400e29b41d4a716446655440000
-        event_type: results_ready
-        partner_id: pk_acme
-      x-internal: true
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-      x-internal: true
     WebhookReservationCreatedData:
       properties:
         user_id:
@@ -227,131 +177,6 @@ components:
       - start_time
       title: WebhookReservationCreatedData
       description: Data payload for reservation_created webhook event.
-      x-internal: true
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-      x-internal: true
-    WebhookReservationNoShowData:
-      properties:
-        user_id:
-          type: string
-          title: User Id
-          description: BodySpec user ID
-        appt_id:
-          type: string
-          title: Appt Id
-          description: Appointment ID
-        service_id:
-          type: string
-          title: Service Id
-          description: Service identifier
-        start_time:
-          type: string
-          title: Start Time
-          description: Scheduled start time of the missed appointment, in ISO 8601 format with timezone
-        no_show_time:
-          type: string
-          title: No Show Time
-          description: 'When BodySpec concluded the appointment was a no-show, in ISO 8601 format with timezone. BodySpec does not record attendance, so this is inferred: the appointment time passed with no published results, the location finished its day, and a later appointment at the same location that day did produce results (evidence the location was operating). If results for this appointment are published later, a `results_ready` event follows and supersedes this one.'
-      type: object
-      required:
-      - user_id
-      - appt_id
-      - service_id
-      - start_time
-      - no_show_time
-      title: WebhookReservationNoShowData
-      description: Data payload for reservation_no_show webhook event.
-      x-internal: true
-    WebhookResultsReadyData:
-      properties:
-        user_id:
-          type: string
-          title: User Id
-          description: BodySpec user ID
-        result_id:
-          type: string
-          title: Result Id
-          description: Result/appointment ID
-        appt_id:
-          type: string
-          title: Appt Id
-          description: Appointment ID. For results_ready events this is the same value as result_id; it is echoed under its own key so it can be correlated with the appt_id from the reservation_created event.
-        service_id:
-          type: string
-          title: Service Id
-          description: Service identifier
-        start_time:
-          type: string
-          title: Start Time
-          description: Result time in ISO 8601 format with timezone
-      type: object
-      required:
-      - user_id
-      - result_id
-      - appt_id
-      - service_id
-      - start_time
-      title: WebhookResultsReadyData
-      description: Data payload for results_ready webhook event.
-      x-internal: true
-    WebhookReservationCreatedPayload:
-      properties:
-        event_type:
-          type: string
-          const: reservation_created
-          title: Event Type
-          description: Type of event (always 'reservation_created' for this payload)
-        event_id:
-          type: string
-          title: Event Id
-          description: Unique identifier for this event
-        partner_id:
-          type: string
-          title: Partner Id
-          description: Partner ID this event is for
-        data:
-          $ref: '#/components/schemas/WebhookReservationCreatedData'
-          description: Event data containing user and appointment information
-      type: object
-      required:
-      - event_type
-      - event_id
-      - partner_id
-      - data
-      title: WebhookReservationCreatedPayload
-      description: 'Webhook payload for reservation_created events.
-
-
-        Sent when a new reservation is created for a user.'
-      examples:
-      - data:
-          appt_id: e8c91d4a2b7f3e6c8d0a5b9f1c3e7d2a
-          service_id: 8d0e0a1f561f4ec69dbca50ea14336d
-          start_time: '2024-03-20T14:00:00-07:00'
-          user_id: a5950beea2a7487fb79cfdbeb77fa555
-        event_id: 7f3a9c12b8e64d21f9a8b7c6d5e4f3a2
-        event_type: reservation_created
-        partner_id: pk_acme
       x-internal: true
     WebhookReservationCanceledData:
       properties:
@@ -395,6 +220,127 @@ components:
       title: WebhookReservationCanceledData
       description: Data payload for reservation_canceled webhook event.
       x-internal: true
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+      x-internal: true
+    WebhookResultsReadyPayload:
+      properties:
+        event_type:
+          type: string
+          const: results_ready
+          title: Event Type
+          description: Type of event (always 'results_ready' for this payload)
+        event_id:
+          type: string
+          title: Event Id
+          description: Unique identifier for this event
+        partner_id:
+          type: string
+          title: Partner Id
+          description: Partner ID this event is for
+        data:
+          $ref: '#/components/schemas/WebhookResultsReadyData'
+          description: Event data containing user and result information
+      type: object
+      required:
+      - event_type
+      - event_id
+      - partner_id
+      - data
+      title: WebhookResultsReadyPayload
+      description: 'Webhook payload for results_ready events.
+
+
+        Sent when scan results are ready for a user.'
+      examples:
+      - data:
+          appt_id: d7ecde6e9518008607e0e1e3b4b960d9
+          result_id: d7ecde6e9518008607e0e1e3b4b960d9
+          service_id: 8d0e0a1f561f4ec69dbca50ea14336d
+          start_time: '2024-03-15T10:30:00-07:00'
+          user_id: a5950beea2a7487fb79cfdbeb77fa555
+        event_id: 550e8400e29b41d4a716446655440000
+        event_type: results_ready
+        partner_id: pk_acme
+      x-internal: true
+    WebhookReservationNoShowData:
+      properties:
+        user_id:
+          type: string
+          title: User Id
+          description: BodySpec user ID
+        appt_id:
+          type: string
+          title: Appt Id
+          description: Appointment ID
+        service_id:
+          type: string
+          title: Service Id
+          description: Service identifier
+        start_time:
+          type: string
+          title: Start Time
+          description: Scheduled start time of the missed appointment, in ISO 8601 format with timezone
+        no_show_time:
+          type: string
+          title: No Show Time
+          description: 'When BodySpec concluded the appointment was a no-show, in ISO 8601 format with timezone. BodySpec does not record attendance, so this is inferred: the appointment time passed with no published results, the location finished its day, and a later appointment at the same location that day did produce results (evidence the location was operating). If results for this appointment are published later, a `results_ready` event follows and supersedes this one.'
+      type: object
+      required:
+      - user_id
+      - appt_id
+      - service_id
+      - start_time
+      - no_show_time
+      title: WebhookReservationNoShowData
+      description: Data payload for reservation_no_show webhook event.
+      x-internal: true
+    WebhookReservationCreatedPayload:
+      properties:
+        event_type:
+          type: string
+          const: reservation_created
+          title: Event Type
+          description: Type of event (always 'reservation_created' for this payload)
+        event_id:
+          type: string
+          title: Event Id
+          description: Unique identifier for this event
+        partner_id:
+          type: string
+          title: Partner Id
+          description: Partner ID this event is for
+        data:
+          $ref: '#/components/schemas/WebhookReservationCreatedData'
+          description: Event data containing user and appointment information
+      type: object
+      required:
+      - event_type
+      - event_id
+      - partner_id
+      - data
+      title: WebhookReservationCreatedPayload
+      description: 'Webhook payload for reservation_created events.
+
+
+        Sent when a new reservation is created for a user.'
+      examples:
+      - data:
+          appt_id: e8c91d4a2b7f3e6c8d0a5b9f1c3e7d2a
+          service_id: 8d0e0a1f561f4ec69dbca50ea14336d
+          start_time: '2024-03-20T14:00:00-07:00'
+          user_id: a5950beea2a7487fb79cfdbeb77fa555
+        event_id: 7f3a9c12b8e64d21f9a8b7c6d5e4f3a2
+        event_type: reservation_created
+        partner_id: pk_acme
+      x-internal: true
     WebhookReservationCanceledPayload:
       properties:
         event_type:
@@ -435,6 +381,60 @@ components:
         event_id: 3b7d2e91c4a85f60b2d9e8a1f7c4b3d6
         event_type: reservation_canceled
         partner_id: pk_acme
+      x-internal: true
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+      x-internal: true
+    WebhookResultsReadyData:
+      properties:
+        user_id:
+          type: string
+          title: User Id
+          description: BodySpec user ID
+        result_id:
+          type: string
+          title: Result Id
+          description: Result/appointment ID
+        appt_id:
+          type: string
+          title: Appt Id
+          description: Appointment ID. For results_ready events this is the same value as result_id; it is echoed under its own key so it can be correlated with the appt_id from the reservation_created event.
+        service_id:
+          type: string
+          title: Service Id
+          description: Service identifier
+        start_time:
+          type: string
+          title: Start Time
+          description: Result time in ISO 8601 format with timezone
+      type: object
+      required:
+      - user_id
+      - result_id
+      - appt_id
+      - service_id
+      - start_time
+      title: WebhookResultsReadyData
+      description: Data payload for results_ready webhook event.
       x-internal: true
     WebhookReservationNoShowPayload:
       properties:

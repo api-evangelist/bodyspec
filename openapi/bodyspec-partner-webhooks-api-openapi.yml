@@ -270,6 +270,51 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
+    WebhookUpdateRequest:
+      properties:
+        url:
+          anyOf:
+          - type: string
+            maxLength: 2083
+            minLength: 1
+            format: uri
+          - type: 'null'
+          title: Url
+          description: HTTPS URL to receive webhook events
+        secret:
+          anyOf:
+          - type: string
+            maxLength: 256
+          - type: 'null'
+          title: Secret
+          description: New secret for webhook authentication. Pass empty string to remove.
+        enabled:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Enabled
+          description: Whether the webhook is enabled
+      type: object
+      title: WebhookUpdateRequest
+      description: 'Request model for updating a webhook (partial update).
+
+
+        Note: event_type cannot be changed after creation.'
+      examples:
+      - enabled: false
+      - secret: new-secret-value
+        url: https://your-server.example.com/webhooks/v2
+      x-internal: true
+    WebhookEventType:
+      type: string
+      enum:
+      - results_ready
+      - reservation_created
+      - reservation_canceled
+      - reservation_no_show
+      title: WebhookEventType
+      description: Supported webhook event types.
+      x-internal: true
     HTTPValidationError:
       properties:
         detail:
@@ -279,6 +324,20 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
+      x-internal: true
+    WebhooksListResponse:
+      properties:
+        webhooks:
+          items:
+            $ref: '#/components/schemas/WebhookResponse'
+          type: array
+          title: Webhooks
+          description: List of webhook configurations
+      type: object
+      required:
+      - webhooks
+      title: WebhooksListResponse
+      description: Response model for listing webhooks.
       x-internal: true
     WebhookCreateRequest:
       properties:
@@ -317,16 +376,6 @@ components:
         secret: my-webhook-secret
         url: https://your-server.example.com/webhooks/bodyspec
       x-internal: true
-    WebhookEventType:
-      type: string
-      enum:
-      - results_ready
-      - reservation_created
-      - reservation_canceled
-      - reservation_no_show
-      title: WebhookEventType
-      description: Supported webhook event types.
-      x-internal: true
     ValidationError:
       properties:
         loc:
@@ -348,55 +397,6 @@ components:
       - msg
       - type
       title: ValidationError
-      x-internal: true
-    WebhookUpdateRequest:
-      properties:
-        url:
-          anyOf:
-          - type: string
-            maxLength: 2083
-            minLength: 1
-            format: uri
-          - type: 'null'
-          title: Url
-          description: HTTPS URL to receive webhook events
-        secret:
-          anyOf:
-          - type: string
-            maxLength: 256
-          - type: 'null'
-          title: Secret
-          description: New secret for webhook authentication. Pass empty string to remove.
-        enabled:
-          anyOf:
-          - type: boolean
-          - type: 'null'
-          title: Enabled
-          description: Whether the webhook is enabled
-      type: object
-      title: WebhookUpdateRequest
-      description: 'Request model for updating a webhook (partial update).
-
-
-        Note: event_type cannot be changed after creation.'
-      examples:
-      - enabled: false
-      - secret: new-secret-value
-        url: https://your-server.example.com/webhooks/v2
-      x-internal: true
-    WebhooksListResponse:
-      properties:
-        webhooks:
-          items:
-            $ref: '#/components/schemas/WebhookResponse'
-          type: array
-          title: Webhooks
-          description: List of webhook configurations
-      type: object
-      required:
-      - webhooks
-      title: WebhooksListResponse
-      description: Response model for listing webhooks.
       x-internal: true
     WebhookResponse:
       properties:

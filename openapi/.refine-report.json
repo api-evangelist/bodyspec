@@ -1,7 +1,7 @@
 {
   "provider": "bodyspec",
   "sources": [
-    "bodyspec-openapi.json"
+    "_original/bodyspec-openapi.json"
   ],
   "outputs": [
     "bodyspec-api-status-api-openapi.yml",
@@ -20,19 +20,34 @@
     "bodyspec-services-api-openapi.yml",
     "bodyspec-users-api-openapi.yml"
   ],
-  "archived": [
-    "archived openapi/bodyspec-openapi.json"
-  ],
+  "archived": [],
   "errors": [],
   "warnings": [],
   "notes": [
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
     "bodyspec-openapi.json: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
     "bodyspec-openapi.json: tagged webhooks POST results_ready -> BodySpec API",
     "bodyspec-openapi.json: tagged webhooks POST reservation_created -> BodySpec API",
     "bodyspec-openapi.json: tagged webhooks POST reservation_canceled -> BodySpec API",
     "bodyspec-openapi.json: tagged webhooks POST reservation_no_show -> BodySpec API",
     "bodyspec-openapi.json: declared missing tag: BodySpec API",
-    "apis.yml register: written (+15 apis, 15 total)"
+    "apis.yml register: already-registered"
   ],
-  "skipped": []
+  "skipped": [
+    "bodyspec-api-status-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "bodyspec-appointments-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "bodyspec-availability-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "bodyspec-bodyspec-api-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "bodyspec-locations-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "bodyspec-partner-appointments-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "bodyspec-partner-intake-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "bodyspec-partner-orders-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "bodyspec-partner-results-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "bodyspec-partner-users-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "bodyspec-partner-webhooks-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "bodyspec-reservations-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "bodyspec-results-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "bodyspec-services-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "bodyspec-users-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }

@@ -321,38 +321,6 @@ paths:
       security: []
 components:
   schemas:
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-      x-internal: true
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-      x-internal: true
     MultiLocationAvailabilityResponse:
       properties:
         slots:
@@ -402,6 +370,16 @@ components:
       - max_availability_days
       title: AvailabilityResponse
       description: Response model for availability endpoint.
+      x-internal: true
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
       x-internal: true
     AvailabilitySlot:
       properties:
@@ -471,6 +449,28 @@ components:
       - has_more
       title: Pagination
       description: Pagination information for list responses.
+      x-internal: true
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
       x-internal: true
   securitySchemes:
     OAuth2:

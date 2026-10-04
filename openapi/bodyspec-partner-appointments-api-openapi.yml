@@ -234,144 +234,20 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-      x-internal: true
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-      x-internal: true
-    Service:
-      properties:
-        name:
-          type: string
-          title: Name
-          description: Short name of the service (e.g., 'DEXA')
-        description:
-          type: string
-          title: Description
-          description: Full descriptive name of the service
-        service_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Service Id
-          description: Unique identifier for the service
-        service_code:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Service Code
-          description: Service code (e.g., 'DXA', 'RMR', 'VO2')
-        duration_minutes:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Duration Minutes
-          description: Typical duration in minutes
-        last_updated:
-          anyOf:
-          - type: string
-            format: date-time
-          - type: 'null'
-          title: Last Updated
-          description: Last update timestamp in ISO 8601 UTC format
-      type: object
-      required:
-      - name
-      - description
-      title: Service
-      description: Service model representing a bookable scan or test type.
-    SortOrder:
+    ApptStatus:
       type: string
       enum:
-      - newest_first
-      - oldest_first
-      title: SortOrder
-      description: Sort order options for appointment lists.
-      x-internal: true
-    Address:
-      properties:
-        address_line1:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Address Line1
-          description: Primary address line
-        address_line2:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Address Line2
-          description: Secondary address line (e.g., suite number)
-        city:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: City
-          description: City name
-        state:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: State
-          description: State or province
-        postal_code:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Postal Code
-          description: Postal/ZIP code
-        country:
-          type: string
-          title: Country
-          description: Two-letter ISO country code
-          default: US
-      type: object
-      title: Address
-      description: Address information for a location.
-      x-internal: true
-    Coordinates:
-      properties:
-        latitude:
-          type: number
-          title: Latitude
-          description: Latitude in decimal degrees
-        longitude:
-          type: number
-          title: Longitude
-          description: Longitude in decimal degrees
-      type: object
-      required:
-      - latitude
-      - longitude
-      title: Coordinates
-      description: Geographic coordinates for a location.
+      - scheduled
+      - pending_scan
+      - completed
+      - no_show
+      title: ApptStatus
+      description: 'Derived appointment outcome.
+
+
+        BodySpec does not record attendance, so the outcome is inferred from whether
+
+        published results exist and from what happened at the same location that day.'
       x-internal: true
     ApptListResponse:
       properties:
@@ -390,33 +266,6 @@ components:
       - pagination
       title: ApptListResponse
       description: Paginated appointment list response.
-      x-internal: true
-    Pagination:
-      properties:
-        page:
-          type: integer
-          title: Page
-          description: Current page number
-        page_size:
-          type: integer
-          title: Page Size
-          description: Number of items per page
-        results:
-          type: integer
-          title: Results
-          description: Number of results in this page
-        has_more:
-          type: boolean
-          title: Has More
-          description: Whether more results exist after this page
-      type: object
-      required:
-      - page
-      - page_size
-      - results
-      - has_more
-      title: Pagination
-      description: Pagination information for list responses.
       x-internal: true
     Appointment:
       properties:
@@ -459,6 +308,74 @@ components:
       - status
       title: Appointment
       description: Appointment information.
+    Address:
+      properties:
+        address_line1:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Address Line1
+          description: Primary address line
+        address_line2:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Address Line2
+          description: Secondary address line (e.g., suite number)
+        city:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: City
+          description: City name
+        state:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: State
+          description: State or province
+        postal_code:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Postal Code
+          description: Postal/ZIP code
+        country:
+          type: string
+          title: Country
+          description: Two-letter ISO country code
+          default: US
+      type: object
+      title: Address
+      description: Address information for a location.
+      x-internal: true
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+      x-internal: true
+    Coordinates:
+      properties:
+        latitude:
+          type: number
+          title: Latitude
+          description: Latitude in decimal degrees
+        longitude:
+          type: number
+          title: Longitude
+          description: Longitude in decimal degrees
+      type: object
+      required:
+      - latitude
+      - longitude
+      title: Coordinates
+      description: Geographic coordinates for a location.
+      x-internal: true
     Location:
       properties:
         location_id:
@@ -513,21 +430,104 @@ components:
       - last_updated
       title: Location
       description: Location model representing a scan location with full details.
-    ApptStatus:
+    Pagination:
+      properties:
+        page:
+          type: integer
+          title: Page
+          description: Current page number
+        page_size:
+          type: integer
+          title: Page Size
+          description: Number of items per page
+        results:
+          type: integer
+          title: Results
+          description: Number of results in this page
+        has_more:
+          type: boolean
+          title: Has More
+          description: Whether more results exist after this page
+      type: object
+      required:
+      - page
+      - page_size
+      - results
+      - has_more
+      title: Pagination
+      description: Pagination information for list responses.
+      x-internal: true
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+      x-internal: true
+    SortOrder:
       type: string
       enum:
-      - scheduled
-      - pending_scan
-      - completed
-      - no_show
-      title: ApptStatus
-      description: 'Derived appointment outcome.
-
-
-        BodySpec does not record attendance, so the outcome is inferred from whether
-
-        published results exist and from what happened at the same location that day.'
+      - newest_first
+      - oldest_first
+      title: SortOrder
+      description: Sort order options for appointment lists.
       x-internal: true
+    Service:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Short name of the service (e.g., 'DEXA')
+        description:
+          type: string
+          title: Description
+          description: Full descriptive name of the service
+        service_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Service Id
+          description: Unique identifier for the service
+        service_code:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Service Code
+          description: Service code (e.g., 'DXA', 'RMR', 'VO2')
+        duration_minutes:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Duration Minutes
+          description: Typical duration in minutes
+        last_updated:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Last Updated
+          description: Last update timestamp in ISO 8601 UTC format
+      type: object
+      required:
+      - name
+      - description
+      title: Service
+      description: Service model representing a bookable scan or test type.
   securitySchemes:
     OAuth2:
       type: oauth2

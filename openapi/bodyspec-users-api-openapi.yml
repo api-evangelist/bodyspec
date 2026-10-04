@@ -124,46 +124,6 @@ paths:
       - OAuth2AuthorizationCodeBearer: []
 components:
   schemas:
-    UserUpdateRequest:
-      properties:
-        first_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: First Name
-          description: User's first name
-        last_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Last Name
-          description: User's last name
-        phone:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Phone
-          description: Phone number in E.164 format
-          examples:
-          - '+14155551234'
-      type: object
-      title: UserUpdateRequest
-      description: User update request model.
-      examples:
-      - first_name: Jane
-        last_name: Smith
-        phone: '+14155559999'
-      x-internal: true
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-      x-internal: true
     UserResponse:
       properties:
         user_id:
@@ -208,6 +168,36 @@ components:
         - is_admin: Admin status is determined from token claims, not exposed in responses
 
         - created_at/updated_at: Internal timestamps not needed in public API'
+    UserUpdateRequest:
+      properties:
+        first_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: First Name
+          description: User's first name
+        last_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Name
+          description: User's last name
+        phone:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Phone
+          description: Phone number in E.164 format
+          examples:
+          - '+14155551234'
+      type: object
+      title: UserUpdateRequest
+      description: User update request model.
+      examples:
+      - first_name: Jane
+        last_name: Smith
+        phone: '+14155559999'
+      x-internal: true
     ValidationError:
       properties:
         loc:
@@ -229,6 +219,16 @@ components:
       - msg
       - type
       title: ValidationError
+      x-internal: true
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
       x-internal: true
   securitySchemes:
     OAuth2:
