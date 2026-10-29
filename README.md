@@ -64,5 +64,154 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-BodySpec is a company surfaced via the API Evangelist harvest backlog (source: secondary-market) and added to the network as a stub for full-pipeline profiling.
-- https://www.nasdaqprivatemarket.com/
+BodySpec provides full-body DEXA scanning services that deliver precise body composition data, including fat, muscle, and bone density. Their platform offers an API and MCP access for integrating scan results into health, fitness, and AI applications, supporting bookings, pricing, and data retrieval for individuals and enterprises.
+
+**Areas:** Company · Health · Fitness · Data
+
+## BodySpec on APIs.io
+
+Everything profiled for BodySpec is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/bodyspec/](https://apis.io/providers/bodyspec/)** — or go straight to one of the APIs or properties below.
+
+### APIs (15)
+
+- [BodySpec API Status API](https://apis.io/apis/bodyspec/bodyspec-api-status-api/) — Health check and monitoring endpoints
+- [BodySpec Appointments API](https://apis.io/apis/bodyspec/bodyspec-appointments-api/) — Appointments scheduling and management
+- [BodySpec Availability API](https://apis.io/apis/bodyspec/bodyspec-availability-api/) — Check appointment availability at locations
+- [BodySpec BodySpec API](https://apis.io/apis/bodyspec/bodyspec-bodyspec-api-api/) — The BodySpec API API from BodySpec — 0 operation(s) for bodyspec api.
+- [BodySpec Locations API](https://apis.io/apis/bodyspec/bodyspec-locations-api/) — Browse and search scan locations
+- [BodySpec Partner Appointments API](https://apis.io/apis/bodyspec/bodyspec-partner-appointments-api/) — Partner integration endpoints for user appointments
+- [BodySpec Partner Intake API](https://apis.io/apis/bodyspec/bodyspec-partner-intake-api/) — Partner integration endpoints for intake form submission
+- [BodySpec Partner Orders API](https://apis.io/apis/bodyspec/bodyspec-partner-orders-api/) — Partner integration endpoints for medical order upload and management
+- [BodySpec Partner Results API](https://apis.io/apis/bodyspec/bodyspec-partner-results-api/) — Partner integration endpoints for user results
+- [BodySpec Partner Users API](https://apis.io/apis/bodyspec/bodyspec-partner-users-api/) — Partner integration endpoints for user management
+- [BodySpec Partner Webhooks API](https://apis.io/apis/bodyspec/bodyspec-partner-webhooks-api/) — Partner integration endpoints for webhook configuration
+- [BodySpec Reservations API](https://apis.io/apis/bodyspec/bodyspec-reservations-api/) — Partner integration endpoints for reservations
+- [BodySpec Results API](https://apis.io/apis/bodyspec/bodyspec-results-api/) — Test results and analysis data
+- [BodySpec Services API](https://apis.io/apis/bodyspec/bodyspec-services-api/) — Available scan types and services
+- [BodySpec Users API](https://apis.io/apis/bodyspec/bodyspec-users-api/) — Operations related to user management and profiles
+
+### Published properties
+
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
+
+#### AsyncAPI (1)
+
+Event-driven and webhook contracts.
+
+- [Bodyspec Webhooks](https://apis.io/asyncapis/bodyspec/bodyspec-webhooks/)
+
+#### Agentic access (1)
+
+Which operations an agent can call, which act, and which need a human in the loop.
+
+- [Bodyspec Agentic Access](https://apis.io/agentic-access/bodyspec/bodyspec-agentic-access/)
+
+#### JSON Schema (6)
+
+The data models the API reads and writes.
+
+- [Appointment](https://apis.io/schemas/bodyspec/bodyspec-appointment/)
+- [DexaComposition](https://apis.io/schemas/bodyspec/bodyspec-dexa-composition-response/)
+- [IntakeCreateRequest](https://apis.io/schemas/bodyspec/bodyspec-intake-create-request/)
+- [InteractiveFormatRequest](https://apis.io/schemas/bodyspec/bodyspec-interactive-format-request/)
+- [OrderResponse](https://apis.io/schemas/bodyspec/bodyspec-order-response/)
+- [PdfFormatRequest](https://apis.io/schemas/bodyspec/bodyspec-pdf-format-request/)
+
+#### JSON-LD (1)
+
+Linked-data contexts for the provider's vocabulary.
+
+- [Bodyspec Context](https://apis.io/jsonld/bodyspec/bodyspec-context/)
+
+#### Governance rules (1)
+
+Spectral rulesets for the provider's contracts.
+
+- [BodySpec API Rules](https://apis.io/rules/bodyspec/bodyspec-rules/)
+
+#### Security (2)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Bodyspec Authentication](https://apis.io/security/bodyspec/bodyspec-authentication/)
+- [Bodyspec Domain Security](https://apis.io/security/bodyspec/bodyspec-domain-security/)
+
+#### OAuth scopes (1)
+
+The permissions the API asks for.
+
+- [Bodyspec Scopes](https://apis.io/scopes/bodyspec/bodyspec-scopes/)
+
+#### Plans and pricing (1)
+
+Published plans, tiers and prices.
+
+- [Bodyspec Plans Pricing](https://apis.io/plans/bodyspec/bodyspec-plans-pricing/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://www.bodyspec.com/)
+- [Documentation](https://app.bodyspec.com/docs)
+- [Getting started](https://www.bodyspec.com/pricing-packages)
+- [API reference](https://app.bodyspec.com/docs)
+- [Pricing](https://www.bodyspec.com/pricing-packages)
+- [Blog](https://www.bodyspec.com/blog)
+- [Terms of service](https://www.bodyspec.com/terms-of-service)
+- [Privacy policy](https://www.bodyspec.com/privacy-policy)
+
+## API Evangelist rating
+
+**Kin Score 48.0** — developing · rubric 0.25.0 · scored 2026-10-23
+
+| Facet | Score |
+|---|---|
+| Discoverability | 57.1 |
+| Contract quality | 73.3 |
+| Contract governance | 22.0 |
+| Operational transparency | 7.9 |
+| Developer ergonomics | 44.6 |
+| Access clarity | 44.7 |
+
+**Agent readiness 53.8** — agent-ready (gated down from agent-native)
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | documented (partial credit) |
+| MCP Server | — |
+| Auth Clarity | served (partial credit) |
+| Idempotency | — |
+| Error Semantics | verified |
+| OpenAPI Examples | verified |
+| Rate Limit Signal | — |
+| Event Surface Described | yes |
+| Agent Skills | derived (partial credit) |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | served (partial credit) |
+| Protected Resource Metadata | verified |
+| Dynamic Client Registration | yes |
+| Agentic Commerce | — |
+| Pagination Ratio | paginated |
+| Operation Distinctiveness | distinct |
+
+**Regulatory alignment 32.8** — Health
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/bodyspec/](https://apis.io/providers/bodyspec/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for BodySpec: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/bodyspec/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
